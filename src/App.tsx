@@ -1,38 +1,26 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
 import './App.css';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { increment, decrement } from './features/counter/counterSlice';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MenuAddTrans from "./Transacciones/addTrans";
+import MenuModTrans from "./Transacciones/modTrans";
+import MenuDelTrans from "./Transacciones/removeTrans";
+import HomeTrans from "./Transacciones/transacciones";
+import Home from "./Home";
+
+const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
 function App() {
-  const count = useAppSelector((state) => state.counter.value);
-  const dispatch = useAppDispatch();
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => dispatch(increment())}>
-          count is {count}
-        </button>
-        <button onClick={() => dispatch(decrement())}>decrement</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={ <Home/> } />
+      <Route path="/transacciones" element={ <HomeTrans/> } />
+      <Route path="/transacciones/menuAdd" element={ <MenuAddTrans/> } />
+      <Route path="/transacciones/menuMod" element={ <MenuModTrans/> } />
+      <Route path="/transacciones/menuDel" element={ <MenuDelTrans/> } />
+      <Route path="*" element={ <Err/> } />
+    </Routes>
+  </BrowserRouter>
+  );
 }
 
 export default App
