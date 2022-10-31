@@ -1,9 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import clienteReducer from '../features/cliente/clienteSlice';
+import transaccionesReducer from '../features/transacciones/transaccionesSlice';
+import cuentasReducer from '../features/cuentas/cuentasSlice';
+import prestamosReducer from '../features/prestamos/prestamosSlice';
 
 const store = configureStore({
     reducer: {
-        counter: counterReducer
+        cliente: clienteReducer,
+        transacciones: transaccionesReducer,
+        cuentas: cuentasReducer,
+        prestamos: prestamosReducer
     }
 });
 
