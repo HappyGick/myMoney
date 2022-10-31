@@ -1,16 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Modal = ({children, estado, setEstado, titulo}: any)=>{
+export const Modal = ({children, estado, titulo}: any)=>{
     return (
         <>
-            {estado &&
+            {estado==1 &&
                 <Overlay>
                     <ContModal>
                         <EncabezadoModal>
                             <h3>{titulo}</h3>
                         </EncabezadoModal>
-                        <BotonCerrar onClick={()=>{setEstado(false)}}>X</BotonCerrar>
                         {children}
                     </ContModal>
                 </Overlay>

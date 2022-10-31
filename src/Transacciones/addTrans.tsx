@@ -1,5 +1,6 @@
-
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ApliModal from "../ApliModal";
 
 class transaccion {
     public monto: Number;
@@ -18,6 +19,7 @@ class transaccion {
 }
   
 export default function MenuAddTrans() {
+    const [modal,setModal]=useState(0);
     let showCond = 0;
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
@@ -56,8 +58,13 @@ export default function MenuAddTrans() {
         let id = ( index ).toString();
         localStorage.setItem("indextrans", id);
         localStorage.setItem( "transaccion-" + id, JSON.stringify(t) );
-        alert('Guardado Exitosamente');
-        window.location.reload();
+        setModal(1);
+    }
+
+    const reset = ()=>{
+        if (modal==2){
+            window.location.reload();
+        }
     }
 
     function optionsAccounts() {
@@ -102,36 +109,40 @@ export default function MenuAddTrans() {
     }
 
     return ( 
-        <div className="bg">
-        <div className="mainAdd">
-            <h1>Añadir Transacciones</h1>           
-            <p>
-                Elige una Cuenta de Banco: <br/>
-                <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
-                    <option value="null" >Cuenta de Banco</option>
-                </select>
-                
-                <br/> <br/> Elige el Tipo de Transaccion: <br/>
-                <select id="tipo" onChange={ handleInputTipo } >  
-                    <option value="null" >Tipo de Transaccion</option>
-                    <option value="Ingreso" >Ingreso</option>
-                    <option value="Gasto" >Gasto</option>
-                </select>
-                
-                <br/> <br/> Ingrese un Monto <br/>
-                <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
-                
-                <br/> <br/> Ingrese la fecha de la Transaccion <br/>
-                <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
-                
-                <br/> <br/> Añade una Descripcion <br/>
-                <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
-                <br/> <br/>
-            </p>
+        <>
+            <div className="bg">
+            <div className="mainAdd">
+                <h1>Añadir Transacciones</h1>           
+                <p>
+                    Elige una Cuenta de Banco: <br/>
+                    <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
+                        <option value="null" >Cuenta de Banco</option>
+                    </select>
+                    
+                    <br/> <br/> Elige el Tipo de Transaccion: <br/>
+                    <select id="tipo" onChange={ handleInputTipo } >  
+                        <option value="null" >Tipo de Transaccion</option>
+                        <option value="Ingreso" >Ingreso</option>
+                        <option value="Gasto" >Gasto</option>
+                    </select>
+                    
+                    <br/> <br/> Ingrese un Monto <br/>
+                    <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
+                    
+                    <br/> <br/> Ingrese la fecha de la Transaccion <br/>
+                    <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
+                    
+                    <br/> <br/> Añade una Descripcion <br/>
+                    <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
+                    <br/> <br/>
+                </p>
 
-            <button onClick = { goHome } className="glow-button" >Regresar</button>
-            <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
-        </div>
-        </div>
+                <button onClick = { goHome } className="glow-button" >Regresar</button>
+                <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
+            </div>
+            </div>
+            {ApliModal('/transacciones','Agregar Transacciones','Menu de Transacciones','Realizar otra Transaccion','Exito!','Se ha realizado la transaccion con exito',modal,setModal)}
+            {reset()}
+        </>
     );
 }
