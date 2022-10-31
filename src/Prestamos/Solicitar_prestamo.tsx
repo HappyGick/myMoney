@@ -120,17 +120,18 @@ export const FormSolicitarPrestamo = ()=>{
                 <h1>Solicitar Prestamos</h1>
 
                 <div className="container">
-                    <div className="campo">
-                        <label>Nombre:</label>
-                        <br />
-                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a solicitar'} onChange={cambios} required/>
-                    </div>
 
                     <select id="cuentas" onClick={Opciones} onChange={showOption}>
                         <option value="null">Seleccione una cuenta</option>
                     </select>
 
                     <div id='card'></div>
+                    
+                    <div className="campo">
+                        <label>Nombre:</label>
+                        <br />
+                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a solicitar'} onChange={cambios} required/>
+                    </div>
 
                     <div className="campo">
                         <label>Monto:</label>
