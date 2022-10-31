@@ -18,7 +18,7 @@ class transaccion {
 }
   
 export default function MenuAddTrans() {
-     
+    let showCond = 0;
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
     const t = new transaccion("28/10/2022", 0, "Empty", "Ingreso" , "Mercantil");
@@ -54,10 +54,32 @@ export default function MenuAddTrans() {
         
         index = index + 1;
         let id = ( index ).toString();
-        localStorage.setItem("index", id);
+        localStorage.setItem("indextrans", id);
         localStorage.setItem( "transaccion-" + id, JSON.stringify(t) );
         alert('Guardado Exitosamente');
         window.location.reload();
+    }
+
+    function optionsAccounts() {
+        if ( showCond == 0 ) {
+            let doc = document.getElementById("cuenta");
+            let keys = Object.keys(localStorage);
+            for(let key of keys) {
+                if ( key.includes("cuenta-") == true ) {
+                    let option = document.createElement("option");
+                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
+                    option.value = key;
+                    option.text = ( 
+                        ob.NombreBanco + ", " +
+                        ob.NumeroCuenta + ", " +
+                        ob.TipoCuenta + ", $" +
+                        ob.Saldo + ", "
+                    );
+                    doc?.appendChild(option);
+                }  
+            }             
+            showCond = 1
+        }
     }
 
     let cond = 0;
@@ -75,8 +97,8 @@ export default function MenuAddTrans() {
                 }  
             } 
         }
-        if ( veri == 0 ) { localStorage.setItem("index", "1"); }
-        else { index = Number( localStorage.getItem("index") ); }
+        if ( veri == 0 ) { localStorage.setItem("indextrans", "1"); }
+        else { index = Number( localStorage.getItem("indextrans") ); }
     }
 
     return ( 
@@ -85,10 +107,8 @@ export default function MenuAddTrans() {
             <h1>Añadir Transacciones</h1>           
             <p>
                 Elige una Cuenta de Banco: <br/>
-                <select id="cuenta" onChange={ handleInputCuenta } > 
+                <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
                     <option value="null" >Cuenta de Banco</option>
-                    <option value="Mercantil" > Mercantil </option>
-                    <option value="BNC"> BNC </option>
                 </select>
                 
                 <br/> <br/> Elige el Tipo de Transaccion: <br/>

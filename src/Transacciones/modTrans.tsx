@@ -6,6 +6,7 @@ export default function MenuModTrans() {
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
     let showCond = 0;
+    let showOp = 0;
     let keyObj = "";
     let cond = 0;
     let objModded = {"monto":"0","descripcion":"emp","fecha":"28/10/2022","tipo":"Ingreso","cuenta":"Mercantil"}
@@ -23,7 +24,7 @@ export default function MenuModTrans() {
             document.createElement("p"),
         ];
         
-        let cuenta = document.createTextNode( "Tipo de Cuenta: " + obj.cuenta );
+        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta );
         let tipo = document.createTextNode( "Tipo de Transaccion: " + obj.tipo );
         let monto = document.createTextNode( "Monto: $" + obj.monto );
         let desc = document.createTextNode( "Descripcion: " + obj.descripcion );
@@ -92,6 +93,28 @@ export default function MenuModTrans() {
         }
     }
     
+    function optionsAccounts() {
+        if ( showOp == 0 ) {
+            let doc = document.getElementById("cuenta");
+            let keys = Object.keys(localStorage);
+            for(let key of keys) {
+                if ( key.includes("cuenta-") == true ) {
+                    let option = document.createElement("option");
+                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
+                    option.value = key;
+                    option.text = ( 
+                        ob.NombreBanco + ", " +
+                        ob.NumeroCuenta + ", " +
+                        ob.TipoCuenta + ", $" +
+                        ob.Saldo + ", "
+                    );
+                    doc?.appendChild(option);
+                }  
+            }             
+            showOp = 1
+        }
+    }
+
     return (     
         <div className="bg">
         <div className="mainMod">
@@ -108,10 +131,8 @@ export default function MenuModTrans() {
 
                 <p>
                     Elige una Cuenta de Banco: <br/>
-                    <select id="cuenta" onChange={ handleInputCuenta } > 
+                    <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
                         <option value="null" >Cuenta de Banco</option>
-                        <option value="Mercantil" > Mercantil </option>
-                        <option value="BNC"> BNC </option>
                     </select>
                 
                     <br/> <br/> Elige el tipo de Transaccion: <br/>

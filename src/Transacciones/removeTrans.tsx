@@ -20,7 +20,7 @@ export default function MenuDelTrans() {
             document.createElement("p"),
         ];
         
-        let cuenta = document.createTextNode( "Tipo de Cuenta: " + obj.cuenta );
+        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta );
         let tipo = document.createTextNode( "Tipo de Transaccion: " + obj.tipo );
         let monto = document.createTextNode( "Monto: $" + obj.monto );
         let desc = document.createTextNode( "Descripcion: " + obj.descripcion );
@@ -46,7 +46,7 @@ export default function MenuDelTrans() {
     }
 
     const clearLocal = () => {
-        localStorage.setItem("index", "0");
+        localStorage.setItem("indextrans", "0");
         let keys = Object.keys(localStorage);
         for(let key of keys) {
             if ( key.includes("transaccion-") == true ) {

@@ -1,5 +1,9 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MenuAddCuen from './Cuentas/Cuentas/MenuAddCuen';
+import MenuDelCuen from './Cuentas/Cuentas/MenuDelCuen';
+import MenuConCuen from './Cuentas/Cuentas/MenuConCuen';
+import MenuCuentas from './Cuentas/Cuentas/MenuCuentas';
 import MenuAddTrans from "./Transacciones/addTrans";
 import MenuModTrans from "./Transacciones/modTrans";
 import MenuDelTrans from "./Transacciones/removeTrans";
@@ -20,6 +24,12 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={ <Home/> } />
+            
+      <Route path="/cuentas/" element={ <MenuCuentas/> } />
+      <Route path="/cuentas/menuAdd" element={ <MenuAddCuen/> } />
+      <Route path="/cuentas/menuCon" element={ <MenuConCuen/> } />
+      <Route path="/cuentas/menuDel" element={ <MenuDelCuen/> } />
+      
       <Route path="/transacciones" element={ <HomeTrans/> } />
       <Route path="/transacciones/menuAdd" element={ <MenuAddTrans/> } />
       <Route path="/transacciones/menuMod" element={ <MenuModTrans/> } />
