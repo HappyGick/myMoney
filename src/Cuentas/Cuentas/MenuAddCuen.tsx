@@ -63,7 +63,6 @@ export default function MenuAddCuen() {
     const handleInputNombreBanco = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         formulario.NombreBanco = text;
-        <p> JSON.stringify(formulario)</p>
     }
 
     let cond = 0;
