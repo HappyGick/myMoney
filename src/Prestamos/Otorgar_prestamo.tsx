@@ -66,7 +66,7 @@ export const FormOtorgarPrestamo = ()=>{
                     </div>
                 </div>
             </div>
-            {ApliModal('/menu_OtoPres','Otorgar Prestamo','Menu de Otorgar Prestamo','Otorgar otro prestamo','Exito!','Se ha otorgado un prestamo con exito',modal,setModal)}
+            {ApliModal('/menu_OtoPres','Otorgar Prestamo','No','Si','Exito!','Se ha otorgado un prestamo con exito. Desea otorgar otro prestamo?',modal,setModal)}
             {reset()}
         </>
     );
