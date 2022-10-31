@@ -1,11 +1,14 @@
 import { useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import uuid from 'react-uuid';
+import ApliModal from "../ApliModal";
 
 export const FormOtorgarPrestamo = ()=>{
+    const [modal,setModal]=useState(0);
     const [formulario, setFormulario]=useState({
-        cuenta: '',
         nombre: '',
-        monto: ''
+        monto: '',
+        cuenta: ''
     })
 
     const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
@@ -18,44 +21,53 @@ export const FormOtorgarPrestamo = ()=>{
     }
 
     const saveLocal = ()=>{
-        localStorage.setItem('nombre',formulario.nombre);
-        localStorage.setItem('monto',formulario.monto);
-        localStorage.setItem('cuenta',formulario.cuenta);
+        localStorage.setItem('OtoPres-' + uuid(),JSON.stringify(formulario));
+        setModal(1);
+    }
+
+    const reset = ()=>{
+        if (modal==2){
+            window.location.reload();
+        }
     }
 
     const nav = useNavigate();
     const goHome = ()=>{nav('/menu_OtoPres')};
 
     return (
-        <form autoComplete="off">
-            <h1>Otorgar Prestamo</h1>
+        <>
+            <div>
+                <h1>Otorgar Prestamo</h1>
 
-            <div className="container">
-                <div className="campo">
-                    <label>Nombre:</label>
-                    <br />
-                    <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a otorgar'} onChange={cambios} required/>
-                </div>
+                <div className="container">
+                    <div className="campo">
+                        <label>Nombre:</label>
+                        <br />
+                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a otorgar'} onChange={cambios} required/>
+                    </div>
 
-                <div className="campo">
-                    <label>Monto:</label>
-                    <br />
-                    <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a otorgar'} onChange={cambios} required/>
-                </div>
+                    <div className="campo">
+                        <label>Monto:</label>
+                        <br />
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a otorgar'} onChange={cambios} required/>
+                    </div>
 
-                <div className="campo">
-                    <label>Cuenta:</label>
-                    <br />  
-                    <input type="text" name="cuenta" minLength={16} maxLength={16} pattern={'^[0-9]+'} placeholder={'Numero de cuenta'} onChange={cambios} required/>
-                </div>
+                    <div className="campo">
+                        <label>Cuenta:</label>
+                        <br />  
+                        <input type="text" name="cuenta" minLength={16} maxLength={16} pattern={'^[0-9]+'} placeholder={'Numero de cuenta'} onChange={cambios} required/>
+                    </div>
 
-                <div className="botones">
-                    <br />
-                    <br />
-                    <button onClick={goHome}>Regresar</button>
-                    <button onClick={saveLocal}>Confirmar</button>
+                    <div className="botones">
+                        <br />
+                        <br />
+                        <button onClick={goHome}>Regresar</button>
+                        <button onClick={saveLocal}>Confirmar</button>
+                    </div>
                 </div>
             </div>
-        </form>
+            {ApliModal('/menu_OtoPres','Otorgar Prestamo','No','Si','Exito!','Se ha otorgado un prestamo con exito. Desea otorgar otro prestamo?',modal,setModal)}
+            {reset()}
+        </>
     );
 }

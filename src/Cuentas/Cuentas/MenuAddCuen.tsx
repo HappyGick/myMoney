@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "../hooks/useForm";
+import {useState} from 'react';
+import ApliModal from '../../ApliModal';
+
 interface FormData{
      NombreBanco: string;
      NumeroCuenta: number;
@@ -36,6 +39,7 @@ class cuenta {
 // }
 let bancos: string[]=["mercantil","BNC"]
 export default function MenuAddCuen() {
+    const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/Cuentas') };
     const {formulario,handleChange}=useForm<FormData>({
@@ -57,9 +61,15 @@ export default function MenuAddCuen() {
         let id = ( index ).toString();
         localStorage.setItem("indexcuentas", id);
         localStorage.setItem( "cuenta-" + id, JSON.stringify(formulario) );
-        alert('Guardado Exitosamente');
-        window.location.reload();
+        setModal(1);
     }
+
+    const reset = ()=>{
+        if (modal==2){
+            window.location.reload();
+        }
+    }
+
     const handleInputNombreBanco = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         formulario.NombreBanco = text;
@@ -84,31 +94,35 @@ export default function MenuAddCuen() {
         else { index = Number( localStorage.getItem("indexcuentas") ); }
     }
 
-    return ( 
-        <div className="bg">
-        <div className="mainAdd">
-            <h1>Añadir Cuenta</h1>           
-            <p>
-                Elige una Cuenta de Banco: <br/>
-                <select id="cuenta" name="NombreBanco" onChange={handleInputNombreBanco} >
-                    <option value="null" >Cuenta de Banco</option>
-                    <option value="Mercantil" > Mercantil </option>
-                    <option value="BNC"> BNC </option>
-                </select>
-                
-                <br/> <br/> Ingrese el numero de cuenta <br/>
-                <input id="NumeroCuenta" name="NumeroCuenta"type="number" placeholder="1234567890123456" onChange={ handleChange }  maxLength={16} minLength={16}/>
-                
-                <br/> <br/> Ingrese el saldo inicial de la cuenta <br/>
-                <input id="Saldo" type="number" name="Saldo"min="0" max="123456789" placeholder="0" onChange={ handleChange }  />
-                
-                <br/> <br/> Ingrese el tipo de cuenta <br/>
-                <input id="TipoCuenta" type="text" name="TipoCuenta" placeholder="ahorro" onChange={ handleChange }  maxLength={9} minLength={6} />
-            </p>
-            {/* <p>{JSON.stringify(formulario)};</p> */}
-            <button onClick = { goHome } className="glow-button" >Regresar</button>
-            <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
-        </div>
-        </div>
+    return (
+        <>
+            <div className="bg">
+            <div className="mainAdd">
+                <h1>Añadir Cuenta</h1>           
+                <p>
+                    Elige una Cuenta de Banco: <br/>
+                    <select id="cuenta" name="NombreBanco" onChange={handleInputNombreBanco} >
+                        <option value="null" >Cuenta de Banco</option>
+                        <option value="Mercantil" > Mercantil </option>
+                        <option value="BNC"> BNC </option>
+                    </select>
+                    
+                    <br/> <br/> Ingrese el numero de cuenta <br/>
+                    <input id="NumeroCuenta" name="NumeroCuenta"type="number" placeholder="1234567890123456" onChange={ handleChange }  maxLength={16} minLength={16}/>
+                    
+                    <br/> <br/> Ingrese el saldo inicial de la cuenta <br/>
+                    <input id="Saldo" type="number" name="Saldo"min="0" max="123456789" placeholder="0" onChange={ handleChange }  />
+                    
+                    <br/> <br/> Ingrese el tipo de cuenta <br/>
+                    <input id="TipoCuenta" type="text" name="TipoCuenta" placeholder="ahorro" onChange={ handleChange }  maxLength={9} minLength={6} />
+                </p>
+                {/* <p>{JSON.stringify(formulario)};</p> */}
+                <button onClick = { goHome } className="glow-button" >Regresar</button>
+                <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
+            </div>
+            </div>
+            {ApliModal('/Cuentas','Agregar Cuenta','Menu de Cuenta','Agregar otra Cuenta','Exito!','Se ha agregado una cuenta con exito',modal,setModal)}
+            {reset()}
+        </>
     );
 }

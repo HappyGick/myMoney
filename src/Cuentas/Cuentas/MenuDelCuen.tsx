@@ -1,4 +1,5 @@
-
+import { useState } from "react";
+import ApliModal from "../../ApliModal";
 import { useNavigate } from "react-router-dom";
 interface FormData{
     NombreBanco: string;
@@ -8,6 +9,7 @@ interface FormData{
 }
    
     export default function MenuDel() {
+        const [modal,setModal]=useState(0);
         const nav = useNavigate();
         const goHome = () => { nav('/cuentas') };
         let showCond = 0;
@@ -19,8 +21,7 @@ interface FormData{
         const delFunction = () => {
             if ( keyObj != "null" ) { 
                 localStorage.removeItem( keyObj );
-                alert( "Eliminado Exitosamente"  );
-                window.location.reload();
+                setModal(1);
             }
         }
     
@@ -32,7 +33,13 @@ interface FormData{
                     localStorage.removeItem(key);
                 }  
             }  
-            window.location.reload();
+            setModal(1);
+        }
+
+        const reset = ()=>{
+            if (modal==2){
+                window.location.reload();
+            }
         }
 
         const showOption = ( e: { target: { value: any; }; } ) => {
@@ -87,26 +94,30 @@ interface FormData{
             }
         }
         
-        return (     
-            <div className="bg">
-            <div className="mainMod">
-                <h1>Eliminar Cuentas</h1>
-                    <p id="mainP">
-                        Elige una Cuenta a Modificar:
-                        <br/>
-                        <select id="cuenta" onClick={ Options } onChange={ showOption } >
-                            <option value="null" >Seleccione una cuenta</option>
-                        </select>
-                        <div id="card" className="card">
-                        </div>
+        return (
+            <>   
+                <div className="bg">
+                <div className="mainMod">
+                    <h1>Eliminar Cuentas</h1>
+                        <p id="mainP">
+                            Elige una Cuenta a Modificar:
+                            <br/>
+                            <select id="cuenta" onClick={ Options } onChange={ showOption } >
+                                <option value="null" >Seleccione una cuenta</option>
+                            </select>
+                            <div id="card" className="card">
+                            </div>
 
-                        Para Eliminar todas las Transacciones presione:        
-                        <button onClick={ clearLocal } className="glow-button" > Borrar Todo </button>
-                        <br/>
-                    </p>
-                    <button onClick={ goHome } className="glow-button" >Regresar</button>
-                    <input type="submit" value="Confirmar" className="glow-button" onClick={ delFunction } />
-            </div>
-            </div>
+                            Para Eliminar todas las Transacciones presione:        
+                            <button onClick={ clearLocal } className="glow-button" > Borrar Todo </button>
+                            <br/>
+                        </p>
+                        <button onClick={ goHome } className="glow-button" >Regresar</button>
+                        <input type="submit" value="Confirmar" className="glow-button" onClick={ delFunction } />
+                </div>
+                </div>
+                {ApliModal('/Cuentas','Eliminar Cuenta','Menu de Cuenta','Eliminar otra Cuenta','Exito!','Se ha eliminado una cuenta con exito',modal,setModal)}
+                {reset()}
+            </>
         );
     }

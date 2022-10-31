@@ -1,8 +1,9 @@
-
+import ApliModal from "../ApliModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function MenuModTrans() {
+    const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
     let showCond = 0;
@@ -65,7 +66,12 @@ export default function MenuModTrans() {
     const modFunction = () => {
         if ( keyObj != "null" ) { 
             localStorage.setItem( keyObj, JSON.stringify(objModded) );
-            alert( "Modificado Exitosamente"  );
+            setModal(1);
+        }
+    }
+
+    const reset = ()=>{
+        if (modal==2){
             window.location.reload();
         }
     }
@@ -116,46 +122,50 @@ export default function MenuModTrans() {
     }
 
     return (     
-        <div className="bg">
-        <div className="mainMod">
-            <h1>Modificar Transacciones</h1>
-                <p id="mainP">
-                    Elige una Transaccion a Modificar:
-                    <br/>
-                    <select id="transacciones" onClick={ Options } onChange={ showOption } >
-                        <option value="null" >Seleccione una Transaccion</option>
-                    </select>
-                    <div id="card" className="card">
-                    </div>
-                </p>
+        <>
+            <div className="bg">
+            <div className="mainMod">
+                <h1>Modificar Transacciones</h1>
+                    <p id="mainP">
+                        Elige una Transaccion a Modificar:
+                        <br/>
+                        <select id="transacciones" onClick={ Options } onChange={ showOption } >
+                            <option value="null" >Seleccione una Transaccion</option>
+                        </select>
+                        <div id="card" className="card">
+                        </div>
+                    </p>
 
-                <p>
-                    Elige una Cuenta de Banco: <br/>
-                    <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
-                        <option value="null" >Cuenta de Banco</option>
-                    </select>
-                
-                    <br/> <br/> Elige el tipo de Transaccion: <br/>
-                    <select id="tipo" onChange={ handleInputTipo } >
-                        <option value="null" >Tipo de Transaccion</option>
-                        <option value="Ingreso" >Ingreso</option>
-                        <option value="Gasto" >Gasto</option>
-                    </select>
-                
-                    <br/> <br/> Ingrese un Monto <br/>
-                    <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
-                
-                    <br/> <br/> Ingrese la fecha de la Transaccion <br/>
-                    <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
-                
-                    <br/> <br/> Añade una Descripcion <br/>
-                    <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
-                    <br/> <br/>
-                </p>
+                    <p>
+                        Elige una Cuenta de Banco: <br/>
+                        <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
+                            <option value="null" >Cuenta de Banco</option>
+                        </select>
+                    
+                        <br/> <br/> Elige el tipo de Transaccion: <br/>
+                        <select id="tipo" onChange={ handleInputTipo } >
+                            <option value="null" >Tipo de Transaccion</option>
+                            <option value="Ingreso" >Ingreso</option>
+                            <option value="Gasto" >Gasto</option>
+                        </select>
+                    
+                        <br/> <br/> Ingrese un Monto <br/>
+                        <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
+                    
+                        <br/> <br/> Ingrese la fecha de la Transaccion <br/>
+                        <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
+                    
+                        <br/> <br/> Añade una Descripcion <br/>
+                        <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
+                        <br/> <br/>
+                    </p>
 
-            <button onClick={ goHome } className="glow-button" >Regresar</button>
-            <input type="submit" value="Confirmar" className="glow-button" onClick={ modFunction } />
-        </div>
-        </div>
+                <button onClick={ goHome } className="glow-button" >Regresar</button>
+                <input type="submit" value="Confirmar" className="glow-button" onClick={ modFunction } />
+            </div>
+            </div>
+            {ApliModal('/transacciones','Modificar Transacciones','Menu de Transacciones','Modificar otra Transaccion','Exito!','Se ha realizado la transaccion con exito',modal,setModal)}
+            {reset()}
+        </>
     );
 }
