@@ -1,6 +1,8 @@
 import { useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorSolicitados } from "../Errores/ErrorSolicitados";
 
 let showCond = 0;
 let keyObj = "";
@@ -126,6 +128,8 @@ export const FormPagarPrestamo = ()=>{
 
     return (
         <>
+        {ErrorCuenta()}
+        {ErrorSolicitados()} 
             <div>
                 <h1>Pagar Prestamo</h1>
 

@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ErrorCuenta } from "../../Errores/ErrorCuenta";
 
 interface FormData{
     NombreBanco: string;
@@ -70,7 +71,9 @@ export default function MenuConCuen() {
         }
     }
     
-    return (     
+    return (    
+        <>
+        {ErrorCuenta()} 
         <div className="bg">
         <div className="mainMod">
             <h1>Consultar Cuentas</h1>
@@ -84,8 +87,8 @@ export default function MenuConCuen() {
                     </div>
                 </p>
             <button onClick={ goHome } className="glow-button" >Regresar</button>
-            <input type="submit" value="Confirmar" className="glow-button" onClick={ modFunction } />
         </div>
         </div>
+        </>
     );
 }

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import ApliModal from "../../ApliModal";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
+import { ErrorCuenta } from "../../Errores/ErrorCuenta";
 interface FormData{
     NombreBanco: string;
     NumeroCuenta: number;
@@ -12,6 +14,7 @@ interface FormData{
         const [modal,setModal]=useState(0);
         const nav = useNavigate();
         const goHome = () => { nav('/cuentas') };
+        const goError ='/ErrorMensajeCuentas';
         let showCond = 0;
         let keyObj = "";
         let cond = 0;
@@ -93,14 +96,15 @@ interface FormData{
                 cond = 1
             }
         }
-        
+
         return (
-            <>   
+            <>
+            {ErrorCuenta()}
                 <div className="bg">
                 <div className="mainMod">
                     <h1>Eliminar Cuentas</h1>
                         <p id="mainP">
-                            Elige una Cuenta a Modificar:
+                            Elige una Cuenta a Eliminar:
                             <br/>
                             <select id="cuenta" onClick={ Options } onChange={ showOption } >
                                 <option value="null" >Seleccione una cuenta</option>

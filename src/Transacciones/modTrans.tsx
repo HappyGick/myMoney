@@ -1,6 +1,8 @@
 import ApliModal from "../ApliModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorTransacciones } from "../Errores/ErrorTransacciones";
 
 export default function MenuModTrans() {
     const [modal,setModal]=useState(0);
@@ -123,6 +125,8 @@ export default function MenuModTrans() {
 
     return (     
         <>
+        {ErrorCuenta()}
+        {ErrorTransacciones()}
             <div className="bg">
             <div className="mainMod">
                 <h1>Modificar Transacciones</h1>

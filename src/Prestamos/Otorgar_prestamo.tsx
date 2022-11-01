@@ -2,6 +2,7 @@ import { useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
 
 let showCond = 0;
 let keyObj = "";
@@ -115,6 +116,7 @@ export const FormOtorgarPrestamo = ()=>{
 
     return (
         <>
+        {ErrorCuenta()} 
             <div>
                 <h1>Otorgar Prestamo</h1>
 

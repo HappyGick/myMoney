@@ -1,6 +1,8 @@
 import { useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorOtorgados } from "../Errores/ErrorOtorgados";
 
 let showCond = 0;
 let keyObj = "";
@@ -120,6 +122,8 @@ export const FormRegisPagoPrestamo = ()=>{
     return (
         <>
             <div>
+            {ErrorCuenta()}
+            {ErrorOtorgados()} 
 
                 <h1>Registrar Pago de Prestamo</h1>
 

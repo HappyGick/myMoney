@@ -94,6 +94,18 @@ export default function MenuAddCuen() {
         else { index = Number( localStorage.getItem("indexcuentas") ); }
     }
 
+    function vefNumCuenta( num:number ) {
+        let keys = Object.keys(localStorage);
+        for(let key of keys) {
+            if ( key.includes("cuenta-") == true ) {
+                let ob = JSON.parse( "" + localStorage.getItem( key ) );
+                if ( ob.NumeroCuenta == num ) { return (<>
+                alert("Esta repetido")</>) }
+            }  
+        }
+    }
+
+
     return (
         <>
             <div className="bg">

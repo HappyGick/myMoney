@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+
 
 class transaccion {
     public monto: Number;
@@ -110,6 +112,7 @@ export default function MenuAddTrans() {
 
     return ( 
         <>
+        {ErrorCuenta()} 
             <div className="bg">
             <div className="mainAdd">
                 <h1>Añadir Transacciones</h1>           

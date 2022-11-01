@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorTransacciones } from "../Errores/ErrorTransacciones";
 
 export default function MenuDelTrans() {
     const [modal,setModal]=useState(0);
@@ -88,6 +90,8 @@ export default function MenuDelTrans() {
     
     return (
         <>
+        {ErrorCuenta()}
+        {ErrorTransacciones()}
             <div className="bg">
             <div className="mainDel">
                 <h1>Eliminar Transacciones</h1>
