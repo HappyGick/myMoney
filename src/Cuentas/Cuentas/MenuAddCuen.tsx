@@ -47,7 +47,7 @@ const validationsForm = (form: any)=>{
     let resCantMonto = "^.{0,9}$"
     
     if (!form.NumeroCuenta){
-        errors.NumeroCuenta = '*El campo Numero de Cuenta';
+        errors.NumeroCuenta = '*El campo Numero de Cuenta es requerido';
     } else if (!(form.NumeroCuenta).match(resMonto)){
         errors.NumeroCuenta = '*El campo solo acepta numeros';
     } else if (!(form.NumeroCuenta).match(resCantCuenta)){
