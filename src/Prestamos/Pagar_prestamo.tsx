@@ -104,24 +104,23 @@ export const FormPagarPrestamo = ()=>{
             let total = parseInt(objModded.monto) - parseInt(form.monto);
             let totalC = parseInt(objModdedC.Saldo) - parseInt(form.monto);
 
-            if (totalC < 0){
-                alert('Saldo insuficiente');
+            if (totalC < 0 && total >=0){
+                objModded.monto = (parseInt(objModded.monto) - parseInt(objModdedC.Saldo)).toString();
+                objModdedC.Saldo = "0";
             }
 
-            else{
-
-                if (total < 0){
-                    objModdedC.Saldo = (parseInt(objModdedC.Saldo) - parseInt(objModded.monto)).toString();
-                    objModded.monto = "0"; 
-                }
-                else {
-                    objModdedC.Saldo = totalC.toString();
-                    objModded.monto = total.toString();
-                }
-                localStorage.setItem( keyObj, JSON.stringify(objModded) );
-                localStorage.setItem( objModded.cuenta, JSON.stringify(objModdedC));
-                setModal(1);
+            else if (total < 0){
+                objModdedC.Saldo = (parseInt(objModdedC.Saldo) - parseInt(objModded.monto)).toString();
+                objModded.monto = "0"; 
             }
+
+            else {
+                objModdedC.Saldo = totalC.toString();
+                objModded.monto = total.toString();
+            }
+            localStorage.setItem( keyObj, JSON.stringify(objModded) );
+            localStorage.setItem( objModded.cuenta, JSON.stringify(objModdedC));
+            setModal(1);
         }
         resetV();
     }

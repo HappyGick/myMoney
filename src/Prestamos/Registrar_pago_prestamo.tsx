@@ -112,9 +112,9 @@ export const FormRegisPagoPrestamo = ()=>{
             else{
                 objModded.monto = total.toString();
                 objModdedC.Saldo = totalC.toString();
-                localStorage.setItem( keyObj, JSON.stringify(objModded) );
-                localStorage.setItem( objModded.cuenta, JSON.stringify(objModdedC));
             }
+            localStorage.setItem( keyObj, JSON.stringify(objModded) );
+            localStorage.setItem( objModded.cuenta, JSON.stringify(objModdedC));
             setModal(1);
         }
         resetV();
