@@ -12,7 +12,7 @@ let objModded = {NombreBanco: '', NumeroCuenta: '', Saldo: '', TipoCuenta: ''}
 
 const validationsForm = (form: any)=>{
     let errors = {nombre: '',monto: ''};
-    let resName = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$";
+    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
     let resMonto = "^[0-9]+$";
     let resCantName = "^.{10,50}$";
     let resCantMonto = "^.{0,9}$"
@@ -55,9 +55,13 @@ export const FormOtorgarPrestamo = ()=>{
 
     const saveLocal = ()=>{
         if (keyObj !='null' && keyObj !='' && errors.nombre =='' && errors.monto ==''){
+            let total = parseInt(objModded.Saldo) - parseInt(form.monto);
+            if (total < 0){
+                form.monto = objModded.Saldo;
+            }
             form.cuenta=keyObj;
             localStorage.setItem('OtoPres-' + uuid(),JSON.stringify(form));
-            modFunction();
+            modFunction(total);
             setModal(1);
         }
         resetV()
@@ -115,9 +119,13 @@ export const FormOtorgarPrestamo = ()=>{
         }
     }
 
-    const modFunction = ()=>{
-        let total = parseInt(objModded.Saldo) - parseInt(form.monto);
-        objModded.Saldo = total.toString();
+    const modFunction = (total:number)=>{
+        if (total < 0){
+            objModded.Saldo = '0'
+        }
+        else{
+            objModded.Saldo = total.toString();
+        }
         localStorage.setItem( keyObj, JSON.stringify(objModded) );
         resetV()
     }

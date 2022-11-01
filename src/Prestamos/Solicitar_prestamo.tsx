@@ -12,7 +12,7 @@ let objModded = {NombreBanco: '', NumeroCuenta: '', Saldo: '', TipoCuenta: ''}
 
 const validationsForm = (form: any)=>{
     let errors = {nombre: '',monto: ''};
-    let resName = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$";
+    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
     let resMonto = "^[0-9]+$";
     let resCantName = "^.{10,50}$";
     let resCantMonto = "^.{0,9}$"
