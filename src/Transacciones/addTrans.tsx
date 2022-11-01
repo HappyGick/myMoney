@@ -1,15 +1,21 @@
+import { DateTime } from "luxon";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Etiqueta } from "../classes/transacciones/etiqueta";
+import { Transaccion } from "../classes/transacciones/transaccion";
+import { guardar } from "../services/datastore";
+import { agregarTransaccion, obtenerCuenta, obtenerCuentas } from "../services/funcionesCliente";
 
 class transaccion {
-    public monto: Number;
+    public monto: number;
     public descripcion: string;
     public fecha: string;
     public tipo: string;
     public cuenta: string;
 
-    public constructor(fecha:string, monto:Number, descripcion:string, tipo:string, cuenta:string) {
+    public constructor(fecha:string, monto:number, descripcion:string, tipo:string, cuenta:string) {
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.monto = monto;
@@ -23,8 +29,14 @@ export default function MenuAddTrans() {
     let showCond = 0;
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
-    const t = new transaccion("28/10/2022", 0, "Empty", "Ingreso" , "Mercantil");
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
+    const cuentas = obtenerCuentas();
+    const dispatch = useAppDispatch();
+    const [t, setTx] = useState(new transaccion("28/10/2022", 0, "Empty", "Ingreso" , "Mercantil"));
     
+    const globalState = useAppSelector((state) => state);
+
     const handleInputMonto = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         t.monto = text;
@@ -46,66 +58,26 @@ export default function MenuAddTrans() {
         t.tipo = text;
     }
     const saveData = () => {
-        let text = (
-            t.cuenta + " " +
-            t.tipo + " " +
-            t.descripcion + " " +
-            t.fecha + " " +
-            "$" + t.monto
-        );
-        
-        index = index + 1;
-        let id = ( index ).toString();
-        localStorage.setItem("indextrans", id);
-        localStorage.setItem( "transaccion-" + id, JSON.stringify(t) );
+        console.log(t);
+        const [tx, saldo] = agregarTransaccion(new Transaccion(
+            t.tipo === 'Ingreso' ? t.monto : -t.monto,
+            cuentas[Number(t.cuenta)],
+            DateTime.fromFormat(t.fecha, "dd/MM/yyyy").toJSDate(),
+            t.descripcion,
+            new Etiqueta("test", ""),
+            []
+        ));
+        dispatch(tx);
+        dispatch(saldo);
         setModal(1);
     }
 
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
-    }
-
-    function optionsAccounts() {
-        if ( showCond == 0 ) {
-            let doc = document.getElementById("cuenta");
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("cuenta-") == true ) {
-                    let option = document.createElement("option");
-                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                    option.value = key;
-                    option.text = ( 
-                        ob.NombreBanco + ", " +
-                        ob.NumeroCuenta + ", " +
-                        ob.TipoCuenta + ", $" +
-                        ob.Saldo + ", "
-                    );
-                    doc?.appendChild(option);
-                }  
-            }             
-            showCond = 1
-        }
-    }
-
-    let cond = 0;
-    let index = 0;
-    let veri = 0;
-
-    if ( cond == 0 ) {
-        cond = 1;    
-        if ( localStorage.length != 0 ) {
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("transaccion-") == true ) {
-                    veri = 1;
-                    break;
-                }  
-            } 
-        }
-        if ( veri == 0 ) { localStorage.setItem("indextrans", "1"); }
-        else { index = Number( localStorage.getItem("indextrans") ); }
     }
 
     return ( 
@@ -115,8 +87,18 @@ export default function MenuAddTrans() {
                 <h1>Añadir Transacciones</h1>           
                 <p>
                     Elige una Cuenta de Banco: <br/>
-                    <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
+                    <select id="cuenta" onChange={ handleInputCuenta } > 
                         <option value="null" >Cuenta de Banco</option>
+                        {cuentas.map((v, i) => {
+                                return (
+                                    <option value={i} key={i}>{
+                                        v.banco.nombre + ", " +
+                                        v.numCuenta + ", " +
+                                        v.tipo + ", " +
+                                        v.saldo
+                                    }</option>
+                                );
+                            })}
                     </select>
                     
                     <br/> <br/> Elige el Tipo de Transaccion: <br/>

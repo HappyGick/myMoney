@@ -3,8 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface Prestamo {
     id: string,
     valor: number,
-    etiqueta: string,
-    descripcion: string,
     cuenta: string,
     fecha: string,
     idTransaccion: string,
@@ -19,13 +17,13 @@ interface POtorgado extends Prestamo {
 }
 
 interface PrestamosState {
-    solicitados: PSolicitado[],
-    otorgados: POtorgado[]
+    solicitados: {[id: string]: PSolicitado},
+    otorgados: {[id: string]: POtorgado}
 }
 
 const initialState: PrestamosState = {
-    solicitados: [],
-    otorgados: []
+    solicitados: {},
+    otorgados: {}
 }
 
 export const prestamosSlice = createSlice({
@@ -33,13 +31,30 @@ export const prestamosSlice = createSlice({
     name: 'prestamos',
     reducers: {
         setPrestamos: (state, action: PayloadAction<PrestamosState>) => {
-            state.otorgados = [...action.payload.otorgados];
-            state.solicitados = [...action.payload.solicitados];
+            state.otorgados = {...action.payload.otorgados};
+            state.solicitados = {...action.payload.solicitados};
         },
-        // falta, no he hecho esa parte
+        solicitar: (state, action: PayloadAction<PSolicitado>) => {
+            state.solicitados[action.payload.id] = action.payload;
+        },
+        otorgar: (state, action: PayloadAction<POtorgado>) => {
+            state.otorgados[action.payload.id] = action.payload;
+        },
+        pagar: (state, action: PayloadAction<{id: string, valor: number}>) => {
+            state.solicitados[action.payload.id].valor -= action.payload.valor;
+            if(state.solicitados[action.payload.id].valor <= 0) {
+                delete state.solicitados[action.payload.id];
+            }
+        },
+        registrarPago: (state, action: PayloadAction<{id: string, valor: number}>) => {
+            state.otorgados[action.payload.id].valor -= action.payload.valor;
+            if(state.otorgados[action.payload.id].valor <= 0) {
+                delete state.otorgados[action.payload.id];
+            }
+        }
     }
 });
 
-export const { setPrestamos } = prestamosSlice.actions;
+export const { setPrestamos, solicitar, otorgar, pagar, registrarPago } = prestamosSlice.actions;
 
 export default prestamosSlice.reducer;

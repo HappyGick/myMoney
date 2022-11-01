@@ -16,10 +16,12 @@ import { FormRegisPagoPrestamo } from './Prestamos/Registrar_pago_prestamo';
 import { FormOtorgarPrestamo } from './Prestamos/Otorgar_prestamo';
 import { MenuSolPrestamos } from './Prestamos/Menu_SolPrestamos';
 import { MenuOtoPrestamos } from './Prestamos/Menu_OtoPrestamos';
+import { login } from './services/funcionesCliente';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
 function App() {
+  login("pperez", "12345");
   return (
     <BrowserRouter>
     <Routes>

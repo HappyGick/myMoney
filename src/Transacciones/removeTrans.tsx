@@ -1,20 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { guardar } from "../services/datastore";
+import { eliminarTodasTransacciones, eliminarTransaccion, obtenerTransacciones, useAllSelectors } from "../services/funcionesCliente";
 
 export default function MenuDelTrans() {
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
-    let showCond = 0;
+    const transacciones = obtenerTransacciones();
+    const dispatch = useAppDispatch();
+    const [showCond, setShowCond] = useState(0);
+    const [keyObj, setKeyObj] = useState("");
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
+    const [ctas, txs, otor, soli] = useAllSelectors();
+    const globalState = useAppSelector((state) => state);
     let cond = 0;
-    let keyObj = "";
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = JSON.parse( "" + localStorage.getItem(key) );
+        let obj = transacciones[Number(key)];
         let div = document.getElementById("card");
-        keyObj = key;
+        setKeyObj(obj.id);
 
         let p = [ 
             document.createElement("p"), document.createElement("p"),
@@ -22,7 +31,7 @@ export default function MenuDelTrans() {
             document.createElement("p"),
         ];
         
-        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta );
+        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta.numCuenta );
         let tipo = document.createTextNode( "Tipo de Transaccion: " + obj.tipo );
         let monto = document.createTextNode( "Monto: $" + obj.monto );
         let desc = document.createTextNode( "Descripcion: " + obj.descripcion );
@@ -34,32 +43,30 @@ export default function MenuDelTrans() {
         p[3].appendChild(desc);
         p[4].appendChild(fecha);
         
-        if ( showCond == 0 ) { showCond = 1; }
+        if ( showCond == 0 ) { setShowCond(1); }
         else { div?.replaceChildren(); }
         for ( let i = 0; i <= 4; i++ ) { div?.appendChild(p[i]); }
     }
 
     const delFunction = () => {
-        if ( keyObj != "null" ) { 
-            localStorage.removeItem( keyObj );
+        if ( keyObj !== "" ) {
+            const [tx, saldo] = eliminarTransaccion(keyObj, txs, ctas);
+            dispatch(tx);
+            dispatch(saldo);
             setModal(1);
         }
     }
 
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
     }
 
     const clearLocal = () => {
-        localStorage.setItem("indextrans", "0");
-        let keys = Object.keys(localStorage);
-        for(let key of keys) {
-            if ( key.includes("transaccion-") == true ) {
-                localStorage.removeItem(key);
-            }  
-        }  
+        dispatch(eliminarTodasTransacciones());
         setModal(1);
     }
 
@@ -94,8 +101,19 @@ export default function MenuDelTrans() {
                 <p id="mainP">
                         Elige una Transaccion a Eliminar:
                         <br/>
-                        <select id="transacciones" onClick={ Options } onChange={ showOption } >
+                        <select id="transacciones" onChange={ showOption } >
                             <option value="null" >Seleccione una Transaccion</option>
+                            {transacciones.map((v, i) => {
+                                return (
+                                    <option value={i} key={i}>
+                                        {v.cuenta.numCuenta + ", " +
+                                        v.tipo + ", " +
+                                        v.descripcion + ", $" +
+                                        v.monto + ", " +
+                                        v.fecha}
+                                    </option>
+                                );
+                            })}
                         </select>
                         <div id="card" className="card">
                         </div>

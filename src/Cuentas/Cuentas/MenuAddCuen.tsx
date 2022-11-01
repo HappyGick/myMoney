@@ -2,96 +2,64 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "../hooks/useForm";
 import {useState} from 'react';
 import ApliModal from '../../ApliModal';
+import constantes from "../../services/constantes";
+import { Banco } from "../../classes/cuentas/banco";
+import { agregarCuenta } from "../../services/funcionesCliente";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { guardar } from "../../services/datastore";
 
 interface FormData{
-     NombreBanco: string;
-     NumeroCuenta: number;
-     Saldo: number;
-     TipoCuenta: string;
+    NombreBanco: string;
+    NumeroCuenta: string;
+    Saldo: number;
+    TipoCuenta: string;
 }
 
-class cuenta {
-    public NombreBanco: string;
-    public NumeroCuenta: number;
-    public Saldo: number;
-    public TipoCuenta: string;
-
-    public constructor(NombreBanco:string, NumeroCuenta:number, Saldo:number, TipoCuenta:string) {
-        this.NombreBanco = NombreBanco;
-        this.NumeroCuenta = NumeroCuenta;
-        this.Saldo = Saldo;
-        this.TipoCuenta = TipoCuenta;
-    }
-}
-// class bancos
-// {
-//     public NombreBanco: string;
-//     public Inicial: number;
-//     public siguiente?: bancos
-//     public constructor(NombreBanco:string, Inicial:number) {
-//         this.NombreBanco = NombreBanco;
-//         this.Inicial = Inicial;
-//     }
-//     public otro(a:bancos)
-//     {this.siguiente=a;}
-//     public getbancos():bancos
-//     {return(this)}
-// }
-let bancos: string[]=["mercantil","BNC"]
 export default function MenuAddCuen() {
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/Cuentas') };
+    const dispatch = useAppDispatch();
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
     const {formulario,handleChange}=useForm<FormData>({
         NombreBanco: "mercantil",
-        NumeroCuenta: 1234567890123456,
+        NumeroCuenta: "1234567890123456",
         Saldo: 0,
         TipoCuenta: "corriente",
     })
+
+    const globalState = useAppSelector((state) => state);
+
+    const procesarBancos = () => {
+        let bancos: Banco[] = [];
+        for(let i in constantes.bancos) {
+            bancos.push(constantes.bancos[i]);
+        }
+        return bancos;
+    }
     
     const saveData = () => {
-        let text = (
-            formulario.NombreBanco + " " +
-            formulario.NumeroCuenta + " " +
-            formulario.TipoCuenta + " " +
-            "$" + formulario.Saldo
-        );
-        
-        index = index + 1;
-        let id = ( index ).toString();
-        localStorage.setItem("indexcuentas", id);
-        localStorage.setItem( "cuenta-" + id, JSON.stringify(formulario) );
+        dispatch(agregarCuenta(
+            formulario.NumeroCuenta,
+            constantes.bancos[formulario.NombreBanco],
+            formulario.Saldo,
+            formulario.TipoCuenta
+        ));
         setModal(1);
     }
 
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
     }
 
     const handleInputNombreBanco = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         formulario.NombreBanco = text;
-    }
-
-    let cond = 0;
-    let index = 0;
-    let veri = 0;
-
-    if ( cond == 0 ) {
-        cond = 1;    
-        if ( localStorage.length != 0 ) {
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("cuenta-") == true ) {
-                    veri = 1;
-                    break;
-                }  
-            } 
-        }
-        if ( veri == 0 ) { localStorage.setItem("indexcuentas", "1"); }
-        else { index = Number( localStorage.getItem("indexcuentas") ); }
     }
 
     return (
@@ -103,12 +71,15 @@ export default function MenuAddCuen() {
                     Elige una Cuenta de Banco: <br/>
                     <select id="cuenta" name="NombreBanco" onChange={handleInputNombreBanco} >
                         <option value="null" >Cuenta de Banco</option>
-                        <option value="Mercantil" > Mercantil </option>
-                        <option value="BNC"> BNC </option>
+                        {procesarBancos().map((v, i) => {
+                            return (
+                                <option value={v.id} key={i}>{v.nombre}</option>
+                            )
+                        })}
                     </select>
                     
                     <br/> <br/> Ingrese el numero de cuenta <br/>
-                    <input id="NumeroCuenta" name="NumeroCuenta"type="number" placeholder="1234567890123456" onChange={ handleChange }  maxLength={16} minLength={16}/>
+                    <input id="NumeroCuenta" name="NumeroCuenta" type="text" placeholder="1234567890123456" onChange={ handleChange }  maxLength={16} minLength={16}/>
                     
                     <br/> <br/> Ingrese el saldo inicial de la cuenta <br/>
                     <input id="Saldo" type="number" name="Saldo"min="0" max="123456789" placeholder="0" onChange={ handleChange }  />

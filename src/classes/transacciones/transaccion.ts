@@ -25,7 +25,11 @@ export class Transaccion {
     }
 
     public get fecha(): string {
-        return this._fecha.setLocale('es').toLocaleString({month: 'long', day: 'numeric', year: 'numeric'});
+        return this._fecha.toFormat("dd/MM/yyyy");
+    }
+
+    public get fechaISO(): string {
+        return this._fecha.toISO();
     }
 
     public get cuenta(): Cuenta {
@@ -42,6 +46,14 @@ export class Transaccion {
 
     public get etiquetasSecundarias(): Etiqueta[] {
         return this._etiquetasSecundarias;
+    }
+
+    public get tipo(): string {
+        return this._valor < 0 ? "Gasto" : "Ingreso";
+    }
+
+    public get monto(): number {
+        return Math.abs(this._valor);
     }
 
     constructor(valor: number, cuenta: Cuenta, fecha: Date, descripcion: string, etiquetaPrimaria: Etiqueta, etiquetasSecudarias: Etiqueta[], id?: string) {

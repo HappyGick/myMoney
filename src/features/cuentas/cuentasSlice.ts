@@ -31,10 +31,13 @@ export const cuentasSlice = createSlice({
             for(let i in state) {
                 delete state[i];
             }
+        },
+        modSaldo: (state, action: PayloadAction<{id: string, valor: number}>) => {
+            state[action.payload.id].saldo += action.payload.valor;
         }
     }
 });
 
-export const { setCuentas, addCuenta, elimCuenta, borrarTodasCuentas } = cuentasSlice.actions;
+export const { setCuentas, addCuenta, elimCuenta, borrarTodasCuentas, modSaldo } = cuentasSlice.actions;
 
 export default cuentasSlice.reducer;

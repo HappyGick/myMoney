@@ -8,8 +8,12 @@ import { Cuenta } from "../cuentas/cuenta";
 export class PrestamoOtorgado extends Prestamo {
     private _deudor: Contacto;
 
-    constructor(valor: number, etiqueta: Etiqueta, descripcion: string, cuenta: Cuenta, deudor: Contacto, id?: string, fecha?: Date) {
-        super(valor, etiqueta, descripcion, cuenta, id, fecha);
+    public get deudor(): Contacto {
+        return this._deudor;
+    }
+
+    constructor(valor: number, cuenta: Cuenta, deudor: Contacto, id?: string, fecha?: Date) {
+        super(valor, cuenta, id, fecha);
         this._deudor = deudor;
     }
 

@@ -1,12 +1,16 @@
 import { useState,ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import ApliModal from "../ApliModal";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Contacto } from "../classes/prestamos/contacto";
+import { PrestamoOtorgado } from "../classes/prestamos/prestamoOtorgado";
+import { guardar } from "../services/datastore";
+import { agregarTransaccion, obtenerCuentas, otorgarPrestamo } from "../services/funcionesCliente";
 
 let showCond = 0;
 let keyObj = "";
-let cond = 0;
-let objModded = {NombreBanco: '', NumeroCuenta: '', Saldo: '', TipoCuenta: ''}
 
 export const FormOtorgarPrestamo = ()=>{
     const [modal,setModal]=useState(0);
@@ -14,7 +18,13 @@ export const FormOtorgarPrestamo = ()=>{
         nombre: '',
         monto: '',
         cuenta: ''
-    })
+    });
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
+    const cuentas = obtenerCuentas();
+    const dispatch = useAppDispatch();
+
+    const globalState = useAppSelector((state) => state);
 
     const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
         const {name,value} = target;
@@ -28,8 +38,16 @@ export const FormOtorgarPrestamo = ()=>{
     const saveLocal = ()=>{
         if (keyObj !='null' && keyObj !=''){
             formulario.cuenta=keyObj;
-            localStorage.setItem('OtoPres-' + uuid(),JSON.stringify(formulario));
-            modFunction();
+            const p = new PrestamoOtorgado(
+                Number(formulario.monto),
+                cuentas[Number(formulario.cuenta)],
+                new Contacto(formulario.nombre, 0, 0)
+            );
+            const tx = p.crearTransaccion();
+            const [dTx, saldo] = agregarTransaccion(tx);
+            dispatch(otorgarPrestamo(p));
+            dispatch(dTx);
+            dispatch(saldo);
             setModal(1);
         }
         resetV()
@@ -37,9 +55,8 @@ export const FormOtorgarPrestamo = ()=>{
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = JSON.parse( "" + localStorage.getItem(key) );
+        let obj = cuentas[Number(key)];
         let div = document.getElementById("card");
-        objModded = obj;
         keyObj = key;
 
         let p = [ 
@@ -49,10 +66,10 @@ export const FormOtorgarPrestamo = ()=>{
             document.createElement("p")
         ];
         
-        let banco = document.createTextNode( "Nombre de Banco: " + obj.NombreBanco );
-        let cuenta = document.createTextNode( "Numero de Cuenta: " + obj.NumeroCuenta );
-        let tipo = document.createTextNode( "Tipo de Cuenta: " + obj.TipoCuenta );
-        let saldo = document.createTextNode( "Saldo: " + obj.Saldo );
+        let banco = document.createTextNode( "Nombre de Banco: " + obj.banco.nombre );
+        let cuenta = document.createTextNode( "Numero de Cuenta: " + obj.numCuenta );
+        let tipo = document.createTextNode( "Tipo de Cuenta: " + obj.tipo );
+        let saldo = document.createTextNode( "Saldo: " + obj.saldo );
         
         p[0].appendChild(banco);
         p[1].appendChild(cuenta);
@@ -64,47 +81,17 @@ export const FormOtorgarPrestamo = ()=>{
         for ( let i = 0; i <= 3; i++ ) { div?.appendChild(p[i]); }
     }
 
-    const Opciones = ()=>{
-        console.log(cond);
-        if ( cond == 0 ) {
-            let doc = document.getElementById("cuentas");
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("cuenta-") == true ) {
-                    let option = document.createElement("option");
-                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                    option.value = key;
-                    option.text = ( 
-                        ob.NombreBanco + ", " +
-                        ob.NumeroCuenta + ", " +
-                        ob.TipoCuenta + ", $" +
-                        ob.Saldo
-                    );
-                    doc?.appendChild(option);
-                }  
-            }             
-            cond = 1;
-        }
-    }
-
-    const modFunction = ()=>{
-        let total = parseInt(objModded.Saldo) - parseInt(formulario.monto);
-        objModded.Saldo = total.toString();
-        localStorage.setItem( keyObj, JSON.stringify(objModded) );
-        resetV()
-    }
-
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
     }
 
     const resetV = ()=>{
         showCond = 0;
         keyObj = "";
-        cond = 0;
-        objModded = {NombreBanco: '', NumeroCuenta: '', Saldo: '', TipoCuenta: ''}
     }
 
     const nav = useNavigate();
@@ -120,8 +107,18 @@ export const FormOtorgarPrestamo = ()=>{
 
                 <div className="container">
 
-                    <select id="cuentas" onClick={Opciones} onChange={showOption}>
+                    <select id="cuentas" onChange={showOption}>
                         <option value="null">Seleccione una cuenta</option>
+                        {cuentas.map((v, i) => {
+                                return (
+                                    <option value={i} key={i}>{
+                                        v.banco.nombre + ", " +
+                                        v.numCuenta + ", " +
+                                        v.tipo + ", " +
+                                        v.saldo
+                                    }</option>
+                                );
+                            })}
                     </select>
 
                     <div id='card'></div>

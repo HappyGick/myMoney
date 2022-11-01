@@ -1,30 +1,35 @@
 import { useState,ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { useAppSelector } from "../app/hooks";
+import { guardar } from "../services/datastore";
+import { obtenerPrestamosOtorgados, registrarPagoPrestamo, useAllSelectors } from "../services/funcionesCliente";
 
 let showCond = 0;
 let keyObj = "";
-let cond = 0;
-let objModded = {nombre:"",monto:"",cuenta:""}
-let objModdedC = {NombreBanco:"", NumeroCuenta:"", Saldo:"", TipoCuenta:"",}
 let resta = '';
 
 export const FormRegisPagoPrestamo = ()=>{
 
     const [modal,setModal]=useState(0);
+    const prestamos = obtenerPrestamosOtorgados();
+    const [ctas, txs, otor, soli] = useAllSelectors();
+    const dispatch = useDispatch();
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
+
+    const globalState = useAppSelector((state) => state);
 
     const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
         resta= target.value;
-
     }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = JSON.parse( "" + localStorage.getItem(key) );
-        let obj2 = JSON.parse("" + localStorage.getItem(obj.cuenta))
+        let obj = prestamos[Number(key)];
+        let obj2 = obj.cuenta;
         let div = document.getElementById("card");
-        objModded = obj;
-        objModdedC = obj2;
         keyObj = key;
 
         let p = [ 
@@ -35,11 +40,11 @@ export const FormRegisPagoPrestamo = ()=>{
             document.createElement("p")
         ];
         
-        let nombre = document.createTextNode( "Nombre: " + obj.nombre );
-        let monto = document.createTextNode( "Monto a Cobrar: $" + obj.monto );
+        let nombre = document.createTextNode( "Nombre: " + obj.deudor.nombre );
+        let monto = document.createTextNode( "Monto a Cobrar: $" + obj.valor );
         let sep = document.createTextNode( "Datos de la Cuenta:");
-        let cuenta = document.createTextNode( "Numero de Cuenta: " + objModdedC.NumeroCuenta );
-        let saldo = document.createTextNode( "Saldo de la Cuenta: " + objModdedC.Saldo );
+        let cuenta = document.createTextNode( "Numero de Cuenta: " + obj2.numCuenta );
+        let saldo = document.createTextNode( "Saldo de la Cuenta: " + obj2.saldo );
         
         p[0].appendChild(nombre);
         p[1].appendChild(monto);
@@ -52,45 +57,15 @@ export const FormRegisPagoPrestamo = ()=>{
         for ( let i = 0; i <= 4; i++ ) { div?.appendChild(p[i]); }
     }
 
-    const Opciones = ()=>{
-        if ( cond == 0 ) {
-            let doc = document.getElementById("registros");
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("OtoPres-") == true ) {
-                    let option = document.createElement("option");
-                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                    let ob2 = JSON.parse("" + localStorage.getItem(ob.cuenta))
-                    option.value = key;
-                    option.text = ( 
-                        ob.nombre + ", $" +
-                        ob.monto + ", " +
-                        ob2.NumeroCuenta
-                    );
-                    doc?.appendChild(option);
-                }  
-            }             
-            cond = 1
-        }
-    }
-
     const modFunction = () => {
         if ( keyObj != "null" && keyObj!="" ) { 
             
-            let total = parseInt(objModded.monto) - parseInt(resta);
-            let totalC = parseInt(objModdedC.Saldo) + parseInt(resta);
-
-            if (total < 0){
-                objModdedC.Saldo = (parseInt(objModded.monto) + parseInt(objModdedC.Saldo)).toString()
-                objModded.monto = "0";
-            }
-
-            else{
-                objModded.monto = total.toString();
-                objModdedC.Saldo = totalC.toString();
-                localStorage.setItem( keyObj, JSON.stringify(objModded) );
-                localStorage.setItem( objModded.cuenta, JSON.stringify(objModdedC));
-            }
+            const prest = prestamos[Number(keyObj)];
+            const [p, tx, saldo] = registrarPagoPrestamo(prest.id, parseInt(resta), otor, prest.cuenta);
+            dispatch(p);
+            dispatch(tx);
+            dispatch(saldo);
+            
             setModal(1);
         }
         resetV();
@@ -98,16 +73,15 @@ export const FormRegisPagoPrestamo = ()=>{
 
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
     }
 
     const resetV = ()=>{
         showCond = 0;
         keyObj = "";
-        cond = 0;
-        objModded = {nombre:"",monto:"",cuenta:""}
-        objModdedC = {NombreBanco:"", NumeroCuenta:"", Saldo:"", TipoCuenta:"",}
         resta = '';
     }
 
@@ -125,8 +99,13 @@ export const FormRegisPagoPrestamo = ()=>{
 
                 <div className="container">
 
-                    <select id="registros" onClick={Opciones} onChange={showOption}>
+                    <select id="registros" onChange={showOption}>
                         <option value="null">Seleccione un prestamo</option>
+                        {prestamos.map((v, i) => {
+                            return (<option value={i} key={i}>{v.deudor.nombre + ", $" +
+                            v.valor + ", " +
+                            v.cuenta.numCuenta}</option>)
+                        })}
                     </select>
 
                     <div id="card"></div>

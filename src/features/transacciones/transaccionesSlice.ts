@@ -43,6 +43,6 @@ export const transaccionesSlice = createSlice({
     }
 });
 
-export const { setTransacciones, borrarTransCuenta, borrarTodasTransacciones } = transaccionesSlice.actions;
+export const { setTransacciones, borrarTransCuenta, borrarTodasTransacciones, addTransaccion, modTransaccion, elimTransaccion } = transaccionesSlice.actions;
 
 export default transaccionesSlice.reducer;

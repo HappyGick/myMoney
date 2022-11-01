@@ -1,23 +1,38 @@
 import ApliModal from "../ApliModal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { modificarTransaccion, obtenerCuentas, obtenerTransacciones, useAllSelectors } from "../services/funcionesCliente";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { Transaccion } from "../classes/transacciones/transaccion";
+import { DateTime } from "luxon";
+import { Etiqueta } from "../classes/transacciones/etiqueta";
+import { guardar } from "../services/datastore";
 
 export default function MenuModTrans() {
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
-    let showCond = 0;
+    const transacciones = obtenerTransacciones();
+    const cuentas = obtenerCuentas();
+    const [state, updateState] = useState({});
+    const forceUpdate = () => updateState({...state});
+    const [keyObj, setKeyObj] = useState("");
+    const dispatch = useAppDispatch();
+    const [showCond, setShowCond] = useState(0);
+    const [ctas, txs, otor, soli] = useAllSelectors();
     let showOp = 0;
-    let keyObj = "";
     let cond = 0;
-    let objModded = {"monto":"0","descripcion":"emp","fecha":"28/10/2022","tipo":"Ingreso","cuenta":"Mercantil"}
+    const [objModded, setObjModded] = useState({monto:"0",descripcion:"emp",fecha:"28/10/2022",tipo:"null",cuenta:"null"});
+    const [idTx, setIdTx] = useState("");
+
+    const globalState = useAppSelector((state) => state);
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = JSON.parse( "" + localStorage.getItem(key) );
+        let obj = transacciones[Number(key)];
         let div = document.getElementById("card");
-        objModded = obj;
-        keyObj = key;
+        setKeyObj(key);
+        setIdTx(obj.id);
 
         let p = [ 
             document.createElement("p"), document.createElement("p"),
@@ -25,7 +40,7 @@ export default function MenuModTrans() {
             document.createElement("p"),
         ];
         
-        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta );
+        let cuenta = document.createTextNode( "Cuenta de Banco: " + obj.cuenta.numCuenta );
         let tipo = document.createTextNode( "Tipo de Transaccion: " + obj.tipo );
         let monto = document.createTextNode( "Monto: $" + obj.monto );
         let desc = document.createTextNode( "Descripcion: " + obj.descripcion );
@@ -37,9 +52,22 @@ export default function MenuModTrans() {
         p[3].appendChild(desc);
         p[4].appendChild(fecha);
         
-        if ( showCond == 0 ) { showCond = 1; }
+        if ( showCond == 0 ) { setShowCond(1); }
         else { div?.replaceChildren(); }
         for ( let i = 0; i <= 4; i++ ) { div?.appendChild(p[i]); }
+        let indexCuenta = "";
+        for(let i in cuentas) {
+            if (cuentas[i].id === obj.id) {
+                indexCuenta = "" + i;
+            }
+        }
+        setObjModded({
+            monto: "" + obj.monto,
+            descripcion: obj.descripcion,
+            fecha: obj.fecha,
+            tipo: obj.tipo,
+            cuenta: indexCuenta
+        });
     }
 
     const handleInputMonto = (e: { target: { value: any; }; }) => {
@@ -64,60 +92,27 @@ export default function MenuModTrans() {
     }
 
     const modFunction = () => {
-        if ( keyObj != "null" ) { 
-            localStorage.setItem( keyObj, JSON.stringify(objModded) );
+        if ( keyObj != "" ) {
+            const [tx, saldo] = modificarTransaccion(new Transaccion(
+                objModded.tipo === 'Ingreso' ? Number(objModded.monto) : -Number(objModded.monto),
+                cuentas[Number(objModded.cuenta)],
+                DateTime.fromFormat(objModded.fecha, "dd/MM/yyyy").toJSDate(),
+                objModded.descripcion,
+                new Etiqueta("test", ""),
+                [],
+                idTx
+            ), txs);
+            dispatch(tx);
+            dispatch(saldo);
             setModal(1);
         }
     }
 
     const reset = ()=>{
         if (modal==2){
-            window.location.reload();
-        }
-    }
-
-    function Options() {
-        if ( cond == 0 ) {
-            let doc = document.getElementById("transacciones");
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("transaccion-") == true ) {
-                    let option = document.createElement("option");
-                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                    option.value = key;
-                    option.text = ( 
-                        ob.cuenta + ", " +
-                        ob.tipo + ", " +
-                        ob.descripcion + ", $" +
-                        ob.monto + ", " +
-                        ob.fecha
-                    );
-                    doc?.appendChild(option);
-                }  
-            }             
-            cond = 1
-        }
-    }
-    
-    function optionsAccounts() {
-        if ( showOp == 0 ) {
-            let doc = document.getElementById("cuenta");
-            let keys = Object.keys(localStorage);
-            for(let key of keys) {
-                if ( key.includes("cuenta-") == true ) {
-                    let option = document.createElement("option");
-                    let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                    option.value = key;
-                    option.text = ( 
-                        ob.NombreBanco + ", " +
-                        ob.NumeroCuenta + ", " +
-                        ob.TipoCuenta + ", $" +
-                        ob.Saldo + ", "
-                    );
-                    doc?.appendChild(option);
-                }  
-            }             
-            showOp = 1
+            forceUpdate();
+            guardar(globalState);
+            setModal(0);
         }
     }
 
@@ -129,8 +124,19 @@ export default function MenuModTrans() {
                     <p id="mainP">
                         Elige una Transaccion a Modificar:
                         <br/>
-                        <select id="transacciones" onClick={ Options } onChange={ showOption } >
+                        <select id="transacciones" onChange={ showOption } >
                             <option value="null" >Seleccione una Transaccion</option>
+                            {transacciones.map((v, i) => {
+                                return (
+                                    <option value={i} key={i}>
+                                        {v.cuenta.numCuenta + ", " +
+                                        v.tipo + ", " +
+                                        v.descripcion + ", $" +
+                                        v.monto + ", " +
+                                        v.fecha}
+                                    </option>
+                                );
+                            })}
                         </select>
                         <div id="card" className="card">
                         </div>
@@ -138,8 +144,18 @@ export default function MenuModTrans() {
 
                     <p>
                         Elige una Cuenta de Banco: <br/>
-                        <select id="cuenta" onChange={ handleInputCuenta } onClick={ optionsAccounts } > 
+                        <select id="cuenta" onChange={ handleInputCuenta } >
                             <option value="null" >Cuenta de Banco</option>
+                            {cuentas.map((v, i) => {
+                                return (
+                                    <option value={i} key={i}>{
+                                        v.banco.nombre + ", " +
+                                        v.numCuenta + ", " +
+                                        v.tipo + ", " +
+                                        v.saldo
+                                    }</option>
+                                );
+                            })}
                         </select>
                     
                         <br/> <br/> Elige el tipo de Transaccion: <br/>
@@ -156,7 +172,7 @@ export default function MenuModTrans() {
                         <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
                     
                         <br/> <br/> Añade una Descripcion <br/>
-                        <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
+                        <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc }></textarea>
                         <br/> <br/>
                     </p>
 
