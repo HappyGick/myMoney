@@ -3,23 +3,44 @@ import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
 import { ErrorCuenta } from "../Errores/ErrorCuenta";
 import { ErrorSolicitados } from "../Errores/ErrorSolicitados";
+import {Validacion} from '../Validaciones';
 
 let showCond = 0;
 let keyObj = "";
 let cond = 0;
 let objModded = {nombre:"",monto:"",cuenta:""}
 let objModdedC = {NombreBanco:"", NumeroCuenta:"", Saldo:"", TipoCuenta:"",}
-let resta = '';
+
+const validationsForm = (form: any)=>{
+    let errors = {monto: ''};
+    let resMonto = "^[0-9]+$";
+    let resCantMonto = "^.{0,9}$"
+    
+    if (!form.monto){
+        errors.monto = 'El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = 'El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = 'El campo solo acepta hasta 9 digitos';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    monto:''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
 
 export const FormPagarPrestamo = ()=>{
 
+    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
     const [modal,setModal]=useState(0);
-    
-
-
-    const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
-        resta = target.value;
-    }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
@@ -78,10 +99,10 @@ export const FormPagarPrestamo = ()=>{
     }
 
     const modFunction = () => {
-        if ( keyObj != "null" && keyObj!="" ) { 
-            
-            let total = parseInt(objModded.monto) - parseInt(resta);
-            let totalC = parseInt(objModdedC.Saldo) - parseInt(resta);
+        if ( keyObj != "null" && keyObj!="" && errors.monto =='') { 
+            console.log(form.resta);
+            let total = parseInt(objModded.monto) - parseInt(form.monto);
+            let totalC = parseInt(objModdedC.Saldo) - parseInt(form.monto);
 
             if (totalC < 0){
                 alert('Saldo insuficiente');
@@ -117,7 +138,6 @@ export const FormPagarPrestamo = ()=>{
         cond = 0;
         objModded = {nombre:"",monto:"",cuenta:""}
         objModdedC = {NombreBanco:"", NumeroCuenta:"", Saldo:"", TipoCuenta:"",}
-        resta = '';
     }
 
     const nav = useNavigate();
@@ -144,7 +164,8 @@ export const FormPagarPrestamo = ()=>{
                     <div className="campo">
                         <label>Monto:</label>
                         <br />
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a pagar'} onChange={cambios} required/>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a pagar'} onChange={handleChange} onBlur={handleBlur} autoFocus required/>
+                        {errors.monto && <p style={style}>{errors.monto}</p>}
                     </div>
 
                     <div className="botones">

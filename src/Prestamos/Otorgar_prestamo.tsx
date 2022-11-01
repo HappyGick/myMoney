@@ -3,33 +3,60 @@ import { useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import ApliModal from "../ApliModal";
 import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import {Validacion} from '../Validaciones';
 
 let showCond = 0;
 let keyObj = "";
 let cond = 0;
 let objModded = {NombreBanco: '', NumeroCuenta: '', Saldo: '', TipoCuenta: ''}
 
-export const FormOtorgarPrestamo = ()=>{
-    const [modal,setModal]=useState(0);
-    const [formulario, setFormulario]=useState({
-        nombre: '',
-        monto: '',
-        cuenta: ''
-    })
-
-    const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
-        const {name,value} = target;
-
-        setFormulario({
-            ...formulario,
-            [name]:value,
-        })
+const validationsForm = (form: any)=>{
+    let errors = {nombre: '',monto: ''};
+    let resName = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$";
+    let resMonto = "^[0-9]+$";
+    let resCantName = "^.{10,50}$";
+    let resCantMonto = "^.{0,9}$"
+    
+    if (!form.nombre){
+        errors.nombre = 'El campo nombre es requerido';
+    } else if (!(form.nombre).match(resName)){
+        errors.nombre = 'El campo solo acepta letras';
+    } else if (!(form.nombre).match(resCantName)){
+        errors.nombre = 'El campo solo acepta de 10 a 50 caracteres';
     }
 
+    if (!form.monto){
+        errors.monto = 'El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = 'El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = 'El campo solo acepta hasta 9 digitos';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    nombre:'',
+    monto:'',
+    cuenta:''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
+
+export const FormOtorgarPrestamo = ()=>{
+
+    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
+    const [modal,setModal]=useState(0);
+
     const saveLocal = ()=>{
-        if (keyObj !='null' && keyObj !=''){
-            formulario.cuenta=keyObj;
-            localStorage.setItem('OtoPres-' + uuid(),JSON.stringify(formulario));
+        if (keyObj !='null' && keyObj !='' && errors.nombre =='' && errors.monto ==''){
+            form.cuenta=keyObj;
+            localStorage.setItem('OtoPres-' + uuid(),JSON.stringify(form));
             modFunction();
             setModal(1);
         }
@@ -89,7 +116,7 @@ export const FormOtorgarPrestamo = ()=>{
     }
 
     const modFunction = ()=>{
-        let total = parseInt(objModded.Saldo) - parseInt(formulario.monto);
+        let total = parseInt(objModded.Saldo) - parseInt(form.monto);
         objModded.Saldo = total.toString();
         localStorage.setItem( keyObj, JSON.stringify(objModded) );
         resetV()
@@ -131,13 +158,15 @@ export const FormOtorgarPrestamo = ()=>{
                     <div className="campo">
                         <label>Nombre:</label>
                         <br />
-                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a otorgar'} onChange={cambios} required/>
+                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre del beneficiario'} onChange={handleChange} onBlur={handleBlur} value={form.nombre} autoFocus required/>
+                        {errors.nombre && <p style={style}>{errors.nombre}</p>}
                     </div>
 
                     <div className="campo">
                         <label>Monto:</label>
-                        <br />
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a otorgar'} onChange={cambios} required/>
+                        <br />  
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a otorgar'} onChange={handleChange} onBlur={handleBlur} value={form.monto} required/>
+                        {errors.monto && <p style={style}>{errors.monto}</p>}
                     </div>
 
                     <div className="botones">

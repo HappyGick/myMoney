@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
 import { ErrorCuenta } from "../Errores/ErrorCuenta";
-
+import {Validacion} from '../Validaciones';
 
 class transaccion {
     public monto: Number;
@@ -19,8 +19,54 @@ class transaccion {
         this.cuenta = cuenta;
     }
 }
-  
+
+const validationsForm = (form: any)=>{
+    let errors = {fecha:'',mensaje:'',monto:''};
+    let resName = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$";
+    let resMonto = "^[0-9]+$";
+    let resCantMonto = "^.{0,9}$"
+    let resFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/
+    
+    if (!form.mensaje){
+        errors.mensaje = 'El campo descripcion es requerido';
+    } else if (!(form.mensaje).match(resName)){
+        errors.mensaje = 'El campo solo acepta letras';
+    }
+
+    if (!form.monto){
+        errors.monto = 'El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = 'El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = 'El campo solo acepta hasta 9 digitos';
+    }
+
+    if (!form.fecha){
+        errors.fecha = 'El campo fecha es requerido'
+    } else if (!(form.fecha).match(resFecha)){
+        errors.fecha = 'El formato de fecha es invalido';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    fecha:'',
+    mensaje:'',
+    tipo:'',
+    monto:'',
+    cuenta: ''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
+
 export default function MenuAddTrans() {
+
+    const {form,errors,handleBlur} = Validacion(initialForm,validationsForm);
     const [modal,setModal]=useState(0);
     let showCond = 0;
     const nav = useNavigate();
@@ -30,37 +76,44 @@ export default function MenuAddTrans() {
     const handleInputMonto = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         t.monto = text;
+        form.monto = text;
     }
     const handleInputFecha = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         t.fecha = text;
+        form.fecha = text;
     }
     const handleInputCuenta = (e: { target: { value: any; }; }) => {
         let txt = e.target.value;
         t.cuenta = txt;
+        form.cuenta=txt;
     }
     const handleInputDesc = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         t.descripcion = text;
+        form.descripcion = text;
     }
     const handleInputTipo = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         t.tipo = text;
+        form.tipo=text;
     }
     const saveData = () => {
-        let text = (
-            t.cuenta + " " +
-            t.tipo + " " +
-            t.descripcion + " " +
-            t.fecha + " " +
-            "$" + t.monto
-        );
-        
-        index = index + 1;
-        let id = ( index ).toString();
-        localStorage.setItem("indextrans", id);
-        localStorage.setItem( "transaccion-" + id, JSON.stringify(t) );
-        setModal(1);
+        if (errors.monto =='' && errors.fecha == '' && errors.mensaje == ''){
+            // let text = (
+            //     t.cuenta + " " +
+            //     t.tipo + " " +
+            //     t.descripcion + " " +
+            //     t.fecha + " " +
+            //     "$" + t.monto
+            // );
+            
+            index = index + 1;
+            let id = ( index ).toString();
+            localStorage.setItem("indextrans", id);
+            localStorage.setItem( "transaccion-" + id, JSON.stringify(t) );
+            setModal(1);
+        }
     }
 
     const reset = ()=>{
@@ -130,13 +183,16 @@ export default function MenuAddTrans() {
                     </select>
                     
                     <br/> <br/> Ingrese un Monto <br/>
-                    <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
+                    <input type="number" placeholder="Numero" name='monto' onChange={ handleInputMonto } autoFocus onBlur={handleBlur}/>
+                    {errors.monto && <p style={style}>{errors.monto}</p>}
                     
                     <br/> <br/> Ingrese la fecha de la Transaccion <br/>
-                    <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
+                    <input type="text" placeholder="dd/mm/aaaa" name='fecha' onChange={ handleInputFecha } onBlur={handleBlur}/>
+                    {errors.fecha && <p style={style}>{errors.fecha}</p>}
                     
                     <br/> <br/> Añade una Descripcion <br/>
-                    <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } ></textarea>
+                    <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } onBlur={handleBlur}></textarea>
+                    {errors.mensaje && <p style={style}>{errors.mensaje}</p>}
                     <br/> <br/>
                 </p>
 
