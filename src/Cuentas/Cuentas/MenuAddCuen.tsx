@@ -47,25 +47,32 @@ const validationsForm = (form: any)=>{
     let resCantMonto = "^.{0,9}$"
     
     if (!form.NumeroCuenta){
-        errors.NumeroCuenta = 'El campo Numero de Cuenta';
+        errors.NumeroCuenta = '*El campo Numero de Cuenta';
     } else if (!(form.NumeroCuenta).match(resMonto)){
-        errors.NumeroCuenta = 'El campo solo acepta numeros';
+        errors.NumeroCuenta = '*El campo solo acepta numeros';
     } else if (!(form.NumeroCuenta).match(resCantCuenta)){
-        errors.NumeroCuenta = 'El campo solo acepta 16 caracteres';
-    }
+        errors.NumeroCuenta = '*El campo solo acepta 16 caracteres';
+    }else {
+        let keys = Object.keys(localStorage);
+        for(let key of keys) {
+            if ( key.includes("cuenta-") == true ) {
+                let ob = JSON.parse( "" + localStorage.getItem( key ) );
+                if ( ob.NumeroCuenta == form.NumeroCuenta ) { errors.NumeroCuenta = '*El numero de cuenta, ya se encuentra en el sistema'  }
+            }
+        }}
 
     if (!form.Saldo){
-        errors.Saldo = 'El campo Saldo es requerido';
+        errors.Saldo = '*El campo Saldo es requerido';
     } else if (!(form.Saldo).match(resMonto)){
-        errors.Saldo = 'El campo solo acepta numeros positivos';
+        errors.Saldo = '*El campo solo acepta numeros positivos';
     } else if (!(form.Saldo).match(resCantMonto)){
-        errors.Saldo = 'El campo solo acepta hasta 9 digitos';
+        errors.Saldo = '*El campo solo acepta hasta 9 digitos';
     }
 
     if (!form.TipoCuenta){
-        errors.TipoCuenta = 'El campo Tipo Cuenta es requerido';
+        errors.TipoCuenta = '*El campo Tipo Cuenta es requerido';
     } else if (form.TipoCuenta != 'ahorro' && form.TipoCuenta != 'corriente'){
-        errors.TipoCuenta = 'Debe ingresar "ahorro" o "corriente"';
+        errors.TipoCuenta = '*Debe ingresar "ahorro" o "corriente"';
     }
 
     return errors;
@@ -149,9 +156,8 @@ export default function MenuAddCuen() {
         for(let key of keys) {
             if ( key.includes("cuenta-") == true ) {
                 let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                if ( ob.NumeroCuenta == num ) { return (<>
-                alert("Esta repetido")</>) }
-            }  
+                if ( ob.NumeroCuenta == form.NumeroCuenta ) { errors.NumeroCuenta = 'El numero de cuenta, ya se encuentra en el sistema'  }
+            }
         }
     }
 

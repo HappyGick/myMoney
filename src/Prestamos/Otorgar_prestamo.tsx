@@ -18,19 +18,19 @@ const validationsForm = (form: any)=>{
     let resCantMonto = "^.{0,9}$"
     
     if (!form.nombre){
-        errors.nombre = 'El campo nombre es requerido';
+        errors.nombre = '*El campo nombre es requerido';
     } else if (!(form.nombre).match(resName)){
-        errors.nombre = 'El campo solo acepta letras';
+        errors.nombre = '*El campo solo acepta letras';
     } else if (!(form.nombre).match(resCantName)){
-        errors.nombre = 'El campo solo acepta de 10 a 50 caracteres';
+        errors.nombre = '*El campo solo acepta de 10 a 50 caracteres';
     }
 
     if (!form.monto){
-        errors.monto = 'El campo monto es requerido';
+        errors.monto = '*El campo monto es requerido';
     } else if (!(form.monto).match(resMonto)){
-        errors.monto = 'El campo solo acepta numeros positivos';
+        errors.monto = '*El campo solo acepta numeros positivos';
     } else if (!(form.monto).match(resCantMonto)){
-        errors.monto = 'El campo solo acepta hasta 9 digitos';
+        errors.monto = '*El campo solo acepta hasta 9 digitos';
     }
 
     return errors;

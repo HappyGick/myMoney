@@ -13,23 +13,23 @@ const validationsForm = (form: any)=>{
     let resFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/
     
     if (!form.mensaje){
-        errors.mensaje = 'El campo descripcion es requerido';
+        errors.mensaje = '*El campo descripcion es requerido';
     } else if (!(form.mensaje).match(resName)){
-        errors.mensaje = 'El campo solo acepta letras';
+        errors.mensaje = '*El campo solo acepta letras';
     }
 
     if (!form.monto){
-        errors.monto = 'El campo monto es requerido';
+        errors.monto = '*El campo monto es requerido';
     } else if (!(form.monto).match(resMonto)){
-        errors.monto = 'El campo solo acepta numeros positivos';
+        errors.monto = '*El campo solo acepta numeros positivos';
     } else if (!(form.monto).match(resCantMonto)){
-        errors.monto = 'El campo solo acepta hasta 9 digitos';
+        errors.monto = '*El campo solo acepta hasta 9 digitos';
     }
 
     if (!form.fecha){
-        errors.fecha = 'El campo fecha es requerido'
+        errors.fecha = '*El campo fecha es requerido'
     } else if (!(form.fecha).match(resFecha)){
-        errors.fecha = 'El formato de fecha es invalido';
+        errors.fecha = '*El formato de fecha es invalido';
     }
 
     return errors;
