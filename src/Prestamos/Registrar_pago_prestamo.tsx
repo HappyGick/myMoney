@@ -2,27 +2,63 @@ import { useState,ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorOtorgados } from "../Errores/ErrorOtorgados";
+import {Validacion} from '../Validaciones';
 import { useAppSelector } from "../app/hooks";
 import { guardar } from "../services/datastore";
-import { obtenerPrestamosOtorgados, registrarPagoPrestamo, useAllSelectors } from "../services/funcionesCliente";
+import { obtenerCuentas, obtenerPrestamosOtorgados, registrarPagoPrestamo, useAllSelectors } from "../services/funcionesCliente";
 
 let showCond = 0;
 let keyObj = "";
-let resta = '';
+
+const validationsForm = (form: any)=>{
+    let errors = {nombre: '',monto: ''};
+    let resMonto = "^[0-9]+$";
+    let resCantMonto = "^.{0,9}$"
+    
+    if (!form.monto){
+        errors.monto = '*El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = '*El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = '*El campo solo acepta hasta 9 digitos';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    monto:''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
 
 export const FormRegisPagoPrestamo = ()=>{
 
     const [modal,setModal]=useState(0);
+    const cuentas = obtenerCuentas();
     const prestamos = obtenerPrestamosOtorgados();
     const [ctas, txs, otor, soli] = useAllSelectors();
     const dispatch = useDispatch();
     const [state, updateState] = useState({});
     const forceUpdate = () => updateState({...state});
+    const nav = useNavigate();
 
     const globalState = useAppSelector((state) => state);
 
-    const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
-        resta= target.value;
+    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
+
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
+    }
+
+    if(prestamos.length === 0) {
+        nav('/ErrorMensajeOtorgados');
     }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
@@ -58,14 +94,13 @@ export const FormRegisPagoPrestamo = ()=>{
     }
 
     const modFunction = () => {
-        if ( keyObj != "null" && keyObj!="" ) { 
-            
+
+        if ( keyObj != "null" && keyObj!="" && errors.monto =='') { 
             const prest = prestamos[Number(keyObj)];
-            const [p, tx, saldo] = registrarPagoPrestamo(prest.id, parseInt(resta), otor, prest.cuenta);
+            const [p, tx, saldo] = registrarPagoPrestamo(prest.id, parseInt(form.monto), otor, prest.cuenta);
             dispatch(p);
             dispatch(tx);
             dispatch(saldo);
-            
             setModal(1);
         }
         resetV();
@@ -82,10 +117,8 @@ export const FormRegisPagoPrestamo = ()=>{
     const resetV = ()=>{
         showCond = 0;
         keyObj = "";
-        resta = '';
     }
 
-    const nav = useNavigate();
     const goHome = ()=>{
         resetV();
         nav('/menu_OtoPres');
@@ -94,6 +127,7 @@ export const FormRegisPagoPrestamo = ()=>{
     return (
         <>
             <div>
+            {ErrorOtorgados()} 
 
                 <h1>Registrar Pago de Prestamo</h1>
 
@@ -113,7 +147,8 @@ export const FormRegisPagoPrestamo = ()=>{
                     <div className="campo">
                         <label>Monto:</label>
                         <br />
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={cambios} required/>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} onBlur={handleBlur} autoFocus required/>
+                        {errors.monto && <p style={style}>{errors.monto}</p>}
                     </div>
 
                     <div className="botones">

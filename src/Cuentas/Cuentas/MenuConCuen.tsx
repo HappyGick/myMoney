@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { obtenerCuentas } from "../../services/funcionesCliente";
+import { ErrorCuenta } from "../../Errores/ErrorCuenta";
 
 interface FormData{
     NombreBanco: string;
@@ -16,6 +17,10 @@ export default function MenuConCuen() {
     const goHome = () => { nav('/cuentas') };
     const cuentas = obtenerCuentas();
     const [showCond, setShowCond] = useState(0);
+
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
+    }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
@@ -42,7 +47,8 @@ export default function MenuConCuen() {
         for ( let i = 0; i <= 3; i++ ) { div?.appendChild(p[i]); }
     }
     
-    return (     
+    return (    
+        <>
         <div className="bg">
         <div className="mainMod">
             <h1>Consultar Cuentas</h1>
@@ -68,5 +74,6 @@ export default function MenuConCuen() {
             <button onClick={ goHome } className="glow-button" >Regresar</button>
         </div>
         </div>
+        </>
     );
 }

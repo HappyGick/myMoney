@@ -1,6 +1,8 @@
 import { useState } from "react";
 import ApliModal from "../../ApliModal";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
+import { ErrorCuenta } from "../../Errores/ErrorCuenta";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { eliminarCuenta, eliminarTodasCuentas, obtenerCuentas } from "../../services/funcionesCliente";
 import React from "react";
@@ -16,6 +18,10 @@ export default function MenuDel() {
     const [state, updateState] = React.useState({});
     const forceUpdate = () => updateState({...state});
     const [showCond, setShowCond] = useState(0);
+
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
+    }
 
     const globalState = useAppSelector((state) => state);
     
@@ -67,7 +73,7 @@ export default function MenuDel() {
     }
     
     return (
-        <>   
+        <>
             <div className="bg">
             <div className="mainMod">
                 <h1>Eliminar Cuentas</h1>

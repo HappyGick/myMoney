@@ -6,9 +6,49 @@ import { Contacto } from "../classes/prestamos/contacto";
 import { PrestamoSolicitado } from "../classes/prestamos/prestamoSolicitado";
 import { guardar } from "../services/datastore";
 import { agregarTransaccion, obtenerCuentas, solicitarPrestamo } from "../services/funcionesCliente";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import {Validacion} from '../Validaciones';
 
 let showCond = 0;
 let keyObj = "";
+
+const validationsForm = (form: any)=>{
+    let errors = {nombre: '',monto: ''};
+    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
+    let resMonto = "^[0-9]+$";
+    let resCantName = "^.{10,50}$";
+    let resCantMonto = "^.{0,9}$"
+    
+    if (!form.nombre){
+        errors.nombre = '*El campo nombre es requerido';
+    } else if (!(form.nombre).match(resName)){
+        errors.nombre = '*El campo solo acepta letras';
+    } else if (!(form.nombre).match(resCantName)){
+        errors.nombre = '*El campo solo acepta de 10 a 50 caracteres';
+    }
+
+    if (!form.monto){
+        errors.monto = '*El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = '*El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = '*El campo solo acepta hasta 9 digitos';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    nombre:'',
+    monto:'',
+    cuenta: ''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
 
 export const FormSolicitarPrestamo = ()=>{
     
@@ -22,20 +62,17 @@ export const FormSolicitarPrestamo = ()=>{
     const [state, updateState] = useState({});
     const forceUpdate = () => updateState({...state});
     const dispatch = useAppDispatch();
+    const nav = useNavigate();
 
     const globalState = useAppSelector((state) => state);
- 
-    const cambios = ({target}:ChangeEvent<HTMLInputElement>)=>{
-        const {name,value} = target;
+    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
 
-        setFormulario({
-            ...formulario,
-            [name]:value,
-        })
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
     }
 
     const saveLocal = ()=>{
-        if (keyObj !='null' && keyObj !=''){
+        if (keyObj !='null' && keyObj !=''  && errors.nombre =='' && errors.monto ==''){
             formulario.cuenta=keyObj;
             const p = new PrestamoSolicitado(
                 Number(formulario.monto),
@@ -92,8 +129,7 @@ export const FormSolicitarPrestamo = ()=>{
         else { div?.replaceChildren(); }
         for ( let i = 0; i <= 3; i++ ) { div?.appendChild(p[i]); }
     }
- 
-    const nav = useNavigate();
+
     const goHome = ()=>{
         resetV();
         nav('/menu_SolPres');
@@ -125,13 +161,15 @@ export const FormSolicitarPrestamo = ()=>{
                     <div className="campo">
                         <label>Nombre:</label>
                         <br />
-                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre de la persona a solicitar'} onChange={cambios} required/>
+                        <input type="text" maxLength={50} minLength={10} name='nombre' placeholder={'Nombre del solicitante'} onChange={handleChange} onBlur={handleBlur} value={form.nombre} autoFocus required/>
+                        {errors.nombre && <p style={style}>{errors.nombre}</p>}
                     </div>
 
                     <div className="campo">
                         <label>Monto:</label>
                         <br />  
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a ingresar'} onChange={cambios} required/>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a ingresar'} onChange={handleChange} onBlur={handleBlur} value={form.monto} required/>
+                        {errors.monto && <p style={style}>{errors.monto}</p>}
                     </div>
 
                     <div className="botones">

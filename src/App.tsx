@@ -17,6 +17,10 @@ import { FormOtorgarPrestamo } from './Prestamos/Otorgar_prestamo';
 import { MenuSolPrestamos } from './Prestamos/Menu_SolPrestamos';
 import { MenuOtoPrestamos } from './Prestamos/Menu_OtoPrestamos';
 import { login } from './services/funcionesCliente';
+import { ErrorMensajeCuentas } from './MensajeErrores/ErrorMensajeCuentas';
+import { ErrorMensajeTransacciones } from './MensajeErrores/ErrorMensajeTransacciones';
+import { ErrorMensajeSol } from './MensajeErrores/MensajeErrorSol';
+import { ErrorMensajeOtor } from './MensajeErrores/ErrorMensajeOtor';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
@@ -44,6 +48,12 @@ function App() {
       <Route path='/menu_OtoPres' element={ <MenuOtoPrestamos/> } />
       <Route path='/menu_OtoPres/RegPres' element={ <FormRegisPagoPrestamo/> } />
       <Route path='/menu_OtoPres/OtoPres' element={ <FormOtorgarPrestamo/> } />
+
+      <Route path='/ErrorMensajeCuentas' element={ <ErrorMensajeCuentas/> } />
+      <Route path='/ErrorMensajeTransacciones' element={ <ErrorMensajeTransacciones/> } />
+      <Route path='/ErrorMensajeSolicitados' element={ <ErrorMensajeSol/> } />
+      <Route path='/ErrorMensajeOtorgados' element={ <ErrorMensajeOtor/> } />
+      
     </Routes>
   </BrowserRouter>
   );

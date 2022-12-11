@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import ApliModal from "../ApliModal";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { guardar } from "../services/datastore";
-import { eliminarTodasTransacciones, eliminarTransaccion, obtenerTransacciones, useAllSelectors } from "../services/funcionesCliente";
+import { eliminarTodasTransacciones, eliminarTransaccion, obtenerCuentas, obtenerTransacciones, useAllSelectors } from "../services/funcionesCliente";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorTransacciones } from "../Errores/ErrorTransacciones";
 
 export default function MenuDelTrans() {
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
+    const cuentas = obtenerCuentas();
     const transacciones = obtenerTransacciones();
     const dispatch = useAppDispatch();
     const [showCond, setShowCond] = useState(0);
@@ -18,6 +21,14 @@ export default function MenuDelTrans() {
     const [ctas, txs, otor, soli] = useAllSelectors();
     const globalState = useAppSelector((state) => state);
     let cond = 0;
+
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
+    }
+
+    if (transacciones.length === 0) {
+        nav('/ErrorMensajeTransacciones');
+    }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;

@@ -7,8 +7,57 @@ import { Transaccion } from "../classes/transacciones/transaccion";
 import { DateTime } from "luxon";
 import { Etiqueta } from "../classes/transacciones/etiqueta";
 import { guardar } from "../services/datastore";
+import { ErrorCuenta } from "../Errores/ErrorCuenta";
+import { ErrorTransacciones } from "../Errores/ErrorTransacciones";
+import {Validacion} from '../Validaciones';
+
+const validationsForm = (form: any)=>{
+    let errors = {fecha:'',mensaje:'',monto:''};
+    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
+    let resMonto = "^[0-9]+$";
+    let resCantMonto = "^.{0,9}$"
+    let resFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/
+    
+    if (!form.mensaje){
+        errors.mensaje = '*El campo descripcion es requerido';
+    } else if (!(form.mensaje).match(resName)){
+        errors.mensaje = '*El campo solo acepta letras';
+    }
+
+    if (!form.monto){
+        errors.monto = '*El campo monto es requerido';
+    } else if (!(form.monto).match(resMonto)){
+        errors.monto = '*El campo solo acepta numeros positivos';
+    } else if (!(form.monto).match(resCantMonto)){
+        errors.monto = '*El campo solo acepta hasta 9 digitos';
+    }
+
+    if (!form.fecha){
+        errors.fecha = '*El campo fecha es requerido'
+    } else if (!(form.fecha).match(resFecha)){
+        errors.fecha = '*El formato de fecha es invalido';
+    }
+
+    return errors;
+}
+
+const initialForm = {
+    fecha:'',
+    mensaje:'',
+    tipo:'',
+    monto:'',
+    cuenta: ''
+};
+
+const style = {
+    color: 'red',
+    fontSize: '15px'
+
+}
 
 export default function MenuModTrans() {
+
+    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/transacciones') };
@@ -24,6 +73,14 @@ export default function MenuModTrans() {
     let cond = 0;
     const [objModded, setObjModded] = useState({monto:"0",descripcion:"emp",fecha:"28/10/2022",tipo:"null",cuenta:"null"});
     const [idTx, setIdTx] = useState("");
+
+    if (cuentas.length === 0) {
+        nav('/ErrorMensajeCuentas');
+    }
+
+    if (transacciones.length === 0) {
+        nav('/ErrorMensajeTransacciones');
+    }
 
     const globalState = useAppSelector((state) => state);
 
@@ -73,26 +130,31 @@ export default function MenuModTrans() {
     const handleInputMonto = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         objModded.monto = text;
+        form.monto = text;
     }
     const handleInputFecha = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         objModded.fecha = text;
+        form.fecha = text;
     }
     const handleInputCuenta = (e: { target: { value: any; }; }) => {
         let txt = e.target.value;
         objModded.cuenta = txt;
+        form.cuenta = txt;
     }
     const handleInputDesc = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         objModded.descripcion = text;
+        form.descripcion = text;
     }
     const handleInputTipo = (e: { target: { value: any; }; }) => {
         let text = e.target.value;
         objModded.tipo = text;
+        form.tipo = text;
     }
 
     const modFunction = () => {
-        if ( keyObj != "" ) {
+        if ( keyObj != "" && errors.monto =='' && errors.fecha == '' && errors.mensaje == '') {
             const [tx, saldo] = modificarTransaccion(new Transaccion(
                 objModded.tipo === 'Ingreso' ? Number(objModded.monto) : -Number(objModded.monto),
                 cuentas[Number(objModded.cuenta)],
@@ -166,13 +228,15 @@ export default function MenuModTrans() {
                         </select>
                     
                         <br/> <br/> Ingrese un Monto <br/>
-                        <input type="number" placeholder="Numero" onChange={ handleInputMonto } />
-                    
+                        <input type="number" placeholder="Numero" name='monto' onChange={ handleInputMonto } onBlur={handleBlur} autoFocus/>
+                        {errors.monto && <p style={style}>{errors.monto}</p>}
                         <br/> <br/> Ingrese la fecha de la Transaccion <br/>
-                        <input type="text" placeholder="Fecha" onChange={ handleInputFecha } />
+                        <input type="text" placeholder="Fecha" name='fecha' onChange={ handleInputFecha } onBlur={handleBlur}/>
+                        {errors.fecha && <p style={style}>{errors.fecha}</p>}
                     
                         <br/> <br/> Añade una Descripcion <br/>
-                        <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc }></textarea>
+                        <textarea name="mensaje" placeholder="Describa" onChange={ handleInputDesc } onBlur={handleBlur} ></textarea>
+                        {errors.mensaje && <p style={style}>{errors.mensaje}</p>}
                         <br/> <br/>
                     </p>
 
