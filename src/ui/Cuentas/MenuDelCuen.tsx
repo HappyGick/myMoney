@@ -27,12 +27,14 @@ export default function MenuDel() {
         if ( keyObj >= 0 ) {
             console.log(cuentas[keyObj].id);
             dispatch(eliminarCuenta(cuentas[keyObj].id));
+            guardar(globalState);
             setModal(1);
         }
     }
 
     const clearLocal = () => {
         dispatch(eliminarTodasCuentas());
+        guardar(globalState);
         setModal(1);
     }
 

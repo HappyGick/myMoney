@@ -64,6 +64,7 @@ export default function MenuDelTrans() {
             const [tx, saldo] = eliminarTransaccion(keyObj, txs, ctas);
             dispatch(tx);
             dispatch(saldo);
+            guardar(globalState);
             setModal(1);
         }
     }
@@ -78,6 +79,7 @@ export default function MenuDelTrans() {
 
     const clearLocal = () => {
         dispatch(eliminarTodasTransacciones());
+        guardar(globalState);
         setModal(1);
     }
 

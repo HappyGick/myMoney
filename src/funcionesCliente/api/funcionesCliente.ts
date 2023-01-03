@@ -8,6 +8,7 @@ import { DatosCliente, datastore, guardar } from "./datastore";
 
 function configurarStore(datos: DatosCliente) {
     const dispatch = useAppDispatch();
+    console.log(datos);
     dispatch(setCliente(datos.cliente));
     dispatch(setCuentas(datos.cuentas));
     dispatch(setPrestamos(datos.prestamos));

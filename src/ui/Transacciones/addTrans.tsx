@@ -128,6 +128,7 @@ export default function MenuAddTrans() {
             ));
             dispatch(tx);
             dispatch(saldo);
+            guardar(globalState);
             setModal(1);
         }
     }

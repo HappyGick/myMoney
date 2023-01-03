@@ -102,6 +102,7 @@ export default function MenuAddCuen() {
                 formulario.Saldo,
                 formulario.TipoCuenta
             ));
+            guardar(globalState);
         }
         setModal(1);
     }

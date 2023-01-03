@@ -1,7 +1,4 @@
 import { v4 } from "uuid";
-import { Cuenta } from "../cuentas/cuenta";
-import { Prestamo } from "../prestamos/prestamo";
-import { Transaccion } from "../transacciones/transaccion";
 
 export class Cliente {
     private _id: string;

@@ -166,6 +166,7 @@ export default function MenuModTrans() {
             ), txs);
             dispatch(tx);
             dispatch(saldo);
+            guardar(globalState);
             setModal(1);
         }
     }

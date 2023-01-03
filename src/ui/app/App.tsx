@@ -20,11 +20,14 @@ import MenuAddTrans from '../Transacciones/addTrans';
 import MenuModTrans from '../Transacciones/modTrans';
 import MenuDelTrans from '../Transacciones/removeTrans';
 import HomeTrans from '../Transacciones/transacciones';
+import { importar } from '../../funcionesCliente/api/datastore';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
 function App() {
-  login("pperez", "12345");
+  importar();
+  const a = login("pperez", "12345");
+  console.log(a);
   return (
     <BrowserRouter>
     <Routes>

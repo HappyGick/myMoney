@@ -107,7 +107,7 @@ export const FormPagarPrestamo = ()=>{
             dispatch(p);
             dispatch(tx);
             dispatch(saldo);
-            setModal(1);
+            guardar(globalState);
             setModal(1);
         }
         resetV();

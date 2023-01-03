@@ -95,6 +95,7 @@ export const FormOtorgarPrestamo = ()=>{
             dispatch(otorgarPrestamo(p));
             dispatch(dTx);
             dispatch(saldo);
+            guardar(globalState);
             setModal(1);
         }
         resetV()
