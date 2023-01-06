@@ -7,6 +7,7 @@ export default function HomeTrans() {
     const goTrans = () => { nav('/transacciones') };
     const goSolPres = ()=>{nav('/menu_SolPres')};
     const goOtoPres = ()=>{nav('/menu_OtoPres')};
+    const goBalGen = ()=>{nav('/BalanceGen')};
     
     return (
         <div className="mainHome">
@@ -17,6 +18,7 @@ export default function HomeTrans() {
             <button onClick={ goTrans }> Transacciones </button> <br></br>
             <button onClick={goSolPres}> Prestamos Solicitados </button> <br></br>
             <button onClick={goOtoPres}> Prestamos Otorgados </button> <br></br>
+            <button onClick={goBalGen}> Balance General </button> <br></br>
         </div>
     );    
 }
