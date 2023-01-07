@@ -33,7 +33,7 @@ import HomeBalGen from '../BalanceGeneral/MenuBalGen';
 import { importar } from '../../funcionesCliente/api/datastore';
 import { GraficaRelvTrans } from '../Transacciones/GraficaTransRelevante';
 import ConPresOto from '../Prestamos/PrestamosOtorgados/ConOtorgado';
-import ConPresSol from '../Prestamos/PrestamosSolicitados/ConPrestamos';
+import ConPresSol from '../Prestamos/PrestamosSolicitados/ConSolicitado';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
