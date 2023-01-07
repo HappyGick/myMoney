@@ -10,16 +10,16 @@ import { ErrorMensajeCuentas } from '../MensajeErrores/ErrorMensajeCuentas';
 import { ErrorMensajeOtor } from '../MensajeErrores/ErrorMensajeOtor';
 import { ErrorMensajeTransacciones } from '../MensajeErrores/ErrorMensajeTransacciones';
 import { ErrorMensajeSol } from '../MensajeErrores/MensajeErrorSol';
-import { MenuOtoPrestamos } from '../Prestamos/Menu_OtoPrestamos';
-import { MenuSolPrestamos } from '../Prestamos/Menu_SolPrestamos';
-import { FormOtorgarPrestamo } from '../Prestamos/Otorgar_prestamo';
-import { FormPagarPrestamo } from '../Prestamos/Pagar_prestamo';
-import { FormRegisPagoPrestamo } from '../Prestamos/Registrar_pago_prestamo';
-import { FormSolicitarPrestamo } from '../Prestamos/Solicitar_prestamo';
-import { GraficaPresSolPrestamo } from '../Prestamos/GraficaPres_SolPrestamos';
-import { GraficaValoSolPrestamo } from '../Prestamos/GraficaValo_SolPrestamos';
-import { GraficaPresOtoPrestamo } from '../Prestamos/GraficaPres_OtoPrestamos';
-import { GraficaValoOtoPrestamo } from '../Prestamos/GraficaValo_OtoPrestamos';
+import { MenuOtoPrestamos } from '../Prestamos/PrestamosOtorgados/Menu_OtoPrestamos';
+import { MenuSolPrestamos } from '../Prestamos/PrestamosSolicitados/Menu_SolPrestamos';
+import { FormOtorgarPrestamo } from '../Prestamos/PrestamosOtorgados/Otorgar_prestamo';
+import { FormPagarPrestamo } from '../Prestamos/PrestamosSolicitados/Pagar_prestamo';
+import { FormRegisPagoPrestamo } from '../Prestamos/PrestamosOtorgados/Registrar_pago_prestamo';
+import { FormSolicitarPrestamo } from '../Prestamos/PrestamosSolicitados/Solicitar_prestamo';
+import { GraficaPresSolPrestamo } from '../Prestamos/PrestamosSolicitados/GraficaPres_SolPrestamos';
+import { GraficaValoSolPrestamo } from '../Prestamos/PrestamosSolicitados/GraficaValo_SolPrestamos';
+import { GraficaPresOtoPrestamo } from '../Prestamos/PrestamosOtorgados/GraficaPres_OtoPrestamos';
+import { GraficaValoOtoPrestamo } from '../Prestamos/PrestamosOtorgados/GraficaValo_OtoPrestamos';
 import { GraficaMayPres } from '../Cuentas/GraficaMayPres';
 import { GraficaComTrans } from '../Transacciones/GraficaTransCom';
 import { GraficaSalCuen } from '../BalanceGeneral/GraficaSalCuenBG';
@@ -31,6 +31,7 @@ import MenuDelTrans from '../Transacciones/removeTrans';
 import HomeTrans from '../Transacciones/transacciones';
 import HomeBalGen from '../BalanceGeneral/MenuBalGen';
 import { importar } from '../../funcionesCliente/api/datastore';
+import { GraficaRelvTrans } from '../Transacciones/GraficaTransRelevante';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
@@ -54,6 +55,7 @@ function App() {
       <Route path="/transacciones/menuMod" element={ <MenuModTrans/> } />
       <Route path="/transacciones/menuDel" element={ <MenuDelTrans/> } />
       <Route path="/transacciones/GrafCom" element={ <GraficaComTrans/> } />
+      <Route path="/transacciones/GrafRelev" element={ <GraficaRelvTrans/>} />
       <Route path="*" element={ <Err/> } />
 
       <Route path='/menu_SolPres' element={ <MenuSolPrestamos/> } />

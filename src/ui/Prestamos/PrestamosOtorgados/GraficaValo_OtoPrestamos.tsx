@@ -4,7 +4,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 export const GraficaValoOtoPrestamo = ()=>{
-    const data = [{name: 'Page A', uv: 400},{name: 'Page B', uv: 600}, {name: 'Page C', uv: 300}, {name: 'Page D', uv: 100}];
+    const data = [{name: 'Daniel', uv: 5},{name: 'Chayane', uv:5}, {name: 'Eduardo', uv: 4}, {name: 'Alfredo', uv: 3}];
     const nav = useNavigate();
 
     const goHome = ()=>{
@@ -14,7 +14,8 @@ export const GraficaValoOtoPrestamo = ()=>{
     return (
         <>
             <div className="GrafContainer">
-                <h2>Valoracion de los Contactos por Prestamos Otorgados</h2>
+            <h1>Prestamos Otorgados</h1>
+            <h2>Estadistica de contacto por valoracion</h2>
             <BarChart width={850} height={500} data={data}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

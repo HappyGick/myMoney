@@ -14,7 +14,8 @@ export const GraficaSalCuen = ()=>{
     return (
         <>
             <div className="GrafContainer">
-                <h2>Saldo de Todas las Cuentas</h2>
+            <h1>Balance General</h1>
+            <h2>Saldo de Todas las Cuentas</h2>
             <BarChart width={850} height={500} data={data}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

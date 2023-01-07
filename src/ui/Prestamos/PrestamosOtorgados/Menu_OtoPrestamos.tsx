@@ -7,6 +7,7 @@ export const MenuOtoPrestamos = ()=>{
     const goOto = ()=>{nav('/menu_OtoPres/OtoPres')};
     const goGrafPres = ()=>{nav('/menu_OtoPres/GrafPres')};
     const goGrafValo = ()=>{nav('/menu_OtoPres/GrafValo')};
+    const goConOt = ()=>{nav('/menu_OtoPres/GrafValo')};
     const goHome = ()=>{nav('/')};
 
     return (
@@ -17,8 +18,9 @@ export const MenuOtoPrestamos = ()=>{
             <div className="botones">
                 <button className='RegPres' onClick={goReg}>Registrar Pago de Prestamo</button>
                 <button onClick={goOto}>Otorgar Prestamo</button>
-                <button onClick={goGrafPres}>Estadisticas de prestamos otorgados por contactos</button>
-                <button onClick={goGrafValo}>Estadisticas de valoracion a contactos</button>
+                <button onClick={goGrafPres}>Estadisticas de contactos por num prestamos</button>
+                <button onClick={goGrafValo}>Estadisticas de contactos por valoracion</button>
+                <button onClick={goGrafValo}>Consultar Prestamo Otorgado </button>
                 <button onClick={goHome}>Regresar a Menu Principal</button>
             </div>
         </div>

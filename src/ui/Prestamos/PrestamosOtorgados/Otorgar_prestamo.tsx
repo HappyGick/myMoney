@@ -1,15 +1,15 @@
 import { useState,ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { guardar } from "../../funcionesCliente/api/datastore";
-import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
-import { otorgarPrestamo } from "../../funcionesCliente/api/funcionesPrestamos";
-import { agregarTransaccion } from "../../funcionesCliente/api/funcionesTransacciones";
-import { Contacto } from "../../funcionesCliente/clases/prestamos/contacto";
-import { PrestamoOtorgado } from "../../funcionesCliente/clases/prestamos/prestamoOtorgado";
+import { guardar } from "../../../funcionesCliente/api/datastore";
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
+import { otorgarPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { agregarTransaccion } from "../../../funcionesCliente/api/funcionesTransacciones";
+import { Contacto } from "../../../funcionesCliente/clases/prestamos/contacto";
+import { PrestamoOtorgado } from "../../../funcionesCliente/clases/prestamos/prestamoOtorgado";
 
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
-import ApliModal from "../helpers/ApliModal";
-import { Validacion } from "../helpers/Validaciones";
+import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
+import ApliModal from "../../helpers/ApliModal";
+import { Validacion } from "../../helpers/Validaciones";
 
 const validationsForm = (form: any)=>{
     let errors = {nombre: '',monto: ''};

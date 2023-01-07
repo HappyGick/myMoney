@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
-export const GraficaPresSolPrestamo = ()=>{
-    const data = [{name: 'Page A', uv: 400},{name: 'Page B', uv: 600}, {name: 'Page C', uv: 300}, {name: 'Page D', uv: 100}];
+export const GraficaRelvTrans = ()=>{
+    const data = [{name: 'Comida', uv: 100000},{name: 'Salidas', uv: 50000}, {name: 'Estudios', uv: 35000}, {name: 'Vivienda', uv: 10000}];
     const nav = useNavigate();
 
     const goHome = ()=>{
-        nav('/menu_SolPres');
+        nav('/transacciones');
     };
 
     return (
         <>
             <div className="GrafContainer">
-                <h2>Prestamos Solicitados por los Contactos</h2>
+                <h2>Transacciones Mas Relevantes</h2>
             <BarChart width={850} height={500} data={data}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

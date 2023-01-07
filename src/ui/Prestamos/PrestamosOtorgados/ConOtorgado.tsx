@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 
 interface FormData{
     NombreBanco: string;

@@ -3,18 +3,19 @@ import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
-export const GraficaPresOtoPrestamo = ()=>{
-    const data = [{name: 'Page A', uv: 400},{name: 'Page B', uv: 600}, {name: 'Page C', uv: 300}, {name: 'Page D', uv: 100}];
+export const GraficaPresSolPrestamo = ()=>{
+    const data = [{name: 'Pedro', uv: 4.5},{name: 'Daniel', uv: 3}, {name: 'Eduardo', uv: 2}, {name: 'Chayane', uv: 1}];
     const nav = useNavigate();
 
     const goHome = ()=>{
-        nav('/menu_OtoPres');
+        nav('/menu_SolPres');
     };
 
     return (
         <>
             <div className="GrafContainer">
-                <h2>Prestamos Otorgados por los Contactos</h2>
+            <h1>Prestamos Solicitados</h1>
+            <h2>Estadistica de contactos por valoracion</h2>
             <BarChart width={850} height={500} data={data}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

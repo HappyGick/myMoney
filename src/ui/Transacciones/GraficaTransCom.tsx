@@ -4,7 +4,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 export const GraficaComTrans = ()=>{
-    const data = [{name: 'Page A', uv: 400},{name: 'Page B', uv: 600}, {name: 'Page C', uv: 300}, {name: 'Page D', uv: 100}];
+    const data = [{name: 'Comida', uv: 20},{name: 'Vivienda', uv: 15}, {name: 'Salidas', uv: 12}, {name: 'Estudios', uv: 10}];
     const nav = useNavigate();
 
     const goHome = ()=>{

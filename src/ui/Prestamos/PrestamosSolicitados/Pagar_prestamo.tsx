@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { guardar } from "../../funcionesCliente/api/datastore";
-import { useAllSelectors } from "../../funcionesCliente/api/funcionesCliente";
-import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
-import { obtenerPrestamosOtorgados, registrarPagoPrestamo } from "../../funcionesCliente/api/funcionesPrestamos";
-import { useAppSelector } from "../../store/api/hooks";
-import ApliModal from "../helpers/ApliModal";
-import { Validacion } from "../helpers/Validaciones";
+import { guardar } from "../../../funcionesCliente/api/datastore";
+import { useAllSelectors } from "../../../funcionesCliente/api/funcionesCliente";
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
+import { obtenerPrestamosSolicitados, pagarPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
+import ApliModal from "../../helpers/ApliModal";
+import { Validacion } from "../../helpers/Validaciones";
 
 let showCond = 0;
 let keyObj = "";
 
 const validationsForm = (form: any)=>{
-    let errors = {nombre: '',monto: ''};
+    let errors = {monto: ''};
     let resMonto = "^[0-9]+$";
     let resCantMonto = "^.{0,9}$"
     
@@ -38,27 +37,26 @@ const style = {
 
 }
 
-export const FormRegisPagoPrestamo = ()=>{
-
+export const FormPagarPrestamo = ()=>{
     const [modal,setModal]=useState(0);
+    const prestamos = obtenerPrestamosSolicitados();
+    const dispatch = useAppDispatch();
     const cuentas = obtenerCuentas();
-    const prestamos = obtenerPrestamosOtorgados();
     const [ctas, txs, otor, soli] = useAllSelectors();
-    const dispatch = useDispatch();
     const [state, updateState] = useState({});
     const forceUpdate = () => updateState({...state});
+
     const nav = useNavigate();
 
     const globalState = useAppSelector((state) => state);
-
     const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
     }
 
-    if(prestamos.length === 0) {
-        nav('/ErrorMensajeOtorgados');
+    if (prestamos.length === 0) {
+        nav('/ErrorMensajeSolicitados');
     }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
@@ -76,8 +74,8 @@ export const FormRegisPagoPrestamo = ()=>{
             document.createElement("p")
         ];
         
-        let nombre = document.createTextNode( "Nombre: " + obj.deudor.nombre );
-        let monto = document.createTextNode( "Monto a Cobrar: $" + obj.valor );
+        let nombre = document.createTextNode( "Nombre: " + obj.acreedor.nombre );
+        let monto = document.createTextNode( "Monto a Pagar: $" + obj.valor );
         let sep = document.createTextNode( "Datos de la Cuenta:");
         let cuenta = document.createTextNode( "Numero de Cuenta: " + obj2.numCuenta );
         let saldo = document.createTextNode( "Saldo de la Cuenta: " + obj2.saldo );
@@ -95,9 +93,17 @@ export const FormRegisPagoPrestamo = ()=>{
 
     const modFunction = () => {
 
-        if ( keyObj != "null" && keyObj!="" && errors.monto =='') { 
+        if ( keyObj != "null" && keyObj!="" && errors.monto =='') {
             const prest = prestamos[Number(keyObj)];
-            const [p, tx, saldo] = registrarPagoPrestamo(prest.id, parseInt(form.monto), otor, prest.cuenta);
+            let monto = parseInt(form.resta);
+            let total = prest.valor - parseInt(form.monto);
+            let totalC = prest.cuenta.saldo - parseInt(form.monto);
+            
+            if (totalC < 0 && total >=0){
+                monto = prest.cuenta.saldo;
+            }
+
+            const [p, tx, saldo] = pagarPrestamo(prest.id, monto, soli, prest.cuenta);
             dispatch(p);
             dispatch(tx);
             dispatch(saldo);
@@ -119,24 +125,22 @@ export const FormRegisPagoPrestamo = ()=>{
         showCond = 0;
         keyObj = "";
     }
-
     const goHome = ()=>{
         resetV();
-        nav('/menu_OtoPres');
+        nav('/menu_SolPres');
     };
 
     return (
         <>
             <div>
-
-                <h1>Registrar Pago de Prestamo</h1>
+                <h1>Pagar Prestamo</h1>
 
                 <div className="container">
 
-                    <select id="registros" onChange={showOption}>
+                    <select id="solicitudes" onChange={showOption}>
                         <option value="null">Seleccione un prestamo</option>
                         {prestamos.map((v, i) => {
-                            return (<option value={i} key={i}>{v.deudor.nombre + ", $" +
+                            return (<option value={i} key={i}>{v.acreedor.nombre + ", $" +
                             v.valor + ", " +
                             v.cuenta.numCuenta}</option>)
                         })}
@@ -147,7 +151,7 @@ export const FormRegisPagoPrestamo = ()=>{
                     <div className="campo">
                         <label>Monto:</label>
                         <br />
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} onBlur={handleBlur} autoFocus required/>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a pagar'} onChange={handleChange} onBlur={handleBlur} autoFocus required/>
                         {errors.monto && <p style={style}>{errors.monto}</p>}
                     </div>
 

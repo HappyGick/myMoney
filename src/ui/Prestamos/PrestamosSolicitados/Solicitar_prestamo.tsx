@@ -1,15 +1,15 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { guardar } from "../../funcionesCliente/api/datastore";
-import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
-import { solicitarPrestamo } from "../../funcionesCliente/api/funcionesPrestamos";
-import { agregarTransaccion } from "../../funcionesCliente/api/funcionesTransacciones";
-import { Contacto } from "../../funcionesCliente/clases/prestamos/contacto";
-import { PrestamoSolicitado } from "../../funcionesCliente/clases/prestamos/prestamoSolicitado";
+import { guardar } from "../../../funcionesCliente/api/datastore";
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
+import { solicitarPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { agregarTransaccion } from "../../../funcionesCliente/api/funcionesTransacciones";
+import { Contacto } from "../../../funcionesCliente/clases/prestamos/contacto";
+import { PrestamoSolicitado } from "../../../funcionesCliente/clases/prestamos/prestamoSolicitado";
 
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
-import ApliModal from "../helpers/ApliModal";
-import { Validacion } from "../helpers/Validaciones";
+import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
+import ApliModal from "../../helpers/ApliModal";
+import { Validacion } from "../../helpers/Validaciones";
 
 let showCond = 0;
 let keyObj = "";
