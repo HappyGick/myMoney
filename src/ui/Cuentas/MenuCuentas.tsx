@@ -4,7 +4,7 @@ export default function MenuCuentas() {
     const nav = useNavigate();
     const goAdd = () => { nav('/cuentas/menuAdd') };
     const goDel = () => { nav('/cuentas/menuDel') };
-    const goMod = () => { nav('/cuentas/menuCon') };
+    const goCon = () => { nav('/cuentas/menuCon') };
     const goGrafPres = () => { nav('/cuentas/GrafMay') };
     const goHome = () => { nav('/') };
 
@@ -17,7 +17,7 @@ export default function MenuCuentas() {
         <h4> { msgHome } </h4> <br/>
         <button className="glow-button" onClick={ goAdd }> Añadir Cuenta </button> 
         <button className="glow-button" onClick={ goDel }> Eliminar Cuenta </button> <br/>
-        <button className="glow-button" onClick={ goMod }> Consultar Saldo de Cuenta especifica</button>
+        <button className="glow-button" onClick={ goCon }> Consultar Saldo de Cuenta especifica</button>
         <button className="glow-button" onClick={ goGrafPres }> Estadisticas Cuenta de Mayor Prestamo </button>
         <button className="glow-button" onClick={ goHome }> Regresar al Menu Principal </button>
       </div>

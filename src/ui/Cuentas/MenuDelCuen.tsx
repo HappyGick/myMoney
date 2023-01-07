@@ -74,6 +74,7 @@ export default function MenuDel() {
     
     return (
         <>
+        {ErrorCuenta()}
             <div className="bg">
             <div className="mainMod">
                 <h1>Eliminar Cuentas</h1>
