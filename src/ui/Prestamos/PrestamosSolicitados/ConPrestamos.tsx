@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 
 
-export default function ConPresOto() {
+export default function ConPresSol() {
     const nav = useNavigate();
     const goHome = () => { nav('/menu_OtoPres') };
 
@@ -13,7 +13,7 @@ export default function ConPresOto() {
         <>
         <div className="bg">
         <div className="mainMod">
-            <h1>Prestamos Otorgados</h1>
+            <h1>Prestamos Solicitados</h1>
                 <div id="mainP">
                     Elige una Cuenta a Consultar:
                     <br/>
@@ -29,12 +29,12 @@ export default function ConPresOto() {
                     <p>TipoCuenta: corriente</p>
                     <br />
                     <select id="prestamo">
-                        <option value="null" >Seleccione un prestamo otorgado</option>
-                        <option value="1" >Daniel, 100</option>
+                        <option value="null" >Seleccione un prestamo solicitado</option>
+                        <option value="1" >Andres, 50</option>
                     </select>
                     <br />
-                    <p>Contacto: Daniel</p>
-                    <p>Saldo: $100</p>
+                    <p>Contacto: Andres</p>
+                    <p>Saldo: $50</p>
                     <div id="card" className="card">
                     </div>
                 </div>

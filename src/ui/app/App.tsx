@@ -32,6 +32,8 @@ import HomeTrans from '../Transacciones/transacciones';
 import HomeBalGen from '../BalanceGeneral/MenuBalGen';
 import { importar } from '../../funcionesCliente/api/datastore';
 import { GraficaRelvTrans } from '../Transacciones/GraficaTransRelevante';
+import ConPresOto from '../Prestamos/PrestamosOtorgados/ConOtorgado';
+import ConPresSol from '../Prestamos/PrestamosSolicitados/ConPrestamos';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
@@ -63,11 +65,14 @@ function App() {
       <Route path='/menu_SolPres/PayPres' element={ <FormPagarPrestamo/> } />
       <Route path='/menu_SolPres/GrafPres' element={ <GraficaPresSolPrestamo/> } />
       <Route path='/menu_SolPres/GrafValo' element={ <GraficaValoSolPrestamo/> } />
+      <Route path='/menu_SolPres/ConsultarSol' element={ <ConPresSol/> } />
+
       <Route path='/menu_OtoPres' element={ <MenuOtoPrestamos/> } />
       <Route path='/menu_OtoPres/RegPres' element={ <FormRegisPagoPrestamo/> } />
       <Route path='/menu_OtoPres/OtoPres' element={ <FormOtorgarPrestamo/> } />
       <Route path='/menu_OtoPres/GrafPres' element={ <GraficaPresOtoPrestamo/> } />
       <Route path='/menu_OtoPres/GrafValo' element={ <GraficaValoOtoPrestamo/> } />
+      <Route path='/menu_OtoPres/ConsultarOto' element={ <ConPresOto/> } />
 
       <Route path="/BalanceGen" element={ <HomeBalGen/> } />
       <Route path="/BalanceGen/SaldoCuen" element={ <GraficaSalCuen/> } />

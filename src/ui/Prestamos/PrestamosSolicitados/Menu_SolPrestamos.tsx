@@ -8,6 +8,7 @@ export const MenuSolPrestamos = ()=>{
     const goPay = ()=>{nav('/menu_SolPres/PayPres')};
     const goGrafPres = ()=>{nav('/menu_SolPres/GrafPres')};
     const goGrafValo = ()=>{nav('/menu_SolPres/GrafValo')};
+    const goConSol = ()=>{nav('/menu_SolPres/ConsultarSol')};
     const goHome = ()=>{nav('/')};
  
     return (
@@ -20,7 +21,7 @@ export const MenuSolPrestamos = ()=>{
                 <button onClick={goPay}>Pagar Prestamo</button>
                 <button onClick={goGrafPres}>Estadisticas de contactos por valoracion</button>
                 <button onClick={goGrafValo}>Estadisticas de contactos por numero de prestamos</button>
-                <button onClick={goGrafValo}>Consultar Prestamo Solicitado</button>
+                <button onClick={goConSol}>Consultar Prestamo Solicitado</button>
                 <button onClick={goHome}>Regresar a Menu Principal</button>
             </div>
         </div>
