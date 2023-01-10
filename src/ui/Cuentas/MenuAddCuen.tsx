@@ -4,87 +4,66 @@ import { Banco } from "../../funcionesCliente/clases/cuentas/banco";
 import constantes from "../../funcionesCliente/api/constantes";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import ApliModal from "../helpers/ApliModal";
-import { useForm } from "../helpers/useForm";
-import { Validacion } from "../helpers/Validaciones";
+import { Form } from "../helpers/Form";
 import { guardar } from "../../funcionesCliente/api/datastore";
-import { agregarCuenta } from "../../funcionesCliente/api/funcionesCuentas";
+import { agregarCuenta, existeCuenta, obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 
-interface FormData{
-    NombreBanco: string;
+interface FormData {
+    banco: string;
     NumeroCuenta: string;
     Saldo: number;
-    TipoCuenta: string;
+    TipoCuenta: 'ahorro' | 'corriente';
 }
 
-
-const validationsForm = (form: any)=>{
+const validationsForm = (cuentas: Cuenta[]) => (form: FormData) => {
     let errors = {NumeroCuenta: '',Saldo: '',TipoCuenta:''};
-    let resMonto = "^[0-9]+$";
-    let resCantCuenta = "^.{16,16}$"
-    let resCantMonto = "^.{0,9}$"
+    let resCantCuenta = "^.{16,16}$";
+    let soloNumeros = "^[0-9]+$";
     
-    if (!form.NumeroCuenta){
+    if (!form.NumeroCuenta) {
         errors.NumeroCuenta = '*El campo Numero de Cuenta es requerido';
-    } else if (!(form.NumeroCuenta).match(resMonto)){
-        errors.NumeroCuenta = '*El campo solo acepta numeros';
-    } else if (!(form.NumeroCuenta).match(resCantCuenta)){
+    } else if (!(form.NumeroCuenta).match(resCantCuenta)) {
         errors.NumeroCuenta = '*El campo solo acepta 16 caracteres';
-    }else {
-        let keys = Object.keys(localStorage);
-        for(let key of keys) {
-            if ( key.includes("cuenta-") == true ) {
-                let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                if ( ob.NumeroCuenta == form.NumeroCuenta ) { errors.NumeroCuenta = '*El numero de cuenta, ya se encuentra en el sistema'  }
-            }
-        }}
+    } else if (!form.NumeroCuenta.match(soloNumeros)) {
+        errors.NumeroCuenta = '*El campo solo acepta numeros';
+    } else if(existeCuenta(cuentas, form.NumeroCuenta, constantes.bancos[form.banco].prefijo)) {
+        errors.NumeroCuenta = '*El numero de cuenta ya existe';
+    }
 
     if (!form.Saldo){
         errors.Saldo = '*El campo Saldo es requerido';
-    } else if (!(form.Saldo).match(resMonto)){
-        errors.Saldo = '*El campo solo acepta numeros positivos';
-    } else if (!(form.Saldo).match(resCantMonto)){
-        errors.Saldo = '*El campo solo acepta hasta 9 digitos';
-    }
-
-    if (!form.TipoCuenta){
-        errors.TipoCuenta = '*El campo Tipo Cuenta es requerido';
-    } else if (form.TipoCuenta != 'ahorro' && form.TipoCuenta != 'corriente'){
-        errors.TipoCuenta = '*Debe ingresar "ahorro" o "corriente"';
+    } else if (form.Saldo < 0){
+        errors.Saldo = '*El campo Saldo no puede ser negativo';
     }
 
     return errors;
 }
 
-const initialForm = {
-    NombreBanco:'',
+const initialForm: FormData = {
+    banco: '0',
     NumeroCuenta:'',
-    Saldo: '',
-    TipoCuenta:''
+    Saldo: 0,
+    TipoCuenta: 'ahorro'
 };
 
 const style = {
     color: 'red',
     fontSize: '15px'
-
 }
 
 export default function MenuAddCuen() {
 
-    const {form,errors,handleBlur} = Validacion(initialForm,validationsForm);
     const [modal,setModal]=useState(0);
     const nav = useNavigate();
     const goHome = () => { nav('/Cuentas') };
     const dispatch = useAppDispatch();
     const [state, updateState] = useState({});
     const forceUpdate = () => updateState({...state});
-    const {formulario,handleChange}=useForm<FormData>({
-        NombreBanco: "mercantil",
-        NumeroCuenta: "1234567890123456",
-        Saldo: 0,
-        TipoCuenta: "corriente",
-    })
-
+    
     const globalState = useAppSelector((state) => state);
+    const cuentas = obtenerCuentas();
+    const {form, errors, validar, handleChange} = Form(initialForm, validationsForm(cuentas));
 
     const procesarBancos = () => {
         let bancos: Banco[] = [];
@@ -95,16 +74,17 @@ export default function MenuAddCuen() {
     }
     
     const saveData = () => {
-        if (errors.NumeroCuenta == '' && errors.Saldo == '' && errors.TipoCuenta == ''){
+        if (validar()){
+            console.log(form);
             dispatch(agregarCuenta(
-                formulario.NumeroCuenta,
-                constantes.bancos[formulario.NombreBanco],
-                formulario.Saldo,
-                formulario.TipoCuenta
+                form.NumeroCuenta,
+                constantes.bancos[form.banco],
+                form.Saldo,
+                form.TipoCuenta
             ));
             guardar(globalState);
+            setModal(1);
         }
-        setModal(1);
     }
 
     const reset = ()=>{
@@ -115,31 +95,16 @@ export default function MenuAddCuen() {
         }
     }
 
-    const handleInputNombreBanco = (e: { target: { value: any; }; }) => {
-        let text = e.target.value;
-        formulario.NombreBanco = text;
-    }
-
-    function vefNumCuenta( num:number ) {
-        let keys = Object.keys(localStorage);
-        for(let key of keys) {
-            if ( key.includes("cuenta-") == true ) {
-                let ob = JSON.parse( "" + localStorage.getItem( key ) );
-                if ( ob.NumeroCuenta == form.NumeroCuenta ) { errors.NumeroCuenta = 'El numero de cuenta, ya se encuentra en el sistema'  }
-            }
-        }
-    }
-
 
     return (
         <>
             <div className="bg">
             <div className="mainAdd">
-                <h1>Añadir Cuenta</h1>           
-                <p>
-                    Elige una Cuenta de Banco: <br/>
-                    <select id="cuenta" name="NombreBanco" onChange={handleInputNombreBanco} >
-                        <option value="null" >Cuenta de Banco</option>
+                <h1 style={{margin: 5}}>Añadir Cuenta</h1>           
+                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', rowGap: 10, margin: 5}}>
+                    <label htmlFor="cuenta">Banco:</label>
+                    <select id="cuenta" name="banco" onChange={handleChange} value={form.banco}>
+                        <option value="null" disabled>Cuenta de Banco</option>
                         {procesarBancos().map((v, i) => {
                             return (
                                 <option value={v.id} key={i}>{v.nombre}</option>
@@ -147,21 +112,37 @@ export default function MenuAddCuen() {
                         })}
                     </select>
                     
-                    <br/> <br/> Ingrese el numero de cuenta <br/>
-                    <input id="NumeroCuenta" name="NumeroCuenta" type="text" placeholder="1234567890123456" onChange={ handleChange } onBlur={handleBlur} autoFocus/>
-                    {errors.NumeroCuenta && <p style={style}>{errors.NumeroCuenta}</p>}
+                    <label htmlFor="NumeroCuenta">Ingrese el numero de cuenta</label>
+                    <input
+                        id="NumeroCuenta" 
+                        name="NumeroCuenta" 
+                        type="text"
+                        placeholder="1234567890123456"
+                        onChange={ handleChange }
+                        maxLength={16}
+                        autoFocus
+                    />
+                    {errors.NumeroCuenta ? <p style={style}>{errors.NumeroCuenta}</p> : <></>}
                     
-                    <br/> <br/> Ingrese el saldo inicial de la cuenta <br/>
-                    <input id="Saldo" type="number" name="Saldo"min="0" max="123456789" placeholder="0" onChange={ handleChange }  onBlur={handleBlur}/>
-                    {errors.Saldo && <p style={style}>{errors.Saldo}</p>}
+                    <label htmlFor="Saldo">Ingrese el saldo inicial de la cuenta</label>
+                    <input
+                        id="Saldo"
+                        type="number"
+                        name="Saldo"
+                        min={0}
+                        max={123456789}
+                        onChange={ handleChange }
+                    />
+                    {errors.Saldo ? <p style={style}>{errors.Saldo}</p>  : <></>}
                     
-                    <br/> <br/> Ingrese el tipo de cuenta <br/>
-                    <input id="TipoCuenta" type="text" name="TipoCuenta" placeholder="ahorro" onChange={ handleChange } onBlur={handleBlur}/>
-                    {errors.TipoCuenta && <p style={style}>{errors.TipoCuenta}</p>}
-                </p>
-                {/* <p>{JSON.stringify(formulario)};</p> */}
-                <button onClick = { goHome } className="glow-button" >Regresar</button>
-                <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
+                    <label htmlFor="TipoCuenta">Ingrese el tipo de cuenta</label>
+                    <select id="TipoCuenta" name="TipoCuenta" onChange={handleChange} value={form.TipoCuenta}>
+                        <option value="ahorro">ahorro</option>
+                        <option value="corriente">corriente</option>
+                    </select>
+                </div>
+                <button onClick={goHome} style={{margin: 5}} className="glow-button" >Regresar</button>
+                <input style={{margin: 5}} type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
             </div>
             </div>
             {ApliModal('/Cuentas','Agregar Cuenta','Menu de Cuenta','Agregar otra Cuenta','Exito!','Se ha agregado una cuenta con exito',modal,setModal)}

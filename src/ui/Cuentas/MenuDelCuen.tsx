@@ -3,19 +3,21 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { obtenerCuentas, eliminarCuenta, eliminarTodasCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import ApliModal from "../helpers/ApliModal";
    
 export default function MenuDel() {
-    const [modal,setModal]=useState(0);
-    const [keyObj, setKey] = useState(-1);
     const nav = useNavigate();
-    const goHome = () => { nav('/cuentas') };
     const cuentas = obtenerCuentas();
     const dispatch = useAppDispatch();
+
+    const [modal,setModal] = useState(0);
     const [state, updateState] = React.useState({});
+    const [cuenta, setCuenta] = useState<Cuenta>();
+    
     const forceUpdate = () => updateState({...state});
-    const [showCond, setShowCond] = useState(0);
+    const goHome = () => { nav('/cuentas') };
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
@@ -24,9 +26,8 @@ export default function MenuDel() {
     const globalState = useAppSelector((state) => state);
     
     const delFunction = () => {
-        if ( keyObj >= 0 ) {
-            console.log(cuentas[keyObj].id);
-            dispatch(eliminarCuenta(cuentas[keyObj].id));
+        if (cuenta) {
+            dispatch(eliminarCuenta(cuenta.id));
             guardar(globalState);
             setModal(1);
         }
@@ -48,62 +49,45 @@ export default function MenuDel() {
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = cuentas[Number(key)];
-        let div = document.getElementById("card");
-        setKey(Number(key));
-
-        let p = [ 
-            document.createElement("p"), document.createElement("p"),
-            document.createElement("p"), document.createElement("p")
-        ];
-        
-        let cuenta = document.createTextNode( "NombreBanco: " + obj.banco.nombre );
-        let tipo = document.createTextNode( "NumeroCuenta: " + obj.numCuenta );
-        let monto = document.createTextNode( "Saldo: $" + obj.saldo );
-        let desc = document.createTextNode( "TipoCuenta: " + obj.tipo );
-
-        p[0].appendChild(cuenta);
-        p[1].appendChild(tipo);
-        p[2].appendChild(monto);
-        p[3].appendChild(desc);
-        
-        if ( showCond == 0 ) { setShowCond(1); }
-        else { div?.replaceChildren(); }
-        for ( let i = 0; i <= 3; i++ ) { div?.appendChild(p[i]); }
+        if (key != 'null') {
+            let obj = cuentas[Number(key)];
+            setCuenta(obj);
+        }
     }
     
     return (
         <>
-        {ErrorCuenta()}
             <div className="bg">
-            <div className="mainMod">
-                <h1>Eliminar Cuentas</h1>
-                    <div id="mainP">
-                        Elige una Cuenta a Modificar:
-                        <br/>
-                        <select id="cuenta" onChange={ showOption } >
-                            <option value="null" >Seleccione una cuenta</option>
-                            {cuentas.map((v, i) => {
-                                return (
-                                    <option value={i} key={i}>{
-                                        v.banco.nombre + ", " +
-                                        v.numCuenta + ", " +
-                                        v.tipo + ", " +
-                                        v.saldo
-                                    }</option>
-                                );
-                            })}
-                        </select>
-                        <div id="card" className="card">
+                <div className="mainMod">
+                    <h1>Eliminar Cuentas</h1>
+                        <div id="mainP">
+                            Elige una cuenta a eliminar:
+                            <br/>
+                            <select id="cuenta" onChange={ showOption } >
+                                <option value="null" >Seleccione una cuenta</option>
+                                {cuentas.map((v, i) => {
+                                    return (
+                                        <option value={i} key={i}>{
+                                            v.banco.nombre + ", " +
+                                            v.numCuenta + ", " +
+                                            v.tipo + ", " +
+                                            v.saldo
+                                        }</option>
+                                    );
+                                })}
+                            </select>
+                            <div id="card" className="card">
+                                <p>Nombre banco: {cuenta?.banco.nombre}</p>
+                                <p>Numero de cuenta: {cuenta?.numCuenta}</p>
+                                <p>Saldo: ${cuenta?.saldo}</p>
+                                <p>Tipo de cuenta: {cuenta?.tipo}</p>
+                            </div>
+        
+                            <button onClick={clearLocal} className="glow-button">Borrar todas las cuentas</button>
                         </div>
-
-                        Para Eliminar todas las Cuentas presione:        
-                        <button onClick={ clearLocal } className="glow-button" > Borrar Todo </button>
-                        <br/>
-                    </div>
-                    <button onClick={ goHome } className="glow-button" >Regresar</button>
-                    <input type="submit" value="Confirmar" className="glow-button" onClick={ delFunction } />
-            </div>
+                        <button onClick={goHome} className="glow-button" >Regresar</button>
+                        <input type="submit" value="Confirmar" className="glow-button" onClick={delFunction} />
+                </div>
             </div>
             {ApliModal('/Cuentas','Eliminar Cuenta','Menu de Cuenta','Eliminar otra Cuenta','Exito!','Se ha eliminado una cuenta con exito',modal,setModal)}
             {reset()}
