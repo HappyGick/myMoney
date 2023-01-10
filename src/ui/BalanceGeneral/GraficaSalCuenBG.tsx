@@ -11,7 +11,7 @@ interface FormData {
 }
 let datos:FormData[]
 export const GraficaSalCuen = ()=>{
-    const data = [{name: 'Page A', uv: 400},{name: 'Page B', uv: 600}, {name: 'Page C', uv: 300}, {name: 'Page D', uv: 100}];
+    const data = [{numCuenta: 'Page A', saldo: 400},{numCuenta: 'Page B', saldo: 600}, {numCuenta: 'Page C', saldo: 300}, {numCuenta: 'Page D', saldo: 100}];
     const nav = useNavigate();
 
     const goHome = ()=>{
@@ -19,39 +19,26 @@ export const GraficaSalCuen = ()=>{
     };
 
     const cuentas = obtenerCuentas();
+    if (cuentas.length == 0) {
+        nav('/ErrorMensajeCuentas');
+    }
     
     const obtenerdata=(cuenta:Cuenta[])=>
-    {
-        let a:FormData[]=[];
-        let initialForm: FormData = {
-            name:'',
-            uv:0,
-        };
-        
+    {   let a=0
         for (let i=0;i<cuenta.length;i++)
         {
-         initialForm.name=cuenta[i].numCuenta;
-         initialForm.uv=cuenta[i].saldo;
-         console.log('name',i,initialForm.name)
-         console.log('saldo',i,initialForm.uv)
-         a.push(initialForm)
-         console.log('tamano',a.length)
-         console.log('name despues',a[i].name)
-         console.log('saldo despues',a[i].uv)
-        }
-        for (let i=0;i<a.length;i++)
-        {console.log(a.length)
-            console.log('a',a[i].name)
+            a = a + cuenta[i].saldo;
+            console.log(a)
         }
         return(a)
     }
-    const datos=obtenerdata(cuentas)
+    const SaldoGeneral=obtenerdata(cuentas)
+    
     return (
         <>
-        
             <div className="GrafContainer">
             <h1>Balance General</h1>
-            <h2>Saldo de Todas las Cuentas{cuentas.length}</h2>
+            <h2>Saldo de Todas las Cuentas</h2>
             <BarChart width={850} height={500} data={cuentas}>
                 <XAxis dataKey="numCuenta" stroke="#8884d8" />
                 <YAxis />
@@ -60,6 +47,7 @@ export const GraficaSalCuen = ()=>{
                 <Bar dataKey="saldo" fill="#8884d8" barSize={30} />
             </BarChart>
             </div>
+            <h2>Saldo General={SaldoGeneral}</h2>
             <div className="botones">
                 <br />
                 <br />

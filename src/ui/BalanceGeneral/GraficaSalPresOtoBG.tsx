@@ -2,6 +2,8 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { obtenerPrestamosOtorgados } from "../../funcionesCliente/api/funcionesPrestamos";
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 
 export const GraficaSalPresOto = ()=>{
     const data = [{name: 'cuenta 1', uv: 5550},{name: 'cuenta 2', uv:4500}, {name: 'cuenta 3', uv: 3000}, {name: 'cuenta 4', uv: 1000}];
@@ -10,13 +12,17 @@ export const GraficaSalPresOto = ()=>{
     const goHome = ()=>{
         nav('/BalanceGen');
     };
-
+    const cuentas = obtenerCuentas();
+    if (cuentas.length == 0) {
+        nav('/ErrorMensajeCuentas');
+    }
+    const prestamos=obtenerPrestamosOtorgados();
     return (
         <>
             <div className="GrafContainer">
             <h1>Balance General</h1>
             <h2>Saldo de Todos los Prestamos Otorgados</h2>
-            <BarChart width={850} height={500} data={data}>
+            <BarChart width={850} height={500} data={prestamos}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />
                 <Tooltip />

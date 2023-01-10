@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 
 export const GraficaSalPresSol = ()=>{
     const data = [{name: 'Cuenta 1', uv: 6000},{name: 'Cuenta 2', uv: 4600}, {name: 'Cuenta 3', uv: 3300}, {name: 'Cuenta 4', uv: 2500}];
@@ -10,6 +11,10 @@ export const GraficaSalPresSol = ()=>{
     const goHome = ()=>{
         nav('/BalanceGen');
     };
+    const cuentas = obtenerCuentas();
+    if (cuentas.length == 0) {
+        nav('/ErrorMensajeCuentas');
+    }
 
     return (
         <>

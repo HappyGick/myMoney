@@ -12,7 +12,7 @@ export default function HomeBalGen() {
     return (
       <div className ="bg">
         <div className="mainHome">
-          <h1>Transacciones</h1>
+          <h1>Balance General</h1>
           <h4> { msgHome } </h4> <br/>
           <button className="glow-button" onClick={ goSalCuen }> Saldo de Todas las Cuentas </button> 
           <button className="glow-button" onClick={ goSalPresSol }> Resumen de Saldo de Todos los Prestamos Recibidos </button>
