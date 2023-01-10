@@ -10,25 +10,28 @@ import { guardar } from "../../funcionesCliente/api/datastore";
 import { useAllSelectors } from "../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { obtenerTransacciones, modificarTransaccion } from "../../funcionesCliente/api/funcionesTransacciones";
+import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 
 type FormTransacciones = {
     fecha: string;
     descripcion: string;
-    tipo: 'Ingreso' | 'Gasto';
+    tipo: 'Ingreso' | 'Gasto' | 'null';
     monto: number;
     cuenta: string;
+    etiqueta: string;
 };
 
 const initialForm: FormTransacciones = {
     fecha: '',
     descripcion: '',
-    tipo: 'Ingreso',
+    tipo: 'null',
     monto: 0,
-    cuenta: 'null'
+    cuenta: 'null',
+    etiqueta: 'null'
 };
 
-const validationsForm = (form: FormTransacciones)=>{
-    let errors = {fecha:'', mensaje:'', monto: '', cuenta: ''};
+const validationsForm = (cuentas: Cuenta[]) => (form: FormTransacciones)=>{
+    let errors = {fecha:'', mensaje:'', monto: '', cuenta: '', etiqueta: ''};
     let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
     let resFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/
     
@@ -52,6 +55,14 @@ const validationsForm = (form: FormTransacciones)=>{
 
     if (form.cuenta === 'null'){
         errors.cuenta = '*Debe seleccionar una cuenta';
+    } else {
+        if (cuentas[Number(form.cuenta)].saldo < form.monto && form.tipo === 'Gasto'){
+            errors.monto = '*El monto del gasto es mayor al saldo de la cuenta';
+        }
+    }
+
+    if (form.etiqueta === 'null'){
+        errors.etiqueta = '*El campo etiqueta es requerido';
     }
 
     return errors;
@@ -73,7 +84,7 @@ export default function MenuModTrans() {
     const dispatch = useAppDispatch();
     const [ctas, txs, otor, soli] = useAllSelectors();
     const [transaccion, setTx] = useState<Transaccion>();
-    const {form, errors, handleChange, validar} = Form(initialForm,validationsForm);
+    const {form, errors, handleChange, validar} = Form(initialForm, validationsForm(cuentas));
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
@@ -94,6 +105,7 @@ export default function MenuModTrans() {
         form.tipo = transacciones[idTx].tipo;
         form.monto = transacciones[idTx].monto;
         form.cuenta = cuentas.findIndex((v) => v.id === transacciones[idTx].cuenta.id).toString();
+        form.etiqueta = transacciones[idTx].etiquetaPrimaria.nombre;
         console.log(form.cuenta)
         forceUpdate();
     };
@@ -141,14 +153,15 @@ export default function MenuModTrans() {
                                         v.tipo + ", " +
                                         v.descripcion + ", $" +
                                         v.monto + ", " +
-                                        v.fecha}
+                                        v.fecha + 
+                                        (v.etiquetaPrimaria.nombre !== "" ? " (" + v.etiquetaPrimaria.nombre + ")" : "")}
                                     </option>
                                 );
                             })}
                         </select>
                     </div>
 
-                    <div style={{display: 'flex', flexDirection: 'column', rowGap: 10}}>
+                    <div style={{display: 'flex', flexDirection: 'column', rowGap: 10}} hidden={transaccion === undefined}>
                         <label htmlFor="cuenta">Elige una Cuenta de Banco:</label>
                         <select name="cuenta" id="cuenta" onChange={ handleChange } value={form.cuenta}>
                             <option value="null" >Cuenta de Banco</option>
@@ -182,6 +195,21 @@ export default function MenuModTrans() {
                         <label htmlFor="descripcion">Añade una Descripcion</label>
                         <textarea name="descripcion" placeholder="Describa" value={form.descripcion} onChange={ handleChange }></textarea>
                         {errors.descripcion ? <p style={style}>{errors.descripcion}</p> : <></>}
+
+                        <label htmlFor="etiqueta">Seleccione una etiqueta</label>
+                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } value={form.etiqueta}>
+                            <option value="null">Etiqueta</option>
+                            <option value="Comida" >Comida</option>
+                            <option value="Transporte" >Transporte</option>
+                            <option value="Ropa" >Ropa</option>
+                            <option value="Salud" >Salud</option>
+                            <option value="Hogar" >Hogar</option>
+                            <option value="Entretenimiento" >Entretenimiento</option>
+                            <option value="Salario">Salario</option>
+                            <option value="Negocio">Negocio</option>
+                            <option value="Otros" >Otros</option>
+                        </select>
+                        {errors.etiqueta ? <p style={style}>{errors.etiqueta}</p> : <></>}
                     </div>
                     <button onClick={ goHome } className="glow-button" >Regresar</button>
                     <input type="submit" value="Confirmar" className="glow-button" onClick={ modFunction } />

@@ -13,20 +13,22 @@ export function obtenerTransacciones(): Transaccion[] {
     for (let i in txs) {
         const protoTx = txs[i];
         const protoCuenta = cuentas[protoTx.cuenta];
-        const cuenta = new Cuenta(protoCuenta.numCuenta, constantes.bancos[protoCuenta.banco], protoCuenta.tipo, protoCuenta.saldo, protoCuenta.id);
-        const etiqueta = new Etiqueta(
-            protoTx.etiquetaPrimaria,
-            ""
-        );
-        arrayTxs.push(new Transaccion(
-            protoTx.valor,
-            cuenta,
-            new Date(protoTx.fecha),
-            protoTx.descripcion,
-            etiqueta,
-            [],
-            protoTx.id
-        ))
+        if (protoTx.etiquetaPrimaria !== constantes.etiquetaPrestamoOtorgado.nombre && protoTx.etiquetaPrimaria !== constantes.etiquetaPrestamoSolicitado.nombre) {
+            const cuenta = new Cuenta(protoCuenta.numCuenta, constantes.bancos[protoCuenta.banco], protoCuenta.tipo, protoCuenta.saldo, protoCuenta.id);
+            const etiqueta = new Etiqueta(
+                protoTx.etiquetaPrimaria,
+                ""
+            );
+            arrayTxs.push(new Transaccion(
+                protoTx.valor,
+                cuenta,
+                new Date(protoTx.fecha),
+                protoTx.descripcion,
+                etiqueta,
+                [],
+                protoTx.id
+            ))
+        }
     }
     return arrayTxs;
 }

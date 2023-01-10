@@ -14,21 +14,23 @@ import { Form } from "../helpers/Form";
 type FormTransacciones = {
     fecha: string;
     descripcion: string;
-    tipo: 'Ingreso' | 'Gasto';
+    tipo: 'Ingreso' | 'Gasto' | 'null';
     monto: number;
     cuenta: string;
+    etiqueta: string;
 };
 
 const initialForm: FormTransacciones = {
     fecha: '',
     descripcion: '',
-    tipo: 'Ingreso',
+    tipo: 'null',
     monto: 0,
-    cuenta: 'null'
+    cuenta: 'null',
+    etiqueta: 'null'
 };
 
 const validationsForm = (cuentas: Cuenta[]) => (form: FormTransacciones) => {
-    let errors = {fecha: '', mensaje: '', monto: '', cuenta: ''};
+    let errors = {fecha: '', mensaje: '', monto: '', cuenta: '', etiqueta: '', tipo: ''};
     let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
     let resFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/
     
@@ -50,12 +52,20 @@ const validationsForm = (cuentas: Cuenta[]) => (form: FormTransacciones) => {
         errors.fecha = '*El formato de fecha es invalido';
     }
 
+    if (form.tipo === 'null'){
+        errors.tipo = '*El campo tipo es requerido';
+    }
+
     if (form.cuenta === 'null'){
         errors.cuenta = '*El campo cuenta es requerido';
     } else {
         if (cuentas[Number(form.cuenta)].saldo < form.monto && form.tipo === 'Gasto'){
             errors.monto = '*El monto del gasto es mayor al saldo de la cuenta';
         }
+    }
+
+    if (form.etiqueta === 'null'){
+        errors.etiqueta = '*El campo etiqueta es requerido';
     }
 
     return errors;
@@ -88,7 +98,7 @@ export default function MenuAddTrans() {
                 cuentas[Number(form.cuenta)],
                 DateTime.fromFormat(form.fecha, "dd/MM/yyyy").toJSDate(),
                 form.descripcion,
-                new Etiqueta("test", ""),
+                new Etiqueta(form.etiqueta, ""),
                 []
             ));
             dispatch(tx);
@@ -130,8 +140,8 @@ export default function MenuAddTrans() {
                         {errors.cuenta ? <p style={style}>{errors.cuenta}</p> : <></>}
                         
                         <label htmlFor="tipo">Elige el Tipo de Transaccion:</label>
-                        <select id="tipo" name="tipo" onChange={ handleChange } >  
-                            <option value="null" disabled>Tipo de Transaccion</option>
+                        <select id="tipo" name="tipo" onChange={ handleChange } value={form.tipo}>  
+                            <option value="null">Tipo de Transaccion</option>
                             <option value="Ingreso" >Ingreso</option>
                             <option value="Gasto" >Gasto</option>
                         </select>
@@ -147,6 +157,21 @@ export default function MenuAddTrans() {
                         <label htmlFor="descripcion">Añade una Descripcion</label>
                         <textarea name="descripcion" placeholder="Describa" onChange={ handleChange }></textarea>
                         {errors.descripcion ? <p style={style}>{errors.descripcion}</p> : <></>}
+
+                        <label htmlFor="etiqueta">Seleccione una etiqueta</label>
+                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } >
+                            <option value="null">Etiqueta</option>
+                            <option value="Comida" >Comida</option>
+                            <option value="Transporte" >Transporte</option>
+                            <option value="Ropa" >Ropa</option>
+                            <option value="Salud" >Salud</option>
+                            <option value="Hogar" >Hogar</option>
+                            <option value="Entretenimiento" >Entretenimiento</option>
+                            <option value="Salario">Salario</option>
+                            <option value="Negocio">Negocio</option>
+                            <option value="Otros" >Otros</option>
+                        </select>
+                        {errors.etiqueta ? <p style={style}>{errors.etiqueta}</p> : <></>}
                     </div>
 
                     <button onClick = { goHome } className="glow-button" >Regresar</button>

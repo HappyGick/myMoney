@@ -79,7 +79,8 @@ export default function MenuDelTrans() {
                                     v.tipo + ", " +
                                     v.descripcion + ", $" +
                                     v.monto + ", " +
-                                    v.fecha}
+                                    v.fecha  + 
+                                    (v.etiquetaPrimaria.nombre !== "" ? " (" + v.etiquetaPrimaria.nombre + ")" : "")}
                                 </option>
                             );
                         })}
@@ -90,6 +91,7 @@ export default function MenuDelTrans() {
                         <p>Monto: ${transaccion?.monto}</p>
                         <p>Descripcion: {transaccion?.descripcion}</p>
                         <p>Fecha: {transaccion?.fecha}</p>
+                        <p>Etiqueta: {transaccion?.etiquetaPrimaria.nombre}</p>
                     </div>
 
                     <button onClick={ clearLocal } className="glow-button">Borrar todas las transacciones</button>
