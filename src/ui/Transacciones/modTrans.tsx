@@ -197,7 +197,7 @@ export default function MenuModTrans() {
                         {errors.descripcion ? <p style={style}>{errors.descripcion}</p> : <></>}
 
                         <label htmlFor="etiqueta">Seleccione una etiqueta</label>
-                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } value={form.etiqueta}>
+                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } value={form.etiqueta} style={{marginBottom: 40}}>
                             <option value="null">Etiqueta</option>
                             <option value="Comida" >Comida</option>
                             <option value="Transporte" >Transporte</option>
@@ -212,7 +212,7 @@ export default function MenuModTrans() {
                         {errors.etiqueta ? <p style={style}>{errors.etiqueta}</p> : <></>}
                     </div>
                     <button onClick={ goHome } className="glow-button" >Regresar</button>
-                    <input type="submit" value="Confirmar" className="glow-button" onClick={ modFunction } />
+                    <button className="glow-button" onClick={ modFunction }>Confirmar</button>
                 </div>
             </div>
             {ApliModal('/transacciones','Modificar Transacciones','Menu de Transacciones','Modificar otra Transaccion','Exito!','Se ha realizado la transaccion con exito',modal,setModal)}

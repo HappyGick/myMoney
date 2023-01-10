@@ -84,10 +84,10 @@ export default function MenuDel() {
                                 <p>Tipo de cuenta: {cuenta?.tipo}</p>
                             </div>
         
-                            <button onClick={clearLocal} className="glow-button">Borrar todas las cuentas</button>
+                            <button onClick={clearLocal} className="glow-button" style={{marginBottom: 10}}>Borrar todas las cuentas</button>
                         </div>
                         <button onClick={goHome} className="glow-button" >Regresar</button>
-                        <input type="submit" value="Confirmar" className="glow-button" onClick={delFunction} />
+                        <button className="glow-button" onClick={delFunction}>Confirmar</button>
                 </div>
             </div>
             {ApliModal('/Cuentas','Eliminar Cuenta','Menu de Cuenta','Eliminar otra Cuenta','Exito!','Se ha eliminado una cuenta con exito',modal,setModal)}

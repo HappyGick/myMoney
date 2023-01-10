@@ -94,10 +94,10 @@ export default function MenuDelTrans() {
                         <p>Etiqueta: {transaccion?.etiquetaPrimaria.nombre}</p>
                     </div>
 
-                    <button onClick={ clearLocal } className="glow-button">Borrar todas las transacciones</button>
+                    <button onClick={ clearLocal } className="glow-button" style={{marginBottom: 10}}>Borrar todas las transacciones</button>
                 </div>
                 <button onClick={ goHome } className="glow-button" >Regresar</button>
-                <input type="submit" value="Confirmar" className="glow-button" onClick={ delFunction } />
+                <button className="glow-button" onClick={ delFunction }>Confirmar</button>
             </div>
             </div>
             {ApliModal('/transacciones','Eliminar Transacciones','Menu de Transacciones','Eliminar otra Transaccion','Exito!','Se ha eliminado la transaccion con exito',modal,setModal)}

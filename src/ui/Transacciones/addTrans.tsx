@@ -159,7 +159,7 @@ export default function MenuAddTrans() {
                         {errors.descripcion ? <p style={style}>{errors.descripcion}</p> : <></>}
 
                         <label htmlFor="etiqueta">Seleccione una etiqueta</label>
-                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } >
+                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } style={{marginBottom: 40}}>
                             <option value="null">Etiqueta</option>
                             <option value="Comida" >Comida</option>
                             <option value="Transporte" >Transporte</option>
@@ -175,7 +175,7 @@ export default function MenuAddTrans() {
                     </div>
 
                     <button onClick = { goHome } className="glow-button" >Regresar</button>
-                    <input type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
+                    <button className="glow-button" onClick={ saveData }>Confirmar</button>
                 </div>
             </div>
             {ApliModal('/transacciones','Agregar Transacciones','Menu de Transacciones','Realizar otra Transaccion','Exito!','Se ha realizado la transaccion con exito',modal,setModal)}
