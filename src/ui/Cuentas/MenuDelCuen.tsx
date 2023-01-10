@@ -39,11 +39,12 @@ export default function MenuDel() {
         setModal(1);
     }
 
-    const reset = ()=>{
+    const reset = () => {
         if (modal==2){
-            forceUpdate();
             guardar(globalState);
             setModal(0);
+            forceUpdate();
+            location.reload();
         }
     }
 

@@ -40,7 +40,6 @@ const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 function App() {
   importar();
   const a = login("pperez", "12345");
-  console.log(a);
   return (
     <BrowserRouter>
     <Routes>

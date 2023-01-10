@@ -3,8 +3,11 @@ import { ErrorLista } from "../helpers/ErrorLista"
 
 export const ErrorMensajeCuentas = ()=>{
     return(
-        <>
-            {ErrorLista("/cuentas","Usted no tiene ninguna cuenta registrada, por favor registre una cuenta","¿Quiere volver al Menú Principal de Cuentas?","Volver al menu de cuentas")}
-        </>
+        <ErrorLista
+            url="/cuentas"
+            mensaje="Usted no tiene ninguna cuenta registrada, por favor registre una cuenta"
+            mensaje2="¿Quiere volver al Menú Principal de Cuentas?"
+            NombreBoton="Volver al menu de cuentas"
+        />
     )
 }

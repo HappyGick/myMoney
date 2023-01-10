@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface ClienteState {
+export interface ClienteState {
     id: string,
     nombre: string,
     username: string,

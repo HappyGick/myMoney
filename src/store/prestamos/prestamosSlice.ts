@@ -16,7 +16,7 @@ interface POtorgado extends Prestamo {
     deudor: string
 }
 
-interface PrestamosState {
+export interface PrestamosState {
     solicitados: {[id: string]: PSolicitado},
     otorgados: {[id: string]: POtorgado}
 }

@@ -79,7 +79,7 @@ export default function MenuAddCuen() {
             dispatch(agregarCuenta(
                 form.NumeroCuenta,
                 constantes.bancos[form.banco],
-                form.Saldo,
+                Number(form.Saldo),
                 form.TipoCuenta
             ));
             guardar(globalState);
@@ -89,9 +89,10 @@ export default function MenuAddCuen() {
 
     const reset = ()=>{
         if (modal==2){
-            forceUpdate();
             guardar(globalState);
             setModal(0);
+            forceUpdate();
+            location.reload();
         }
     }
 

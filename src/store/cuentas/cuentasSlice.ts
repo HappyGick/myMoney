@@ -8,7 +8,7 @@ interface Cuenta {
     saldo: number
 }
 
-type CuentasState = {[id: string]: Cuenta}
+export type CuentasState = {[id: string]: Cuenta}
 
 const initialState: CuentasState = {};
 
@@ -22,6 +22,7 @@ export const cuentasSlice = createSlice({
             }
         },
         addCuenta: (state, action: PayloadAction<Cuenta>) => {
+            console.log(action.payload);
             state[action.payload.id] = action.payload;
         },
         elimCuenta: (state, action: PayloadAction<string>) => {
