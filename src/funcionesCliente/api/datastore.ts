@@ -7,8 +7,6 @@ interface Datastore {
     clientes: {[id: string]: DatosCliente}
 }
 
-const currentDate = (new Date()).toISOString();
-
 export let datastore: Datastore = {
     idsCliente: {
         "pperez": "1234"
@@ -21,43 +19,19 @@ export let datastore: Datastore = {
                 username: "pperez",
                 password: "12345"
             },
-            transacciones: {
-                '567': {
-                    cuenta: '123',
-                    descripcion: 'sample text',
-                    etiquetaPrimaria: 'ejemplo',
-                    etiquetasSecundarias: [],
-                    fecha: currentDate,
-                    id: "567",
-                    valor: 5
-                }
-            },
+            transacciones: {},
             prestamos: {
-                solicitados: {"789": {
-                    acreedor: 'nose',
-                    cuenta: '123',
-                    fecha: currentDate,
-                    id: '789',
-                    idTransaccion: '567',
-                    valor: 5
-                }},
+                solicitados: {},
                 otorgados: {}
             },
-            cuentas: {
-                "123": {
-                    banco: "0",
-                    id: "123",
-                    numCuenta: "00000",
-                    tipo: 'corriente',
-                    saldo: 5
-                }
-            }
+            cuentas: {}
         }
     }
 }
 
 export function importar() {
-    datastore = JSON.parse(localStorage.getItem("app-storage")!);
+    const localStorageItem = localStorage.getItem("app-storage");
+    if (localStorageItem) datastore = JSON.parse(localStorage.getItem("app-storage")!);
 }
 
 export function guardar(state: DatosCliente) {

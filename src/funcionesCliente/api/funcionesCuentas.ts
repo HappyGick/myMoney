@@ -21,6 +21,14 @@ export function obtenerCuentas(): Cuenta[] {
     return arrayCuentas;
 }
 
+export function existeCuenta(cuentas: Cuenta[], numCuenta: string, prefijo: string): boolean {
+    const numCuentaPrefijo = prefijo + "-" + numCuenta;
+    for(let c of cuentas) {
+        if (c.numCuenta === numCuentaPrefijo) return true;
+    }
+    return false;
+}
+
 export function obtenerCuenta(id: string): Cuenta {
     const cuentas = useAppSelector((state) => state.cuentas);
     return new Cuenta(
@@ -37,7 +45,7 @@ export function agregarCuenta(numero: string, banco: Banco, saldoInicial: number
     return addCuenta({
         banco: banco.id,
         id: c.id,
-        numCuenta: c.numCuenta,
+        numCuenta: numero,
         saldo: saldoInicial,
         tipo
     });

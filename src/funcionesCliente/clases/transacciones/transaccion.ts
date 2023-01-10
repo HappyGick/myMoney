@@ -48,7 +48,7 @@ export class Transaccion {
         return this._etiquetasSecundarias;
     }
 
-    public get tipo(): string {
+    public get tipo(): 'Ingreso' | 'Gasto' {
         return this._valor < 0 ? "Gasto" : "Ingreso";
     }
 
