@@ -10,7 +10,7 @@ interface Transaccion {
     etiquetasSecundarias: string[]
 };
 
-type TransaccionesState = {[id: string]: Transaccion}
+export type TransaccionesState = {[id: string]: Transaccion}
 
 const initialState: TransaccionesState = {};
 

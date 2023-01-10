@@ -9,7 +9,7 @@ export function Form<T>(initialForm: T, validateForm: FuncionValidacion<T>) {
     const [form, setForm]= useState(initialForm);
     const [errors, setErrors] = useState({} as ErroresFormulario<T>);
 
-    const handleChange = ({target}:ChangeEvent<any>)=>{
+    const handleChange = ({ target }: ChangeEvent<any>) => {
         const { name, value } = target;
         setForm({
             ...form,

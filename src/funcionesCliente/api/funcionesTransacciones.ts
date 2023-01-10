@@ -6,27 +6,32 @@ import { Etiqueta } from '../clases/transacciones/etiqueta';
 import { Transaccion } from '../clases/transacciones/transaccion';
 import constantes from './constantes';
 
-export function obtenerTransacciones(): Transaccion[] {
+export function obtenerTransacciones(excluirPrestamos: boolean = true): Transaccion[] {
     const txs = useAppSelector((state) => state.transacciones);
     const cuentas = useAppSelector((state) =>  state.cuentas);
     let arrayTxs: Transaccion[] = [];
     for (let i in txs) {
         const protoTx = txs[i];
         const protoCuenta = cuentas[protoTx.cuenta];
+        if (
+            (protoTx.etiquetaPrimaria === constantes.etiquetaPrestamoOtorgado.nombre ||
+            protoTx.etiquetaPrimaria === constantes.etiquetaPrestamoSolicitado.nombre) &&
+            excluirPrestamos
+        ) continue;
         const cuenta = new Cuenta(protoCuenta.numCuenta, constantes.bancos[protoCuenta.banco], protoCuenta.tipo, protoCuenta.saldo, protoCuenta.id);
-        const etiqueta = new Etiqueta(
-            protoTx.etiquetaPrimaria,
-            ""
-        );
-        arrayTxs.push(new Transaccion(
-            protoTx.valor,
-            cuenta,
-            new Date(protoTx.fecha),
-            protoTx.descripcion,
-            etiqueta,
-            [],
-            protoTx.id
-        ))
+            const etiqueta = new Etiqueta(
+                protoTx.etiquetaPrimaria,
+                ""
+            );
+            arrayTxs.push(new Transaccion(
+                protoTx.valor,
+                cuenta,
+                new Date(protoTx.fecha),
+                protoTx.descripcion,
+                etiqueta,
+                [],
+                protoTx.id
+            ))
     }
     return arrayTxs;
 }

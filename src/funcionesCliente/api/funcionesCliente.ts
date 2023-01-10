@@ -4,11 +4,10 @@ import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import { setPrestamos } from "../../store/prestamos/prestamosSlice";
 import { setTransacciones } from "../../store/transacciones/transaccionesSlice";
 import { Cliente } from "../clases/cliente/cliente";
-import { DatosCliente, datastore, guardar } from "./datastore";
+import { datastore, guardar } from "./datastore";
 
-function configurarStore(datos: DatosCliente) {
+function configurarStore(datos: any) {
     const dispatch = useAppDispatch();
-    console.log(datos);
     dispatch(setCliente(datos.cliente));
     dispatch(setCuentas(datos.cuentas));
     dispatch(setPrestamos(datos.prestamos));

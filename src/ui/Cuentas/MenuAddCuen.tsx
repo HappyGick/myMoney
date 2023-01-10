@@ -79,7 +79,7 @@ export default function MenuAddCuen() {
             dispatch(agregarCuenta(
                 form.NumeroCuenta,
                 constantes.bancos[form.banco],
-                form.Saldo,
+                Number(form.Saldo),
                 form.TipoCuenta
             ));
             guardar(globalState);
@@ -89,9 +89,10 @@ export default function MenuAddCuen() {
 
     const reset = ()=>{
         if (modal==2){
-            forceUpdate();
             guardar(globalState);
             setModal(0);
+            forceUpdate();
+            location.reload();
         }
     }
 
@@ -136,13 +137,13 @@ export default function MenuAddCuen() {
                     {errors.Saldo ? <p style={style}>{errors.Saldo}</p>  : <></>}
                     
                     <label htmlFor="TipoCuenta">Ingrese el tipo de cuenta</label>
-                    <select id="TipoCuenta" name="TipoCuenta" onChange={handleChange} value={form.TipoCuenta}>
+                    <select id="TipoCuenta" name="TipoCuenta" onChange={handleChange} value={form.TipoCuenta} style={{marginBottom: 40}}>
                         <option value="ahorro">ahorro</option>
                         <option value="corriente">corriente</option>
                     </select>
                 </div>
                 <button onClick={goHome} style={{margin: 5}} className="glow-button" >Regresar</button>
-                <input style={{margin: 5}} type="submit" className="glow-button" value="Confirmar" onClick={ saveData } />
+                <button style={{margin: 5}} className="glow-button" onClick={ saveData }>Confirmar</button>
             </div>
             </div>
             {ApliModal('/Cuentas','Agregar Cuenta','Menu de Cuenta','Agregar otra Cuenta','Exito!','Se ha agregado una cuenta con exito',modal,setModal)}

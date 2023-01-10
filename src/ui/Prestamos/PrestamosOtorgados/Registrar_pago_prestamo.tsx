@@ -5,53 +5,52 @@ import { guardar } from "../../../funcionesCliente/api/datastore";
 import { useAllSelectors } from "../../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosOtorgados, registrarPagoPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { PrestamoOtorgado } from "../../../funcionesCliente/clases/prestamos/prestamoOtorgado";
 import { useAppSelector } from "../../../store/api/hooks";
 import ApliModal from "../../helpers/ApliModal";
-import { Validacion } from "../../helpers/Validaciones";
+import { Form } from "../../helpers/Form";
 
-let showCond = 0;
-let keyObj = "";
+interface FormPrestOtorgar {
+    monto: number;
+}
 
-const validationsForm = (form: any)=>{
+const validationsForm = (form: FormPrestOtorgar) => {
     let errors = {nombre: '',monto: ''};
-    let resMonto = "^[0-9]+$";
-    let resCantMonto = "^.{0,9}$"
     
     if (!form.monto){
         errors.monto = '*El campo monto es requerido';
-    } else if (!(form.monto).match(resMonto)){
-        errors.monto = '*El campo solo acepta numeros positivos';
-    } else if (!(form.monto).match(resCantMonto)){
-        errors.monto = '*El campo solo acepta hasta 9 digitos';
+    } else if (form.monto <= 0) {
+        errors.monto = '*El monto debe ser mayor a 0';
     }
 
     return errors;
 }
 
-const initialForm = {
-    monto:''
+const initialForm: FormPrestOtorgar = {
+    monto: 0 
 };
 
 const style = {
     color: 'red',
     fontSize: '15px'
-
 }
 
-export const FormRegisPagoPrestamo = ()=>{
+export const FormRegisPagoPrestamo = () => {
 
     const [modal,setModal]=useState(0);
+    const [ctas, txs, otor, soli] = useAllSelectors();
+    const [state, updateState] = useState({});
+    const [prestamo, setPrestamo] = useState<PrestamoOtorgado>();
     const cuentas = obtenerCuentas();
     const prestamos = obtenerPrestamosOtorgados();
-    const [ctas, txs, otor, soli] = useAllSelectors();
     const dispatch = useDispatch();
-    const [state, updateState] = useState({});
-    const forceUpdate = () => updateState({...state});
     const nav = useNavigate();
-
+    
     const globalState = useAppSelector((state) => state);
+    
+    const forceUpdate = () => updateState({...state});
 
-    const {form,errors,handleChange,handleBlur} = Validacion(initialForm,validationsForm);
+    const { form, errors, handleChange, validar } = Form(initialForm, validationsForm);
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
@@ -63,76 +62,41 @@ export const FormRegisPagoPrestamo = ()=>{
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
-        let obj = prestamos[Number(key)];
-        let obj2 = obj.cuenta;
-        let div = document.getElementById("card");
-        keyObj = key;
-
-        let p = [ 
-            document.createElement("p"),
-            document.createElement("p"),
-            document.createElement("p"),
-            document.createElement("p"),
-            document.createElement("p")
-        ];
-        
-        let nombre = document.createTextNode( "Nombre: " + obj.deudor.nombre );
-        let monto = document.createTextNode( "Monto a Cobrar: $" + obj.valor );
-        let sep = document.createTextNode( "Datos de la Cuenta:");
-        let cuenta = document.createTextNode( "Numero de Cuenta: " + obj2.numCuenta );
-        let saldo = document.createTextNode( "Saldo de la Cuenta: " + obj2.saldo );
-        
-        p[0].appendChild(nombre);
-        p[1].appendChild(monto);
-        p[2].appendChild(sep);
-        p[3].appendChild(cuenta);
-        p[4].appendChild(saldo);
-        
-        if ( showCond == 0 ) { showCond = 1; }
-        else { div?.replaceChildren(); }
-        for ( let i = 0; i <= 4; i++ ) { div?.appendChild(p[i]); }
+        if (key !== 'null') {
+            let obj = prestamos[Number(key)];
+            setPrestamo(obj);
+        }
     }
 
     const modFunction = () => {
-
-        if ( keyObj != "null" && keyObj!="" && errors.monto =='') { 
-            const prest = prestamos[Number(keyObj)];
-            const [p, tx, saldo] = registrarPagoPrestamo(prest.id, parseInt(form.monto), otor, prest.cuenta);
+        if (validar() && prestamo) {
+            const [p, tx, saldo] = registrarPagoPrestamo(prestamo.id, Number(form.monto), otor, prestamo.cuenta);
             dispatch(p);
             dispatch(tx);
             dispatch(saldo);
             guardar(globalState);
             setModal(1);
         }
-        resetV();
     }
 
     const reset = ()=>{
-        if (modal==2){
-            forceUpdate();
+        if (modal == 2){
             guardar(globalState);
             setModal(0);
+            forceUpdate();
+            location.reload();
         }
     }
 
-    const resetV = ()=>{
-        showCond = 0;
-        keyObj = "";
-    }
-
     const goHome = ()=>{
-        resetV();
         nav('/menu_OtoPres');
     };
 
     return (
         <>
             <div>
-
                 <h1>Registrar Pago de Prestamo</h1>
-
                 <div className="container">
-
                     <select id="registros" onChange={showOption}>
                         <option value="null">Seleccione un prestamo</option>
                         {prestamos.map((v, i) => {
@@ -142,18 +106,21 @@ export const FormRegisPagoPrestamo = ()=>{
                         })}
                     </select>
 
-                    <div id="card"></div>
+                    <div id="card">
+                        <p>Nombre: {prestamo?.deudor.nombre}</p>
+                        <p>Monto a Cobrar: ${prestamo?.valor}</p>
+                        <p>Datos de la Cuenta:</p>
+                        <p>Numero de Cuenta: {prestamo?.cuenta.numCuenta}</p>
+                        <p>Saldo de la Cuenta: {prestamo?.cuenta.saldo}</p>
+                    </div>
 
                     <div className="campo">
-                        <label>Monto:</label>
-                        <br />
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} onBlur={handleBlur} autoFocus required/>
-                        {errors.monto && <p style={style}>{errors.monto}</p>}
+                        <label htmlFor="monto">Monto:</label>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} autoFocus required/>
+                        {errors.monto ? <p style={style}>{errors.monto}</p> : <></>}
                     </div>
 
                     <div className="botones">
-                        <br />
-                        <br />
                         <button onClick={goHome}>Regresar</button>
                         <button onClick={modFunction}>Confirmar</button>
                     </div>
