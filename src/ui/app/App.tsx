@@ -34,8 +34,8 @@ import { importar } from '../../funcionesCliente/api/datastore';
 import { GraficaRelvTrans } from '../Transacciones/GraficaTransRelevante';
 import ConPresOto from '../Prestamos/PrestamosOtorgados/ConOtorgado';
 import ConPresSol from '../Prestamos/PrestamosSolicitados/ConSolicitado';
-import Login from '../Login/Login';
-import Register from '../Login/Register';
+import Login from '../HomePage/Login';
+import Register from '../HomePage/Register';
 import { useAppSelector } from '../../store/api/hooks';
 import { redirect } from 'react-router-dom';
 
