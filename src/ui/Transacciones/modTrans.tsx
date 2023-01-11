@@ -117,7 +117,7 @@ export default function MenuModTrans() {
                 cuentas[Number(form.cuenta)],
                 DateTime.fromFormat(form.fecha, "dd/MM/yyyy").toJSDate(),
                 form.descripcion,
-                new Etiqueta("test", ""),
+                new Etiqueta(form.etiqueta, ""),
                 [],
                 transaccion.id
             ), txs);
