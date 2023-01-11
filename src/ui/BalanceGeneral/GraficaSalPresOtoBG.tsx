@@ -4,6 +4,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerPrestamosOtorgados } from "../../funcionesCliente/api/funcionesPrestamos";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { validarOtorgados } from "../helpers/validarOtorgados";
 
 export const GraficaSalPresOto = ()=>{
     const data = [{name: 'cuenta 1', uv: 5550},{name: 'cuenta 2', uv:4500}, {name: 'cuenta 3', uv: 3000}, {name: 'cuenta 4', uv: 1000}];
@@ -42,6 +43,7 @@ export const GraficaSalPresOto = ()=>{
 
     return (
         <>
+            {validarOtorgados(cuentas,prestamos)}
             <div className="GrafContainer">
             <h1>Balance General</h1>
             <h2>Saldo de Todos los Prestamos Otorgados</h2>

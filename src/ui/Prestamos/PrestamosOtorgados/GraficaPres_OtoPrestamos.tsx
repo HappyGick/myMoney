@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerPrestamosOtorgados } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
+import { validarOtorgados } from "../../helpers/validarOtorgados";
 
 export const GraficaPresOtoPrestamo = ()=>{
     const data = [{name: 'Eduardo', uv: 50},{name: 'Alfredo', uv:40}, {name: 'Chayane', uv: 30}, {name: 'Daniel', uv: 30}];
@@ -11,7 +13,7 @@ export const GraficaPresOtoPrestamo = ()=>{
     const goHome = ()=>{
         nav('/menu_OtoPres');
     };
-
+    const cuentas=obtenerCuentas();
     const prestamos=obtenerPrestamosOtorgados();
     let presOto=[];
 
@@ -33,6 +35,7 @@ export const GraficaPresOtoPrestamo = ()=>{
 
     return (
         <>
+            {validarOtorgados(cuentas,prestamos)}
             <div className="GrafContainer">
             <h1>Prestamos Otorgados</h1>
             <h2>Estadisticas de contactos por num prestamos</h2>
