@@ -19,8 +19,8 @@ export const MenuSolPrestamos = ()=>{
             <div className="botones">
                 <button onClick={goSol}>Solicitar Prestamo</button>
                 <button onClick={goPay}>Pagar Prestamo</button>
-                <button onClick={goGrafPres}>Estadisticas de contactos por valoracion</button>
-                <button onClick={goGrafValo}>Estadisticas de contactos por numero de prestamos</button>
+                <button onClick={goGrafPres}>Estadisticas de contactos por numero de prestamos</button>
+                <button onClick={goGrafValo}>Estadisticas de contactos por valoracion</button>
                 <button onClick={goConSol}>Consultar Prestamo Solicitado</button>
                 <button onClick={goHome}>Regresar a Menu Principal</button>
             </div>

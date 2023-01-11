@@ -15,7 +15,7 @@ export const GraficaValoSolPrestamo = ()=>{
         <>
             <div className="GrafContainer">
             <h1>Prestamos Solicitados</h1>
-            <h2>Estadistica de contactos por num de prestamos </h2>
+            <h2>Estadistica de contactos por valoracion</h2>
             <BarChart width={850} height={500} data={data}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

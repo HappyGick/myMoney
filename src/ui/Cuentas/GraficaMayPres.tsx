@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, TooltipProps } from 'recharts';
 import { obtenerPrestamosSolicitados } from "../../funcionesCliente/api/funcionesPrestamos";
+import { Prestamo } from "../../funcionesCliente/clases/prestamos/prestamo";
 
 export const GraficaMayPres = ()=>{
     const data = [{name: '1234567890123456', uv: 600},{name: '2315648970123456', uv: 600}, {name: '1235648970123456', uv: 250}, {name: '1238975640123456', uv: 100}];
@@ -41,13 +42,49 @@ export const GraficaMayPres = ()=>{
 
     let n='';
     let v=0;
+    let m=''; let o='';
     for (let i=0;i<prestamos.length;i++){
         n=prestamos[i].cuenta.numCuenta;
         v=prestamos[i].valor;
-        mayPres.push({cuenta:n, monto:v});
+        m=prestamos[i].acreedor.nombre
+        o=prestamos[i].cuenta.numCuenta
+        mayPres.push({cuenta:n, monto:v,nombre:m,numCuenta:o});
     }
     ordenarPorBurbujaPositivo(mayPres);
     cambiarNombre(mayPres);
+
+    function getCuentaOfPage(label: any,prestamos:mayPres[]) {
+        for(let i=0;i<=prestamos.length;i++)
+        {if(label==prestamos[i].cuenta){return(prestamos[i].cuenta)}}
+      }
+      function getNombreOfPage(label: any,prestamos:mayPres[]) {
+        for(let i=0;i<=prestamos.length;i++)
+        {if(label==prestamos[i].cuenta){return(prestamos[i].nombre)}}
+      }
+
+      function getnumCuentaOfPage(label: any,prestamos:mayPres[]) {
+        for(let i=0;i<=prestamos.length;i++)
+        {if(label==prestamos[i].cuenta){return(prestamos[i].numCuenta)}}
+      }
+
+    const CustomTooltip = ({
+        active,
+        payload,
+        label,
+      }: TooltipProps<number, string>) => {
+        if (active) {
+          return (
+            <div className="custom-tooltip">
+              <p className="label">{`${label} : ${payload?.[0].value}`}</p>
+              <p className="intro">cuenta:{getCuentaOfPage(label,mayPres)}</p>
+              <p className="intro">Nombre:{getNombreOfPage(label,mayPres)}</p>
+              <p className="intro">Numo de cuenta:{getnumCuentaOfPage(label,mayPres)}</p>
+            </div>
+          );
+        }
+      
+        return null;
+      };
 
     return (
         <>
@@ -56,7 +93,8 @@ export const GraficaMayPres = ()=>{
             <BarChart width={850} height={500} data={mayPres}>
                 <XAxis dataKey="cuenta" stroke="#8884d8" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip content={<CustomTooltip/>} wrapperStyle={{ width: 200, backgroundColor: '#13AED4' }}/>
+                <Legend width={100} wrapperStyle={{ top: 40, right: 20, backgroundColor: '#f5f5f5', border: '1px solid #d5d5d5', borderRadius: 3, lineHeight: '40px' }} />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Bar dataKey="monto" fill="#8884d8" barSize={30} />
             </BarChart>

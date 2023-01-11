@@ -126,7 +126,7 @@ export const FormRegisPagoPrestamo = () => {
                     </div>
                 </div>
             </div>
-            {ApliModal('/menu_SolPres','Pagar Prestamo','Menu de Solicitar Prestamo','Pagar otro prestamo','Exito!','Se ha pagado un prestamo con exito',modal,setModal)}
+            {ApliModal('/menu_OtoPres','Pagar Prestamo','Menu de Solicitar Prestamo','Pagar otro prestamo','Exito!','Se ha pagado un prestamo con exito',modal,setModal)}
             {reset()}
         </>
     );
