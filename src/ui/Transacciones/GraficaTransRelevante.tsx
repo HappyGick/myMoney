@@ -165,13 +165,7 @@ export const GraficaRelvTrans = ()=>{
     };
 
     const transacciones2=ordenarPorBurbujaAbPositivo(transacciones)
-<<<<<<< HEAD
-    const transacciones3=getransmod(transacciones2)
-    
-                
-=======
     //const transacciones3=getransmod(transacciones2)
->>>>>>> f6c9213ee2c39b045b8998dce344f2098f07c405
     return (
         <>{validar()}
             <div className="GrafContainer">
