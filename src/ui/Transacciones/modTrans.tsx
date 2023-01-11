@@ -11,6 +11,7 @@ import { useAllSelectors } from "../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { obtenerTransacciones, modificarTransaccion } from "../../funcionesCliente/api/funcionesTransacciones";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
+import { validarTransaccion } from "../helpers/validarTransaccion";
 
 type FormTransacciones = {
     fecha: string;
@@ -139,6 +140,7 @@ export default function MenuModTrans() {
 
     return (     
         <>
+         {validarTransaccion(cuentas,transacciones)}
             <div className="bg">
                 <div className="mainMod">
                     <h1>Modificar Transacciones</h1>

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, TooltipProps, Legend } from 'recharts';
 import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
@@ -9,6 +9,7 @@ import { DateTime } from "luxon";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 import { Etiqueta } from "../../funcionesCliente/clases/transacciones/etiqueta";
 import { v4 } from "uuid";
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 //intente acomodarlo a traves de otra clase pero no me funciono
 export class TransaccionMod {
   private _name:string;
@@ -36,12 +37,30 @@ constructor(valor: number, cuenta: Cuenta, fecha: string, descripcion: string, e
 export const GraficaRelvTrans = ()=>{
     const data = [{name: 'Comida', uv: 100000},{name: 'Salidas', uv: 50000}, {name: 'Estudios', uv: 35000}, {name: 'Vivienda', uv: 10000}];
     const nav = useNavigate();
+    const transacciones=obtenerTransacciones(true);
+    const cuentas=obtenerCuentas();
 
     const goHome = ()=>{
         nav('/transacciones');
     };
 
-    function getransmod(trans:Transaccion[])
+    function validar(){
+      if (cuentas.length === 0) {
+          return(
+              <>
+              <Navigate to='/ErrorMensajeCuentas'/>;
+              </>
+          )
+      }
+  
+      if (transacciones.length === 0) {return(
+          <>
+          <Navigate to='/ErrorMensajeTransacciones'/>;
+          </>
+      )
+      }}
+
+    function getransmod(trans:Transaccion[]): TransaccionMod[] | undefined
     { let solicitados: TransaccionMod[] = [];
       let a:TransaccionMod
       for(let i=0;i<=trans.length;i++)
@@ -62,8 +81,6 @@ export const GraficaRelvTrans = ()=>{
       }
     }
 
-
-    const transacciones=obtenerTransacciones(true);
         
     function ordenarPorBurbujaPositivo(arrayDesordenado: Transaccion[]): Transaccion[] {
         arrayDesordenado.sort((a,b)=>{
@@ -84,11 +101,13 @@ export const GraficaRelvTrans = ()=>{
     }
 
     function ordenarPorBurbujaAbPositivo(arrayDesordenado: Transaccion[]): Transaccion[] {
+      if(arrayDesordenado.length!=0){
         arrayDesordenado.sort((a,b)=>{
             if(Math.abs(a.valor)<Math.abs(b.valor)){return(1);}
             if(Math.abs(a.valor)>Math.abs(b.valor)){return(-1);}
             return(0)
         })
+      }
         return(arrayDesordenado);
     }
 
@@ -126,9 +145,9 @@ export const GraficaRelvTrans = ()=>{
       };
 
     const transacciones2=ordenarPorBurbujaAbPositivo(transacciones)
-    const transacciones3=getransmod(transacciones2)
+    //const transacciones3=getransmod(transacciones2)
     return (
-        <>
+        <>{validar()}
             <div className="GrafContainer">
             <h2>Transacciones Mas Relevantes</h2>
             <BarChart width={850} height={500} data={transacciones2}>

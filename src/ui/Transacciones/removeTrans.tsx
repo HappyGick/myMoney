@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { useAllSelectors } from "../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
@@ -7,6 +7,8 @@ import { obtenerTransacciones, eliminarTransaccion, eliminarTodasTransacciones }
 import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import ApliModal from "../helpers/ApliModal";
+import { validarCuenta } from "../helpers/validarCuenta";
+import { validarTransaccion } from "../helpers/validarTransaccion";
 
 export default function MenuDelTrans() {
     const [modal,setModal]=useState(0);
@@ -20,14 +22,6 @@ export default function MenuDelTrans() {
     const [ctas, txs, otor, soli] = useAllSelectors();
     const globalState = useAppSelector((state) => state);
     const [transaccion, setTx] = useState<Transaccion>();
-
-    if (cuentas.length === 0) {
-        nav('/ErrorMensajeCuentas');
-    }
-
-    if (transacciones.length === 0) {
-        nav('/ErrorMensajeTransacciones');
-    }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
         let key = e.target.value;
@@ -63,7 +57,7 @@ export default function MenuDelTrans() {
     }
     
     return (
-        <>
+        <> {validarTransaccion(cuentas,transacciones)}
             <div className="bg">
             <div className="mainDel">
                 <h1>Eliminar Transacciones</h1>

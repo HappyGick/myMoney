@@ -1,9 +1,11 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
 import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { validarTransaccion } from "../helpers/validarTransaccion";
 
 export const GraficaComTrans = ()=>{
     const data = [{name: 'Comida', uv: 20},{name: 'Vivienda', uv: 15}, {name: 'Salidas', uv: 12}, {name: 'Estudios', uv: 10}];
@@ -13,6 +15,7 @@ export const GraficaComTrans = ()=>{
         nav('/transacciones');
     };
 
+    const cuentas=obtenerCuentas();
     const transacciones=obtenerTransacciones(true);
 
     let aux=[]
@@ -45,7 +48,7 @@ export const GraficaComTrans = ()=>{
 
 
     return (
-        <>
+        <> {validarTransaccion(cuentas,transacciones)}
             <div className="GrafContainer">
                 <h2>Transacciones Mas Comunes{aux.length}</h2>
             <BarChart width={850} height={500} data={aux}>
