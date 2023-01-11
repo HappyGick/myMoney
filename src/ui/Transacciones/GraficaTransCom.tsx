@@ -1,53 +1,50 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
-import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
 
 export const GraficaComTrans = ()=>{
-    const data = [{name: 'Comida', uv: 20},{name: 'Vivienda', uv: 15}, {name: 'Salidas', uv: 12}, {name: 'Estudios', uv: 10}];
     const nav = useNavigate();
+    const goHome = ()=>{ nav('/transacciones'); };
+    const trans = obtenerTransacciones(true);
 
-    const goHome = ()=>{
-        nav('/transacciones');
-    };
+    let book = [];
+    let values = [];
+    let saldos = [];
+    let aux = [];
+    
+    let index = 0;
+    let cond = 0;
 
-    const transacciones=obtenerTransacciones(true);
+    for (let i = 0; i < trans.length; i++) {
+        let n = trans[i].etiquetaPrimaria.nombre;
+    if ( book.includes( n ) == false ) {
+            book.push( n );
+            values.push( 0 );
+            saldos.push( 0 );
+        } 
+    }
 
-    let aux=[]
-    let n='';
-    let v=0;
-    let c=1;
-    let SaldoGeneral=0;
-    for (let i=0;i<transacciones.length;i++){
-        let bool=true;
-        n=transacciones[i].etiquetaPrimaria.nombre;
-        v=transacciones[i].valor;
-        for (let item of aux){
-            if (item.name == n){
-                item.saldo+= v;
-                SaldoGeneral += c;
-                bool=false;
-                c++;
-                break
+    for (let i = 0; i < book.length; i++) {
+        for (let j = 0; j < trans.length; j++) {
+            if ( book[i] == trans[j].etiquetaPrimaria.nombre ) {
+                values[i] = values[i] + 1;
+                saldos[i] += trans[j].valor;
             }
         }
-        if (bool){
-            aux.push({name:n, saldo:v,cantidad:c});
-            SaldoGeneral += c;
-            c=1;
-        }
     }
-    // for(let i=0;i<=aux.length;i++)
-    // {console.log("nombre:",aux[i].name,"saldo",aux[i].cantidad)}
+    
+    let numTotal = 0
+    for (let i = 0; i < book.length; i++) {
+        aux.push({ name:book[i], saldo:saldos[i], cantidad:values[i] });
+        numTotal += values[i];
+    } 
 
-
+    
 
     return (
         <>
             <div className="GrafContainer">
-                <h2>Transacciones Mas Comunes{aux.length}</h2>
+                <h2>Transacciones Mas Comunes: {aux.length}</h2>
             <BarChart width={850} height={500} data={aux}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />
@@ -57,7 +54,7 @@ export const GraficaComTrans = ()=>{
             </BarChart>
             </div>
             <div className="botones">
-                <h2>Total de transacciones = {SaldoGeneral}</h2>
+                <h2>Total de transacciones = {numTotal}</h2>
                 <br />
                 <br />
                 <button onClick={goHome}>Regresar</button>

@@ -92,58 +92,78 @@ export const GraficaRelvTrans = ()=>{
         return(arrayDesordenado);
     }
 
-    function getDesOfPage(label: any,transacciones:Transaccion[]) {
-        for(let i=0;i<=transacciones.length;i++)
-        {if(label==transacciones[i].id){return(transacciones[i].descripcion)}}
-      }
-      function getFechaOfPage(label: any,transacciones:Transaccion[]) {
-        for(let i=0;i<=transacciones.length;i++)
-        {if(label==transacciones[i].id){return(transacciones[i].fecha)}}
-      }
+ 
 
-      function getEtiquetaOfPage(label: any,transacciones:Transaccion[]) {
-        for(let i=0;i<=transacciones.length;i++)
-        {if(label==transacciones[i].id){return(transacciones[i].etiquetaPrimaria.nombre)}}
-      }
+    let trans = []  
 
-    const CustomTooltip = ({
-        active,
-        payload,
-        label,
-      }: TooltipProps<number, string>) => {
-        if (active) {
-          return (
-            <div className="custom-tooltip">
-              <p className="label">{`${label} : ${payload?.[0].value}`}</p>
-              <p className="intro">Etiqueta:{getEtiquetaOfPage(label,transacciones)}</p>
-              <p className="intro">Descripccion:{getDesOfPage(label,transacciones)}</p>
-              <p className="intro">Fecha:{getFechaOfPage(label,transacciones)}</p>
-            </div>
-          );
-        }
-      
-        return null;
-      };
+    for ( let u=0; u<transacciones.length; u++ ) {
+      trans.push( { 
+        id:transacciones[u].id, 
+        valor:transacciones[u].valor, 
+        fecha:transacciones[u].fecha,
+        nombre:'T-'+(u+1), 
+        etiqueta:transacciones[u].etiquetaPrimaria.nombre,
+        descirpcion:transacciones[u].descripcion
+      } )
+    }
+
+    function getIdOfPage(label: any,transacciones:trans[]) {
+      for(let i=0;i<transacciones.length;i++)
+      {if(label==transacciones[i].nombre){return(transacciones[i].id)}}
+    }
+    function getFechaOfPage(label: any,transacciones:trans[]) {
+      for(let i=0;i<transacciones.length;i++)
+      {if(label==transacciones[i].nombre){return(transacciones[i].fecha)}}
+    }
+
+    function getEtiquetaOfPage(label: any,transacciones:trans[]) {
+      for(let i=0;i<transacciones.length;i++)
+      {if(label==transacciones[i].nombre){return(transacciones[i].etiqueta)}}
+    }
+
+    function getDesOfPage(label: any,transacciones:trans[]) {
+      for(let i=0;i<transacciones.length;i++)
+      {if(label==transacciones[i].nombre){return(transacciones[i].descirpcion)}}
+    }
+
+  const CustomTooltip = ({
+      active,
+      payload,
+      label,
+    }: TooltipProps<number, string>) => {
+      if (active) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{`${label} : ${payload?.[0].value}`}</p>
+            <p className="intro">Etiqueta:{getEtiquetaOfPage(label,trans)}</p>
+            <p className="intro">ID:{getIdOfPage(label,trans)}</p>
+            <p className="intro">Fecha:{getFechaOfPage(label,trans)}</p>
+            <p className="intro">Descripcion:{getDesOfPage(label,trans)}</p>
+          </div> 
+        );
+      }
+      return null;
+    };
 
     const transacciones2=ordenarPorBurbujaAbPositivo(transacciones)
     const transacciones3=getransmod(transacciones2)
+    
+                
     return (
         <>
             <div className="GrafContainer">
             <h2>Transacciones Mas Relevantes</h2>
-            <BarChart width={850} height={500} data={transacciones2}>
-                <XAxis dataKey="id" stroke="#8884d8" />
+            <BarChart width={850} height={500} data={trans}> 
+                <XAxis dataKey="nombre" stroke="#8884d8" />
                 <YAxis />
                 <Tooltip content={<CustomTooltip/>} wrapperStyle={{ width: 200, backgroundColor: '#13AED4' }}/>
                 <Legend width={100} wrapperStyle={{ top: 40, right: 20, backgroundColor: '#f5f5f5', border: '1px solid #d5d5d5', borderRadius: 3, lineHeight: '40px' }} />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Bar dataKey="valor" fill="#8884d8" barSize={30} />
-                
+                <Bar dataKey="valor" fill="#8884d8" barSize={30} />             
             </BarChart>
             </div>
             <div className="botones">
-                <br />
-                <br />
+                <br /> <br />
                 <button onClick={goHome}>Regresar</button>
             </div>
         </>
