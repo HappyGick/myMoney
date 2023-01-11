@@ -38,6 +38,8 @@ import Login from '../HomePage/Login';
 import Register from '../HomePage/Register';
 import { useAppSelector } from '../../store/api/hooks';
 import { redirect } from 'react-router-dom';
+import MenuMayorDeuda from '../Cuentas/CuentaMayorDeuda';
+import MenuMayorMov from '../Cuentas/CuentaMayorMov';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
@@ -56,6 +58,8 @@ function App() {
       <Route path="/cuentas/menuCon" element={ <MenuConCuen/> } />
       <Route path="/cuentas/menuDel" element={ <MenuDelCuen/> } />
       <Route path="/cuentas/GrafMay" element={ <GraficaMayPres/> } />
+      <Route path="/cuentas/menuMayorDeuda" element={ <MenuMayorDeuda/> } />
+      <Route path="/cuentas/menuMayorMov" element={ <MenuMayorMov/> } />
       
       <Route path="/transacciones" element={ <HomeTrans/> } />
       <Route path="/transacciones/menuAdd" element={ <MenuAddTrans/> } />
