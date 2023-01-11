@@ -107,8 +107,10 @@ export const FormOtorgarPrestamo = ()=>{
         if (modal == 2){
             guardar(globalState);
             setModal(0);
+            form.nombre = '';
+            form.monto = 0;
+            form.cuenta = 'null';
             forceUpdate();
-            location.reload();
         }
     }
 

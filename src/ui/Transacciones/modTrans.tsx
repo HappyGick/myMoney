@@ -86,7 +86,7 @@ export default function MenuModTrans() {
     const [ctas, txs, otor, soli] = useAllSelectors();
     const [transaccion, setTx] = useState<Transaccion>();
     const {form, errors, handleChange, validar} = Form(initialForm, validationsForm(cuentas));
-
+    const [key, setKey] = useState('null');
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
     }
@@ -98,6 +98,7 @@ export default function MenuModTrans() {
     const globalState = useAppSelector((state) => state);
 
     const showOption = (e: any) => {
+        setKey(e.target.value);
         const idTx = Number(e.target.value);
         setTx(transacciones[idTx]);
     
@@ -107,7 +108,6 @@ export default function MenuModTrans() {
         form.monto = transacciones[idTx].monto;
         form.cuenta = cuentas.findIndex((v) => v.id === transacciones[idTx].cuenta.id).toString();
         form.etiqueta = transacciones[idTx].etiquetaPrimaria.nombre;
-        console.log(form.cuenta)
         forceUpdate();
     };
 
@@ -132,9 +132,16 @@ export default function MenuModTrans() {
     const reset = () => {
         if (modal==2){
             guardar(globalState);
+            setKey('null');
+            setTx(undefined);
+            form.fecha = '';
+            form.descripcion = '';
+            form.tipo = 'null';
+            form.monto = 0;
+            form.cuenta = 'null';
+            form.etiqueta = 'null';
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -146,7 +153,7 @@ export default function MenuModTrans() {
                     <h1>Modificar Transacciones</h1>
                     <div id="mainP">
                         Elige una Transaccion a Modificar:
-                        <select id="transacciones" name="transacciones" onChange={ showOption }>
+                        <select id="transacciones" name="transacciones" onChange={ showOption } value={key}>
                             <option value="null">Seleccione una Transaccion</option>
                             {transacciones.map((v, i) => {
                                 return (

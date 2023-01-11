@@ -45,6 +45,7 @@ export const FormRegisPagoPrestamo = () => {
     const prestamos = obtenerPrestamosOtorgados();
     const dispatch = useDispatch();
     const nav = useNavigate();
+    const [key, setKey] = useState('null');
     
     const globalState = useAppSelector((state) => state);
     
@@ -60,12 +61,13 @@ export const FormRegisPagoPrestamo = () => {
         nav('/ErrorMensajeOtorgados');
     }
 
+    if (key !== 'null') {
+        let obj = prestamos[Number(key)];
+        if (obj.id !== prestamo?.id) setPrestamo(obj);
+    }
+
     const showOption = ( e: { target: { value: any; }; } ) => {
-        let key = e.target.value;
-        if (key !== 'null') {
-            let obj = prestamos[Number(key)];
-            setPrestamo(obj);
-        }
+        setKey(e.target.value);
     }
 
     const modFunction = () => {
@@ -83,8 +85,10 @@ export const FormRegisPagoPrestamo = () => {
         if (modal == 2){
             guardar(globalState);
             setModal(0);
+            setKey('null');
+            setPrestamo(undefined);
+            form.monto = 0;
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -97,7 +101,7 @@ export const FormRegisPagoPrestamo = () => {
             <div>
                 <h1>Registrar Pago de Prestamo</h1>
                 <div className="container">
-                    <select id="registros" onChange={showOption}>
+                    <select id="registros" onChange={showOption} value={key}>
                         <option value="null">Seleccione un prestamo</option>
                         {prestamos.map((v, i) => {
                             return (<option value={i} key={i}>{v.deudor.nombre + ", $" +
@@ -116,7 +120,7 @@ export const FormRegisPagoPrestamo = () => {
 
                     <div className="campo" style={{marginBottom:40}}>
                         <label htmlFor="monto">Monto:</label>
-                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} autoFocus required/>
+                        <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} value={form.monto} autoFocus required/>
                         {errors.monto ? <p style={style}>{errors.monto}</p> : <></>}
                     </div>
 

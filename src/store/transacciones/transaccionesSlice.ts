@@ -19,7 +19,6 @@ export const transaccionesSlice = createSlice({
     initialState,
     reducers: {
         setTransacciones: (state, action: PayloadAction<TransaccionesState>) => {
-            state = {};
             for(let i in action.payload) {
                 state[i] = action.payload[i];
             }
@@ -40,10 +39,11 @@ export const transaccionesSlice = createSlice({
         },
         elimTransaccion: (state, action: PayloadAction<string>) => {
             delete state[action.payload];
-        }
+        },
+        reiniciarTransacciones: () => initialState
     }
 });
 
-export const { setTransacciones, borrarTransCuenta, borrarTodasTransacciones, addTransaccion, modTransaccion, elimTransaccion } = transaccionesSlice.actions;
+export const { reiniciarTransacciones, setTransacciones, borrarTransCuenta, borrarTodasTransacciones, addTransaccion, modTransaccion, elimTransaccion } = transaccionesSlice.actions;
 
 export default transaccionesSlice.reducer;

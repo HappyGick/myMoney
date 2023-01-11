@@ -24,15 +24,10 @@ export const clienteSlice = createSlice({
             state.password = action.payload.password;
             state.username = action.payload.username;
         },
-        elimCliente: (state) => {
-            state.id = "";
-            state.nombre = "";
-            state.password = "";
-            state.username = "";
-        }
+        reiniciarCliente: () => initialState
     }
 });
 
-export const { setCliente, elimCliente } = clienteSlice.actions;
+export const { setCliente, reiniciarCliente } = clienteSlice.actions;
 
 export default clienteSlice.reducer;

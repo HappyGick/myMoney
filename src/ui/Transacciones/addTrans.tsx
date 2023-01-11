@@ -111,9 +111,14 @@ export default function MenuAddTrans() {
     const reset = () => {
         if (modal == 2){
             guardar(globalState);
+            form.cuenta = 'null';
+            form.etiqueta = 'null';
+            form.tipo = 'null';
+            form.monto = 0;
+            form.descripcion = '';
+            form.fecha = '';
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -124,7 +129,7 @@ export default function MenuAddTrans() {
                     <h1>Añadir Transacciones</h1>           
                     <div style={{display: 'flex', flexDirection: 'column', rowGap: 10}}>
                         <label htmlFor="cuenta">Elige una Cuenta de Banco: </label>
-                        <select id="cuenta" name="cuenta" onChange={ handleChange } > 
+                        <select id="cuenta" name="cuenta" onChange={ handleChange } value={form.cuenta} > 
                             <option value="null">Seleccione una cuenta</option>
                             {cuentas.map((v, i) => {
                                     return (
@@ -147,19 +152,19 @@ export default function MenuAddTrans() {
                         </select>
                         
                         <label htmlFor="monto">Ingrese un Monto</label>
-                        <input type="number" placeholder="Numero" name='monto' onChange={ handleChange } autoFocus/>
+                        <input type="number" placeholder="Numero" name='monto' onChange={ handleChange } value={form.monto} autoFocus/>
                         {errors.monto ? <p style={style}>{errors.monto}</p> : <></>}
                         
                         <label htmlFor="fecha">Ingrese la fecha de la Transaccion</label>
-                        <input type="text" placeholder="dd/mm/aaaa" name='fecha' onChange={ handleChange }/>
+                        <input type="text" placeholder="dd/mm/aaaa" name='fecha' value={form.fecha} onChange={ handleChange }/>
                         {errors.fecha ? <p style={style}>{errors.fecha}</p> : <></>}
                         
                         <label htmlFor="descripcion">Añade una Descripcion</label>
-                        <textarea name="descripcion" placeholder="Describa" onChange={ handleChange }></textarea>
+                        <textarea name="descripcion" placeholder="Describa" value={form.descripcion} onChange={ handleChange }></textarea>
                         {errors.descripcion ? <p style={style}>{errors.descripcion}</p> : <></>}
 
                         <label htmlFor="etiqueta">Seleccione una etiqueta</label>
-                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } style={{marginBottom: 40}}>
+                        <select id="etiqueta" name="etiqueta" onChange={ handleChange } value={form.etiqueta} style={{marginBottom: 40}}>
                             <option value="null">Etiqueta</option>
                             <option value="Comida" >Comida</option>
                             <option value="Transporte" >Transporte</option>

@@ -17,7 +17,6 @@ export const cuentasSlice = createSlice({
     name: 'cuentas',
     reducers: {
         setCuentas: (state, action: PayloadAction<CuentasState>) => {
-            state = {};
             for(let i in action.payload) {
                 state[i] = action.payload[i];
             }
@@ -35,10 +34,11 @@ export const cuentasSlice = createSlice({
         },
         modSaldo: (state, action: PayloadAction<{id: string, valor: number}>) => {
             state[action.payload.id].saldo += action.payload.valor;
-        }
+        },
+        reiniciarCuentas: () => initialState
     }
 });
 
-export const { setCuentas, addCuenta, elimCuenta, borrarTodasCuentas, modSaldo } = cuentasSlice.actions;
+export const { reiniciarCuentas, setCuentas, addCuenta, elimCuenta, borrarTodasCuentas, modSaldo } = cuentasSlice.actions;
 
 export default cuentasSlice.reducer;

@@ -45,6 +45,7 @@ export const FormPagarPrestamo = ()=>{
     const [ctas, txs, otor, soli] = useAllSelectors();
     const [state, updateState] = useState({});
     const forceUpdate = () => updateState({...state});
+    const [key, setKey] = useState('null');
 
     const nav = useNavigate();
 
@@ -59,12 +60,13 @@ export const FormPagarPrestamo = ()=>{
         nav('/ErrorMensajeSolicitados');
     }
 
+    if (key !== 'null') {
+        let obj = prestamos[Number(key)];
+        if (obj.id !== prestamo?.id) setPrestamo(obj);
+    }
+
     const showOption = ( e: { target: { value: any; }; } ) => {
-        let key = e.target.value;
-        if (key !== 'null') {
-            let obj = prestamos[Number(key)];
-            setPrestamo(obj);
-        }
+        setKey(e.target.value);
     }
 
     const modFunction = () => {
@@ -81,9 +83,11 @@ export const FormPagarPrestamo = ()=>{
     const reset = ()=>{
         if (modal==2){
             guardar(globalState);
+            setKey('null');
+            setPrestamo(undefined);
+            form.monto = 0;
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -98,7 +102,7 @@ export const FormPagarPrestamo = ()=>{
 
                 <div className="container">
 
-                    <select id="solicitudes" onChange={showOption}>
+                    <select id="solicitudes" onChange={showOption} value={key}>
                         <option value="null">Seleccione un prestamo</option>
                         {prestamos.map((v, i) => {
                             return (<option value={i} key={i}>{v.acreedor.nombre + ", $" +
@@ -122,6 +126,7 @@ export const FormPagarPrestamo = ()=>{
                             max={999999999} 
                             placeholder={'Monto a pagar'}
                             onChange={handleChange}
+                            value={form.monto}
                             autoFocus 
                             required
                         />

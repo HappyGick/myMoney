@@ -113,7 +113,7 @@ export const GraficaRelvTrans = ()=>{
 
  
 
-    let trans = []  
+    let trans: object[] = []  
 
     for ( let u=0; u<transacciones.length; u++ ) {
       trans.push( { 
@@ -126,21 +126,21 @@ export const GraficaRelvTrans = ()=>{
       } )
     }
 
-    function getIdOfPage(label: any,transacciones:trans[]) {
+    function getIdOfPage(label: any,transacciones:any[]) {
       for(let i=0;i<transacciones.length;i++)
       {if(label==transacciones[i].nombre){return(transacciones[i].id)}}
     }
-    function getFechaOfPage(label: any,transacciones:trans[]) {
+    function getFechaOfPage(label: any,transacciones:any[]) {
       for(let i=0;i<transacciones.length;i++)
       {if(label==transacciones[i].nombre){return(transacciones[i].fecha)}}
     }
 
-    function getEtiquetaOfPage(label: any,transacciones:trans[]) {
+    function getEtiquetaOfPage(label: any,transacciones:any[]) {
       for(let i=0;i<transacciones.length;i++)
       {if(label==transacciones[i].nombre){return(transacciones[i].etiqueta)}}
     }
 
-    function getDesOfPage(label: any,transacciones:trans[]) {
+    function getDesOfPage(label: any,transacciones:any[]) {
       for(let i=0;i<transacciones.length;i++)
       {if(label==transacciones[i].nombre){return(transacciones[i].descirpcion)}}
     }
@@ -165,13 +165,7 @@ export const GraficaRelvTrans = ()=>{
     };
 
     const transacciones2=ordenarPorBurbujaAbPositivo(transacciones)
-<<<<<<< HEAD
-    const transacciones3=getransmod(transacciones2)
-    
-                
-=======
     //const transacciones3=getransmod(transacciones2)
->>>>>>> f6c9213ee2c39b045b8998dce344f2098f07c405
     return (
         <>{validar()}
             <div className="GrafContainer">

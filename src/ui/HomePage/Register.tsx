@@ -21,6 +21,8 @@ export default function Register() {
             setError('Las contraseñas no coinciden');
         } else if (clienteExiste(user)) {
             setError('El usuario ya existe');
+        } else if (!user || !password || !name) {
+            setError('Todos los campos son requeridos');
         } else {
             registro(name, user, password);
             guardar(state);

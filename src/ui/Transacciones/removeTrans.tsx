@@ -22,13 +22,15 @@ export default function MenuDelTrans() {
     const [ctas, txs, otor, soli] = useAllSelectors();
     const globalState = useAppSelector((state) => state);
     const [transaccion, setTx] = useState<Transaccion>();
+    const [key, setKey] = useState<string>('null');
+    
+    if (key != 'null') {
+        let obj = transacciones[Number(key)];
+        if (obj.id !== transaccion?.id) setTx(obj);
+    }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
-        let key = e.target.value;
-        if (key != 'null') {
-            let obj = transacciones[Number(key)];
-            setTx(obj);
-        }
+        setKey(e.target.value);
     }
 
     const delFunction = () => {
@@ -44,9 +46,10 @@ export default function MenuDelTrans() {
     const reset = () => {
         if (modal == 2){
             guardar(globalState);
+            setKey('null');
+            setTx(undefined);
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -64,7 +67,7 @@ export default function MenuDelTrans() {
                 <div id="mainP">
                     Elige una Transaccion a Eliminar:
                     <br/>
-                    <select id="transacciones" onChange={ showOption } >
+                    <select id="transacciones" onChange={ showOption } value={key}>
                         <option value="null" >Seleccione una Transaccion</option>
                         {transacciones.map((v, i) => {
                             return (

@@ -90,9 +90,12 @@ export default function MenuAddCuen() {
     const reset = ()=>{
         if (modal==2){
             guardar(globalState);
+            form.banco = '0';
+            form.NumeroCuenta = '';
+            form.Saldo = 0;
+            form.TipoCuenta = 'ahorro';        
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
@@ -122,6 +125,7 @@ export default function MenuAddCuen() {
                         onChange={ handleChange }
                         maxLength={16}
                         autoFocus
+                        value={form.NumeroCuenta}
                     />
                     {errors.NumeroCuenta ? <p style={style}>{errors.NumeroCuenta}</p> : <></>}
                     
@@ -133,6 +137,7 @@ export default function MenuAddCuen() {
                         min={0}
                         max={123456789}
                         onChange={ handleChange }
+                        value={form.Saldo}
                     />
                     {errors.Saldo ? <p style={style}>{errors.Saldo}</p>  : <></>}
                     

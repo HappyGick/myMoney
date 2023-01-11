@@ -14,25 +14,8 @@ interface Datastore {
 }
 
 export let datastore: Datastore = {
-    idsCliente: {
-        "pperez": "1234"
-    },
-    clientes: {
-        "1234": {
-            cliente: {
-                id: "1234",
-                nombre: "Pedro Perez",
-                username: "pperez",
-                password: "12345"
-            },
-            transacciones: {},
-            prestamos: {
-                solicitados: {},
-                otorgados: {}
-            },
-            cuentas: {}
-        }
-    }
+    idsCliente: {},
+    clientes: {}
 }
 
 export function importar() {

@@ -1,8 +1,8 @@
-import { elimCliente, setCliente } from "../../store/cliente/clienteSlice";
-import { setCuentas } from "../../store/cuentas/cuentasSlice";
+import { reiniciarCliente, setCliente } from "../../store/cliente/clienteSlice";
+import { reiniciarCuentas, setCuentas } from "../../store/cuentas/cuentasSlice";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
-import { setPrestamos } from "../../store/prestamos/prestamosSlice";
-import { setTransacciones } from "../../store/transacciones/transaccionesSlice";
+import { reiniciarPrestamos, setPrestamos } from "../../store/prestamos/prestamosSlice";
+import { reiniciarTransacciones, setTransacciones } from "../../store/transacciones/transaccionesSlice";
 import { Cliente } from "../clases/cliente/cliente";
 import { datastore, guardar } from "./datastore";
 
@@ -59,5 +59,5 @@ export function registro(nombre: string, username: string, passwd: string): void
 }
 
 export function logout() {
-    return elimCliente();
+    return [reiniciarCliente(), reiniciarCuentas(), reiniciarPrestamos(), reiniciarTransacciones()];
 }

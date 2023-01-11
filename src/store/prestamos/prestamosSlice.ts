@@ -59,10 +59,11 @@ export const prestamosSlice = createSlice({
             for (let i in state.otorgados) {
                 if (state.otorgados[i].cuenta == action.payload) delete state.otorgados[i];
             }
-        }
+        },
+        reiniciarPrestamos: () => initialState
     }
 });
 
-export const { setPrestamos, solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } = prestamosSlice.actions;
+export const { reiniciarPrestamos, setPrestamos, solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } = prestamosSlice.actions;
 
 export default prestamosSlice.reducer;

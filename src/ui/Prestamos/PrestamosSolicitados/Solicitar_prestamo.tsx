@@ -61,12 +61,19 @@ export const FormSolicitarPrestamo = () => {
     const dispatch = useAppDispatch();
     const nav = useNavigate();
     const [cuenta, setCuenta] = useState<Cuenta>();
+    const [key, setKey] = useState<string>('null');
 
     const globalState = useAppSelector((state) => state);
     const { form, errors, handleChange, validar } = Form(initialForm, validationsForm);
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
+    }
+
+    if (key !== 'null') {
+        let obj = cuentas[Number(key)];
+        if (obj.id !== cuenta?.id) setCuenta(obj);
+        form.cuenta = key;
     }
 
     const saveLocal = ()=>{
@@ -89,19 +96,18 @@ export const FormSolicitarPrestamo = () => {
     const reset = ()=>{
         if (modal==2){
             guardar(globalState);
-            setModal(0);
+            setCuenta(undefined);
+            setKey('null');
+            form.nombre = '';
+            form.monto = 0;
+            form.cuenta = 'null';
             forceUpdate();
-            location.reload();
+            setModal(0);
         }
     }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
-        let key = e.target.value;
-        if (key !== 'null') {
-            let obj = cuentas[Number(key)];
-            setCuenta(obj);
-            form.cuenta = key;
-        }
+        setKey(e.target.value)
     }
 
     const goHome = ()=>{

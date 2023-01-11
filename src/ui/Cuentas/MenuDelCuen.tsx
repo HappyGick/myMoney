@@ -16,12 +16,18 @@ export default function MenuDel() {
     const [modal,setModal] = useState(0);
     const [state, updateState] = React.useState({});
     const [cuenta, setCuenta] = useState<Cuenta>();
+    const [key, setKey] = useState<string>('null');
     
     const forceUpdate = () => updateState({...state});
     const goHome = () => { nav('/cuentas') };
 
     if (cuentas.length === 0) {
         nav('/ErrorMensajeCuentas');
+    }
+
+    if (key != 'null') {
+        let obj = cuentas[Number(key)];
+        if (obj.id !== cuenta?.id) setCuenta(obj);
     }
 
     const globalState = useAppSelector((state) => state);
@@ -46,18 +52,15 @@ export default function MenuDel() {
     const reset = () => {
         if (modal==2){
             guardar(globalState);
+            setKey('null');
+            setCuenta(undefined);
             setModal(0);
             forceUpdate();
-            location.reload();
         }
     }
 
     const showOption = ( e: { target: { value: any; }; } ) => {
-        let key = e.target.value;
-        if (key != 'null') {
-            let obj = cuentas[Number(key)];
-            setCuenta(obj);
-        }
+        setKey(e.target.value);
     }
     
     return (
@@ -69,7 +72,7 @@ export default function MenuDel() {
                         <div id="mainP">
                             Elige una cuenta a eliminar:
                             <br/>
-                            <select id="cuenta" onChange={ showOption } >
+                            <select id="cuenta" onChange={ showOption } value={key}>
                                 <option value="null" >Seleccione una cuenta</option>
                                 {cuentas.map((v, i) => {
                                     return (
