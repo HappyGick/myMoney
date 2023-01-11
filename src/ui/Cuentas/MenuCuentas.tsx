@@ -6,6 +6,8 @@ export default function MenuCuentas() {
     const goDel = () => { nav('/cuentas/menuDel') };
     const goCon = () => { nav('/cuentas/menuCon') };
     const goGrafPres = () => { nav('/cuentas/GrafMay') };
+    const goMayorMov = () => { nav('/cuentas/menuMayorMov') };
+    const goMayorDeuda = () => { nav('/cuentas/menuMayorDeuda') };
     const goHome = () => { nav('/') };
 
     const msgHome = " Bienvenido recuerde agregar una cuenta para poder disfrutar de todos los beneficios de Mymoney"
@@ -16,9 +18,11 @@ export default function MenuCuentas() {
         <h1>Cuenta</h1>
         <h4> { msgHome } </h4> <br/>
         <button className="glow-button" onClick={ goAdd }> Añadir Cuenta </button> 
-        <button className="glow-button" onClick={ goDel }> Eliminar Cuenta </button> <br/>
-        <button className="glow-button" onClick={ goCon }> Consultar Saldo de Cuenta especifica</button>
+        <button className="glow-button" onClick={ goDel }> Eliminar Cuenta </button> 
+        <button className="glow-button" onClick={ goCon }> Consultar Saldo de Cuenta especifica</button> <br/>
         <button className="glow-button" onClick={ goGrafPres }> Estadisticas Cuenta de Mayor Prestamo </button>
+        <button className="glow-button" onClick={ goMayorDeuda }> Consultar Cuenta con Mayor Deuda </button>
+        <button className="glow-button" onClick={ goMayorMov }> Consultar Cuenta con Mayor Movimiento </button> <br/>
         <button className="glow-button" onClick={ goHome }> Regresar al Menu Principal </button>
       </div>
       </div>
