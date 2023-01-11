@@ -4,6 +4,9 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, TooltipProps } from 'recharts';
 import { obtenerPrestamosSolicitados } from "../../funcionesCliente/api/funcionesPrestamos";
 import { Prestamo } from "../../funcionesCliente/clases/prestamos/prestamo";
+import { validarCuenta } from "../helpers/validarCuenta";
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { validarSolicitados } from "../helpers/validarSolicitados";
 
 export const GraficaMayPres = ()=>{
     const data = [{name: '1234567890123456', uv: 600},{name: '2315648970123456', uv: 600}, {name: '1235648970123456', uv: 250}, {name: '1238975640123456', uv: 100}];
@@ -13,6 +16,7 @@ export const GraficaMayPres = ()=>{
         nav('/cuentas');
     };
 
+    const cuentas=obtenerCuentas();
     const prestamos=obtenerPrestamosSolicitados();
     let mayPres=[];
     function ordenarPorBurbujaPositivo(arrayDesordenado: any){
@@ -88,6 +92,7 @@ export const GraficaMayPres = ()=>{
 
     return (
         <>
+        {validarSolicitados(cuentas,prestamos)}
             <div className="GrafContainer">
                 <h2>Cuentas con Mayor Prestamos</h2>
             <BarChart width={850} height={500} data={mayPres}>

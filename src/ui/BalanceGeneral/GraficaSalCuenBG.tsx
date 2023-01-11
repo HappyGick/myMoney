@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerCuenta, obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 import { each } from "immer/dist/internal";
+import { validarCuenta } from "../helpers/validarCuenta";
 interface FormData {
     name: string;
     uv: number;
@@ -36,6 +37,7 @@ export const GraficaSalCuen = ()=>{
     
     return (
         <>
+            {validarCuenta(cuentas)}
             <div className="GrafContainer">
             <h1>Balance General</h1>
             <h2>Saldo de Todas las Cuentas</h2>

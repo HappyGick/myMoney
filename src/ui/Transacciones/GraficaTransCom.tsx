@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
+=======
+import { useState } from "react"
+import { Navigate, useNavigate } from "react-router-dom";
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
+import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
+import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
+import { validarTransaccion } from "../helpers/validarTransaccion";
+>>>>>>> f6c9213ee2c39b045b8998dce344f2098f07c405
 
 export const GraficaComTrans = ()=>{
     const nav = useNavigate();
@@ -15,6 +26,7 @@ export const GraficaComTrans = ()=>{
     let index = 0;
     let cond = 0;
 
+<<<<<<< HEAD
     for (let i = 0; i < trans.length; i++) {
         let n = trans[i].etiquetaPrimaria.nombre;
     if ( book.includes( n ) == false ) {
@@ -23,6 +35,10 @@ export const GraficaComTrans = ()=>{
             saldos.push( 0 );
         } 
     }
+=======
+    const cuentas=obtenerCuentas();
+    const transacciones=obtenerTransacciones(true);
+>>>>>>> f6c9213ee2c39b045b8998dce344f2098f07c405
 
     for (let i = 0; i < book.length; i++) {
         for (let j = 0; j < trans.length; j++) {
@@ -42,7 +58,7 @@ export const GraficaComTrans = ()=>{
     
 
     return (
-        <>
+        <> {validarTransaccion(cuentas,transacciones)}
             <div className="GrafContainer">
                 <h2>Transacciones Mas Comunes: {aux.length}</h2>
             <BarChart width={850} height={500} data={aux}>

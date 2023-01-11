@@ -2,10 +2,16 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
+import { obtenerPrestamosSolicitados } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { validarSolicitados } from "../../helpers/validarSolicitados";
 
 export const GraficaValoSolPrestamo = ()=>{
     const data = [{name: 'Daniel', uv: 40},{name: 'Chayane', uv: 30}, {name: 'Eduardo', uv: 30}, {name: 'Alfredo', uv: 10}];
     const nav = useNavigate();
+
+    const cuentas=obtenerCuentas();
+    const prestamos=obtenerPrestamosSolicitados();
 
     const goHome = ()=>{
         nav('/menu_SolPres');
@@ -13,6 +19,7 @@ export const GraficaValoSolPrestamo = ()=>{
 
     return (
         <>
+            {validarSolicitados(cuentas,prestamos)}
             <div className="GrafContainer">
             <h1>Prestamos Solicitados</h1>
             <h2>Estadistica de contactos por valoracion</h2>

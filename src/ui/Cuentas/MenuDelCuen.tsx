@@ -6,6 +6,7 @@ import { obtenerCuentas, eliminarCuenta, eliminarTodasCuentas } from "../../func
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import ApliModal from "../helpers/ApliModal";
+import { validarCuenta } from "../helpers/validarCuenta";
    
 export default function MenuDel() {
     const nav = useNavigate();
@@ -61,6 +62,7 @@ export default function MenuDel() {
     
     return (
         <>
+        {validarCuenta(cuentas)}
             <div className="bg">
                 <div className="mainMod">
                     <h1>Eliminar Cuentas</h1>
