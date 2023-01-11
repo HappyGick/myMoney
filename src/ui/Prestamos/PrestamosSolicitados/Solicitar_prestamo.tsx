@@ -26,7 +26,7 @@ const initialForm: FormPrestSolicitar = {
 
 const validationsForm = (form: FormPrestSolicitar) => {
     let errors = { nombre: '', monto: '', cuenta: '' };
-    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ\s]+$";
+    let resName = "^[A-ZÑa-zñáéíóúÁÉÍÓÚ'° ]+$";
     let resCantName = "^.{10,50}$";
     
     if (!form.nombre){
@@ -141,7 +141,7 @@ export const FormSolicitarPrestamo = () => {
                         {errors.nombre ? <p style={style}>{errors.nombre}</p> : <></>}
                     </div>
 
-                    <div className="campo">
+                    <div className="campo" style={{marginBottom:40}}>
                         <label htmlFor="monto">Monto:</label>
                         <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto a ingresar'} onChange={handleChange} value={form.monto} required/>
                         {errors.monto ? <p style={style}>{errors.monto}</p> : <></>}
@@ -149,7 +149,7 @@ export const FormSolicitarPrestamo = () => {
 
                     <div className="botones">
                         <button onClick={goHome}>Regresar</button>
-                        <input type="submit" className="glow-button" value="Confirmar" onClick={saveLocal}/>
+                        <button className="glow-button" onClick={saveLocal}>Confirmar</button>
                     </div>
                 </div>
             </div>

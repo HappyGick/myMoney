@@ -113,7 +113,7 @@ export const FormPagarPrestamo = ()=>{
                         <p>Numero de Cuenta: {prestamo?.cuenta.numCuenta}</p>
                         <p>Saldo de la Cuenta: ${prestamo?.cuenta.saldo}</p>
                     </div>
-                    <div className="campo">
+                    <div className="campo" style={{marginBottom:40}}>
                         <label htmlFor="monto">Monto:</label>
                         <input
                             type="number"

@@ -114,7 +114,7 @@ export const FormRegisPagoPrestamo = () => {
                         <p>Saldo de la Cuenta: {prestamo?.cuenta.saldo}</p>
                     </div>
 
-                    <div className="campo">
+                    <div className="campo" style={{marginBottom:40}}>
                         <label htmlFor="monto">Monto:</label>
                         <input type="number" name="monto" min={0} max={999999999} placeholder={'Monto recibido'} onChange={handleChange} autoFocus required/>
                         {errors.monto ? <p style={style}>{errors.monto}</p> : <></>}
