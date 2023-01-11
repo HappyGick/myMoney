@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { login } from '../../funcionesCliente/api/funcionesCliente';
 import MenuAddCuen from '../Cuentas/MenuAddCuen';
 import MenuConCuen from '../Cuentas/MenuConCuen';
@@ -34,16 +34,22 @@ import { importar } from '../../funcionesCliente/api/datastore';
 import { GraficaRelvTrans } from '../Transacciones/GraficaTransRelevante';
 import ConPresOto from '../Prestamos/PrestamosOtorgados/ConOtorgado';
 import ConPresSol from '../Prestamos/PrestamosSolicitados/ConSolicitado';
+import Login from '../Login/Login';
+import Register from '../Login/Register';
+import { useAppSelector } from '../../store/api/hooks';
+import { redirect } from 'react-router-dom';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
 function App() {
   importar();
-  const a = login("pperez", "12345");
+  const cliente = useAppSelector((state) => state.cliente);
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={ <Home/> } />
+      <Route path="/login" element={ <Login /> } />
+      <Route path="/registro" element={ <Register /> }/>
+      <Route path="/" element={ cliente.id ? <Home/> : <Navigate to={'/login'} /> } />
             
       <Route path="/cuentas/" element={ <MenuCuentas/> } />
       <Route path="/cuentas/menuAdd" element={ <MenuAddCuen/> } />

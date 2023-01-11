@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../store/api/hooks';
-import { solicitar, otorgar, pagar, registrarPago } from '../../store/prestamos/prestamosSlice';
+import { solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } from '../../store/prestamos/prestamosSlice';
 import { Cuenta } from '../clases/cuentas/cuenta';
 import { Contacto } from '../clases/prestamos/contacto';
 import { PrestamoOtorgado } from '../clases/prestamos/prestamoOtorgado';
@@ -84,6 +84,10 @@ export function pagarPrestamo(id: string, valor: number, prestamos: any, cuenta:
         []
     ));
     return [payloadPrestamo, payloadTx, payloadSaldo];
+}
+
+export function eliminarPrestamosCuenta(idCuenta: string) {
+    return borrarPrestamosCuenta(idCuenta);
 }
 
 export function registrarPagoPrestamo(id: string, valor: number, prestamos: any, cuenta: Cuenta) {

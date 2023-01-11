@@ -19,6 +19,7 @@ export const transaccionesSlice = createSlice({
     initialState,
     reducers: {
         setTransacciones: (state, action: PayloadAction<TransaccionesState>) => {
+            state = {};
             for(let i in action.payload) {
                 state[i] = action.payload[i];
             }

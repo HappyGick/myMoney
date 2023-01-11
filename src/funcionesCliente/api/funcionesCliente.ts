@@ -1,4 +1,4 @@
-import { setCliente } from "../../store/cliente/clienteSlice";
+import { elimCliente, setCliente } from "../../store/cliente/clienteSlice";
 import { setCuentas } from "../../store/cuentas/cuentasSlice";
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import { setPrestamos } from "../../store/prestamos/prestamosSlice";
@@ -23,6 +23,10 @@ export function useAllSelectors() {
     ]
 }
 
+export function clienteExiste(username: string): boolean {
+    return datastore.idsCliente[username] !== undefined;
+}
+
 export function login(username: string, passwd: string): [boolean, string] {
     if (!datastore.idsCliente[username]) return [false, "El usuario no existe"];
     const datos = datastore.clientes[datastore.idsCliente[username]];
@@ -35,6 +39,7 @@ export function login(username: string, passwd: string): [boolean, string] {
 }
 
 export function registro(nombre: string, username: string, passwd: string): void {
+    if (datastore.idsCliente[username]) return
     const nuevoCliente = new Cliente(username, nombre, passwd);
     datastore.idsCliente[nuevoCliente.username] = nuevoCliente.id;
     datastore.clientes[nuevoCliente.id] = {
@@ -51,5 +56,8 @@ export function registro(nombre: string, username: string, passwd: string): void
         },
         transacciones: {}
     };
-    guardar(useAppSelector((state) => state));
+}
+
+export function logout() {
+    return elimCliente();
 }

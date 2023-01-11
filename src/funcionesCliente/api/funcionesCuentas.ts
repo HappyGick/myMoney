@@ -1,5 +1,7 @@
 import { useAppSelector } from '../../store/api/hooks';
 import { addCuenta, elimCuenta, borrarTodasCuentas } from '../../store/cuentas/cuentasSlice';
+import { borrarPrestamosCuenta } from '../../store/prestamos/prestamosSlice';
+import { borrarTransCuenta } from '../../store/transacciones/transaccionesSlice';
 import { Banco } from '../clases/cuentas/banco';
 import { Cuenta } from '../clases/cuentas/cuenta';
 import constantes from './constantes';
@@ -52,7 +54,7 @@ export function agregarCuenta(numero: string, banco: Banco, saldoInicial: number
 }
 
 export function eliminarCuenta(id: string) {
-    return elimCuenta(id);
+    return [elimCuenta(id), borrarPrestamosCuenta(id), borrarTransCuenta(id)];
 }
 
 export function eliminarTodasCuentas() {

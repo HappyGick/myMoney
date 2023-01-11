@@ -17,12 +17,12 @@ export const cuentasSlice = createSlice({
     name: 'cuentas',
     reducers: {
         setCuentas: (state, action: PayloadAction<CuentasState>) => {
+            state = {};
             for(let i in action.payload) {
                 state[i] = action.payload[i];
             }
         },
         addCuenta: (state, action: PayloadAction<Cuenta>) => {
-            console.log(action.payload);
             state[action.payload.id] = action.payload;
         },
         elimCuenta: (state, action: PayloadAction<string>) => {

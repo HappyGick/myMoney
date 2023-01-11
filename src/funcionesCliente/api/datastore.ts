@@ -41,13 +41,11 @@ export function importar() {
 }
 
 export function guardar(state: any) {
-    console.log(state);
     datastore.clientes[state.cliente.id] = {
         cliente: state.cliente,
         prestamos: state.prestamos,
         transacciones: state.transacciones,
         cuentas: state.cuentas
     }
-    console.log(datastore);
     localStorage.setItem("app-storage", JSON.stringify(datastore));
 }

@@ -8,10 +8,10 @@ export interface ClienteState {
 };
 
 const initialState: ClienteState = {
-    id: "1234",
-    nombre: "Pedro Perez",
-    username: "pperez",
-    password: "12345"
+    id: "",
+    nombre: "",
+    username: "",
+    password: ""
 };
 
 export const clienteSlice = createSlice({
@@ -23,10 +23,16 @@ export const clienteSlice = createSlice({
             state.nombre = action.payload.nombre;
             state.password = action.payload.password;
             state.username = action.payload.username;
+        },
+        elimCliente: (state) => {
+            state.id = "";
+            state.nombre = "";
+            state.password = "";
+            state.username = "";
         }
     }
 });
 
-export const { setCliente } = clienteSlice.actions;
+export const { setCliente, elimCliente } = clienteSlice.actions;
 
 export default clienteSlice.reducer;

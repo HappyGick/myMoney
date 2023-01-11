@@ -51,10 +51,18 @@ export const prestamosSlice = createSlice({
             if(state.otorgados[action.payload.id].valor <= 0) {
                 delete state.otorgados[action.payload.id];
             }
+        },
+        borrarPrestamosCuenta: (state, action: PayloadAction<string>) => {
+            for (let i in state.solicitados) {
+                if (state.solicitados[i].cuenta == action.payload) delete state.solicitados[i];
+            }
+            for (let i in state.otorgados) {
+                if (state.otorgados[i].cuenta == action.payload) delete state.otorgados[i];
+            }
         }
     }
 });
 
-export const { setPrestamos, solicitar, otorgar, pagar, registrarPago } = prestamosSlice.actions;
+export const { setPrestamos, solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } = prestamosSlice.actions;
 
 export default prestamosSlice.reducer;

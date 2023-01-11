@@ -27,7 +27,10 @@ export default function MenuDel() {
     
     const delFunction = () => {
         if (cuenta) {
-            dispatch(eliminarCuenta(cuenta.id));
+            const [elim, elimPrest, elimTrans] = eliminarCuenta(cuenta.id);
+            dispatch(elimPrest);
+            dispatch(elimTrans);
+            dispatch(elim);
             guardar(globalState);
             setModal(1);
         }
