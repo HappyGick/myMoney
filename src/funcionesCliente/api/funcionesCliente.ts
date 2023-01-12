@@ -5,6 +5,7 @@ import { reiniciarPrestamos, setPrestamos } from "../../store/prestamos/prestamo
 import { reiniciarTransacciones, setTransacciones } from "../../store/transacciones/transaccionesSlice";
 import { Cliente } from "../clases/cliente/cliente";
 import { datastore, guardar } from "./datastore";
+import { reiniciarValoraciones, setValoracionContactos } from "../../store/valoracionContactos/valoracionContactosSlice";
 
 function configurarStore(datos: any) {
     const dispatch = useAppDispatch();
@@ -12,6 +13,7 @@ function configurarStore(datos: any) {
     dispatch(setCuentas(datos.cuentas));
     dispatch(setPrestamos(datos.prestamos));
     dispatch(setTransacciones(datos.transacciones));
+    dispatch(setValoracionContactos(datos.valoraciones));
 }
 
 export function useAllSelectors() {
@@ -54,10 +56,14 @@ export function registro(nombre: string, username: string, passwd: string): void
             otorgados: {},
             solicitados: {}
         },
-        transacciones: {}
+        transacciones: {},
+        valoraciones: {
+            otorgado: {},
+            solicitado: {}
+        }
     };
 }
 
 export function logout() {
-    return [reiniciarCliente(), reiniciarCuentas(), reiniciarPrestamos(), reiniciarTransacciones()];
+    return [reiniciarCliente(), reiniciarCuentas(), reiniciarPrestamos(), reiniciarTransacciones(), reiniciarValoraciones()];
 }

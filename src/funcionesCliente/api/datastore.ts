@@ -2,6 +2,7 @@ import { ClienteState } from "../../store/cliente/clienteSlice";
 import { CuentasState } from "../../store/cuentas/cuentasSlice";
 import { PrestamosState } from "../../store/prestamos/prestamosSlice";
 import { TransaccionesState } from "../../store/transacciones/transaccionesSlice";
+import { ValoracionContactosState } from "../../store/valoracionContactos/valoracionContactosSlice";
 
 interface Datastore {
     idsCliente: {[name: string]: string},
@@ -9,7 +10,8 @@ interface Datastore {
         cliente: ClienteState,
         transacciones: TransaccionesState,
         prestamos: PrestamosState,
-        cuentas: CuentasState
+        cuentas: CuentasState,
+        valoraciones: ValoracionContactosState
     }}
 }
 
@@ -28,7 +30,8 @@ export function guardar(state: any) {
         cliente: state.cliente,
         prestamos: state.prestamos,
         transacciones: state.transacciones,
-        cuentas: state.cuentas
+        cuentas: state.cuentas,
+        valoraciones: state.valoraciones
     }
     localStorage.setItem("app-storage", JSON.stringify(datastore));
 }

@@ -5,13 +5,18 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosSolicitados } from "../../../funcionesCliente/api/funcionesPrestamos";
 import { validarSolicitados } from "../../helpers/validarSolicitados";
+import { obtenerValoracionesSolicitados } from "../../../funcionesCliente/api/funcionesValoracion";
 
 export const GraficaValoSolPrestamo = ()=>{
-    const data = [{name: 'Daniel', uv: 40},{name: 'Chayane', uv: 30}, {name: 'Eduardo', uv: 30}, {name: 'Alfredo', uv: 10}];
     const nav = useNavigate();
 
     const cuentas=obtenerCuentas();
     const prestamos=obtenerPrestamosSolicitados();
+    const valoraciones = obtenerValoracionesSolicitados();
+    let data = [];
+    for(let v of valoraciones) {
+        data.push({ name: v.nombre, uv: v.valoracion });
+    }
 
     const goHome = ()=>{
         nav('/menu_SolPres');

@@ -5,13 +5,18 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { validarOtorgados } from "../../helpers/validarOtorgados";
 import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosOtorgados } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { obtenerValoracionesOtorgados } from "../../../funcionesCliente/api/funcionesValoracion";
 
 export const GraficaValoOtoPrestamo = ()=>{
-    const data = [{name: 'Daniel', uv: 5},{name: 'Chayane', uv:5}, {name: 'Eduardo', uv: 4}, {name: 'Alfredo', uv: 3}];
     const nav = useNavigate();
 
     const cuentas=obtenerCuentas();
     const prestamos=obtenerPrestamosOtorgados();
+    const valoraciones = obtenerValoracionesOtorgados();
+    let data = [];
+    for(let v of valoraciones) {
+        data.push({ name: v.nombre, uv: v.valoracion });
+    }
 
     const goHome = ()=>{
         nav('/menu_OtoPres');

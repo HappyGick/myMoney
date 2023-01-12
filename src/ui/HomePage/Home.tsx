@@ -13,7 +13,8 @@ export default function HomeTrans() {
     const goBalGen = ()=>{nav('/BalanceGen')};
     const user = useAppSelector(state => state.cliente);
     const logoutBtn = () => {
-        const [cliente, cuentas, prestamos, transacciones] = logout();
+        const [cliente, cuentas, prestamos, transacciones, valoraciones] = logout();
+        dispatch(valoraciones);
         dispatch(prestamos);
         dispatch(transacciones);
         dispatch(cuentas);

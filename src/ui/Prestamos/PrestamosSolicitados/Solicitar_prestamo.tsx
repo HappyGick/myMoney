@@ -9,6 +9,7 @@ import { Contacto } from "../../../funcionesCliente/clases/prestamos/contacto";
 import { PrestamoSolicitado } from "../../../funcionesCliente/clases/prestamos/prestamoSolicitado";
 
 import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
+import { agregarContacto } from "../../../store/valoracionContactos/valoracionContactosSlice";
 import ApliModal from "../../helpers/ApliModal";
 import { Form } from "../../helpers/Form";
 
@@ -88,6 +89,8 @@ export const FormSolicitarPrestamo = () => {
             dispatch(solicitarPrestamo(p));
             dispatch(dTx);
             dispatch(saldo);
+            const valoracion = agregarContacto({nombre: form.nombre, tipoPrestamo: 'solicitado'});
+            dispatch(valoracion);
             guardar(globalState);
             setModal(1);
         }

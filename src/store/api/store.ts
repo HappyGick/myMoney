@@ -3,13 +3,15 @@ import clienteReducer from '../cliente/clienteSlice';
 import transaccionesReducer from '../transacciones/transaccionesSlice';
 import cuentasReducer from '../cuentas/cuentasSlice';
 import prestamosReducer from '../prestamos/prestamosSlice';
+import valoracionContactosReducer from '../valoracionContactos/valoracionContactosSlice';
 
 const store = configureStore({
     reducer: {
         cliente: clienteReducer,
         transacciones: transaccionesReducer,
         cuentas: cuentasReducer,
-        prestamos: prestamosReducer
+        prestamos: prestamosReducer,
+        valoracionContactos: valoracionContactosReducer
     }
 });
 

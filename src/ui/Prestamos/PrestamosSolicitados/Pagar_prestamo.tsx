@@ -4,6 +4,7 @@ import { guardar } from "../../../funcionesCliente/api/datastore";
 import { useAllSelectors } from "../../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosSolicitados, pagarPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
+import { aumentarValoracion } from "../../../funcionesCliente/api/funcionesValoracion";
 import { PrestamoSolicitado } from "../../../funcionesCliente/clases/prestamos/prestamoSolicitado";
 import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
 import ApliModal from "../../helpers/ApliModal";
@@ -75,6 +76,8 @@ export const FormPagarPrestamo = ()=>{
             dispatch(p);
             dispatch(tx);
             dispatch(saldo);
+            const valoracion = aumentarValoracion(prestamo.acreedor.nombre, 'solicitado');
+            dispatch(valoracion);
             guardar(globalState);
             setModal(1);
         }
