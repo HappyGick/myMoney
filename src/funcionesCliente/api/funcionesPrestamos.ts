@@ -79,8 +79,8 @@ export function pagarPrestamo(id: string, valor: number, prestamos: any, cuenta:
         -valor,
         cuenta,
         new Date(prestamos[id].fecha),
-        "Pago de prestamo a " + prestamos[id].acreedor,
-        new Etiqueta("", ""),
+        "Pago de prestamo de " + prestamos[id].acreedor,
+        constantes.etiquetaPrestamoSolicitado,
         []
     ));
     return [payloadPrestamo, payloadTx, payloadSaldo];
@@ -97,7 +97,7 @@ export function registrarPagoPrestamo(id: string, valor: number, prestamos: any,
         cuenta,
         new Date(prestamos[id].fecha),
         "Pago de prestamo a " + prestamos[id].deudor,
-        new Etiqueta("", ""),
+        constantes.etiquetaPrestamoOtorgado,
         []
     ));
     return [payloadPrestamo, payloadTx, payloadSaldo];
