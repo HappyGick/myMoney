@@ -1,8 +1,8 @@
-import { ClienteState } from "../../store/cliente/clienteSlice";
-import { CuentasState } from "../../store/cuentas/cuentasSlice";
-import { PrestamosState } from "../../store/prestamos/prestamosSlice";
-import { TransaccionesState } from "../../store/transacciones/transaccionesSlice";
-import { ValoracionContactosState } from "../../store/valoracionContactos/valoracionContactosSlice";
+import { ClienteState } from "../../state/cliente/clienteSlice";
+import { CuentasState } from "../../state/cuentas/cuentasSlice";
+import { PrestamosState } from "../../state/prestamos/prestamosSlice";
+import { TransaccionesState } from "../../state/transacciones/transaccionesSlice";
+import { ValoracionContactosState } from "../../state/valoracionContactos/valoracionContactosSlice";
 
 interface Datastore {
     idsCliente: {[name: string]: string},

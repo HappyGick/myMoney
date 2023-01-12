@@ -7,7 +7,7 @@ import { agregarTransaccion } from "../../funcionesCliente/api/funcionesTransacc
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
 import { Etiqueta } from "../../funcionesCliente/clases/transacciones/etiqueta";
 import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
 import ApliModal from "../helpers/ApliModal";
 import { Form } from "../helpers/Form";
 import { validarCuenta } from "../helpers/validarCuenta";

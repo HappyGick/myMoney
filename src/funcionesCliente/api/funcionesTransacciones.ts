@@ -1,6 +1,6 @@
-import { useAppSelector } from '../../store/api/hooks';
-import { modSaldo } from '../../store/cuentas/cuentasSlice';
-import { addTransaccion, modTransaccion, elimTransaccion, borrarTransCuenta, borrarTodasTransacciones } from '../../store/transacciones/transaccionesSlice';
+import { useAppSelector } from '../../state/api/hooks';
+import { modSaldo } from '../../state/cuentas/cuentasSlice';
+import { addTransaccion, modTransaccion, elimTransaccion, borrarTransCuenta, borrarTodasTransacciones } from '../../state/transacciones/transaccionesSlice';
 import { Cuenta } from '../clases/cuentas/cuenta';
 import { Etiqueta } from '../clases/transacciones/etiqueta';
 import { Transaccion } from '../clases/transacciones/transaccion';

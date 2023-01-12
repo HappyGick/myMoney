@@ -1,11 +1,11 @@
-import { reiniciarCliente, setCliente } from "../../store/cliente/clienteSlice";
-import { reiniciarCuentas, setCuentas } from "../../store/cuentas/cuentasSlice";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
-import { reiniciarPrestamos, setPrestamos } from "../../store/prestamos/prestamosSlice";
-import { reiniciarTransacciones, setTransacciones } from "../../store/transacciones/transaccionesSlice";
+import { reiniciarCliente, setCliente } from "../../state/cliente/clienteSlice";
+import { reiniciarCuentas, setCuentas } from "../../state/cuentas/cuentasSlice";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
+import { reiniciarPrestamos, setPrestamos } from "../../state/prestamos/prestamosSlice";
+import { reiniciarTransacciones, setTransacciones } from "../../state/transacciones/transaccionesSlice";
 import { Cliente } from "../clases/cliente/cliente";
 import { datastore, guardar } from "./datastore";
-import { reiniciarValoraciones, setValoracionContactos } from "../../store/valoracionContactos/valoracionContactosSlice";
+import { reiniciarValoraciones, setValoracionContactos } from "../../state/valoracionContactos/valoracionContactosSlice";
 
 function configurarStore(datos: any) {
     const dispatch = useAppDispatch();

@@ -5,7 +5,7 @@ import { Form } from "../helpers/Form";
 import { DateTime } from "luxon";
 import { Etiqueta } from "../../funcionesCliente/clases/transacciones/etiqueta";
 import { Transaccion } from "../../funcionesCliente/clases/transacciones/transaccion";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { useAllSelectors } from "../../funcionesCliente/api/funcionesCliente";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";

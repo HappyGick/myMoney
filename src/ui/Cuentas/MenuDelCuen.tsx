@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { obtenerCuentas, eliminarCuenta, eliminarTodasCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
 import ApliModal from "../helpers/ApliModal";
 import { validarCuenta } from "../helpers/validarCuenta";
    

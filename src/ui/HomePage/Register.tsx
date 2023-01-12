@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { clienteExiste, registro } from "../../funcionesCliente/api/funcionesCliente";
-import { useAppSelector } from "../../store/api/hooks";
+import { useAppSelector } from "../../state/api/hooks";
 
 export default function Register() {
     const [name, setName] = useState('');

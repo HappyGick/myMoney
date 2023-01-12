@@ -1,5 +1,5 @@
-import { useAppSelector } from "../../store/api/hooks";
-import { agregarContacto, aumentarValoracionContacto } from "../../store/valoracionContactos/valoracionContactosSlice";
+import { useAppSelector } from "../../state/api/hooks";
+import { agregarContacto, aumentarValoracionContacto } from "../../state/valoracionContactos/valoracionContactosSlice";
 
 export interface Valoracion {
     nombre: string;

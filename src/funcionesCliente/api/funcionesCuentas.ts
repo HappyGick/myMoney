@@ -1,7 +1,7 @@
-import { useAppSelector } from '../../store/api/hooks';
-import { addCuenta, elimCuenta, borrarTodasCuentas } from '../../store/cuentas/cuentasSlice';
-import { borrarPrestamosCuenta } from '../../store/prestamos/prestamosSlice';
-import { borrarTransCuenta } from '../../store/transacciones/transaccionesSlice';
+import { useAppSelector } from '../../state/api/hooks';
+import { addCuenta, elimCuenta, borrarTodasCuentas } from '../../state/cuentas/cuentasSlice';
+import { borrarPrestamosCuenta } from '../../state/prestamos/prestamosSlice';
+import { borrarTransCuenta } from '../../state/transacciones/transaccionesSlice';
 import { Banco } from '../clases/cuentas/banco';
 import { Cuenta } from '../clases/cuentas/cuenta';
 import constantes from './constantes';

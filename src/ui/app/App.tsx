@@ -36,9 +36,9 @@ import ConPresOto from '../Prestamos/PrestamosOtorgados/ConOtorgado';
 import ConPresSol from '../Prestamos/PrestamosSolicitados/ConSolicitado';
 import Login from '../HomePage/Login';
 import Register from '../HomePage/Register';
-import { useAppSelector } from '../../store/api/hooks';
+import { useAppSelector } from '../../state/api/hooks';
 import { redirect } from 'react-router-dom';
-import MenuMayorMov from '../Cuentas/CuentaMayorMov';
+import MenuMayorMov from '../Cuentas/GraficaCuentaMayorMov';
 import { ErrorMensajeCuentasExeso } from '../MensajeErrores/ErrorMensajeCuentaExeso';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;

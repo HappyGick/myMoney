@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Modal } from "./Modal";
 import { useNavigate } from "react-router-dom";
 import { guardar } from "../../funcionesCliente/api/datastore";
-import { useAppSelector } from "../../store/api/hooks";
+import { useAppSelector } from "../../state/api/hooks";
 
 
 const ApliModal = (url:string, titulo:string, textMenu:string, textVolver:string, textAlert:string, textDescrip:string, op:number, opF:Function)=>{

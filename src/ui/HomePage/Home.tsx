@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../funcionesCliente/api/funcionesCliente";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
 
 export default function HomeTrans() {
     

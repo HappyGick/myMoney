@@ -8,8 +8,8 @@ import { Cuenta } from "../../../funcionesCliente/clases/cuentas/cuenta";
 import { Contacto } from "../../../funcionesCliente/clases/prestamos/contacto";
 import { PrestamoSolicitado } from "../../../funcionesCliente/clases/prestamos/prestamoSolicitado";
 
-import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
-import { agregarContacto } from "../../../store/valoracionContactos/valoracionContactosSlice";
+import { useAppDispatch, useAppSelector } from "../../../state/api/hooks";
+import { agregarContacto } from "../../../state/valoracionContactos/valoracionContactosSlice";
 import ApliModal from "../../helpers/ApliModal";
 import { Form } from "../../helpers/Form";
 

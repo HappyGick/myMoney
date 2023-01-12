@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Banco } from "../../funcionesCliente/clases/cuentas/banco";
 import constantes from "../../funcionesCliente/api/constantes";
-import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
+import { useAppDispatch, useAppSelector } from "../../state/api/hooks";
 import ApliModal from "../helpers/ApliModal";
 import { Form } from "../helpers/Form";
 import { guardar } from "../../funcionesCliente/api/datastore";

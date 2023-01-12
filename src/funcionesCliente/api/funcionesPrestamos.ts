@@ -1,5 +1,5 @@
-import { useAppSelector } from '../../store/api/hooks';
-import { solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } from '../../store/prestamos/prestamosSlice';
+import { useAppSelector } from '../../state/api/hooks';
+import { solicitar, otorgar, pagar, registrarPago, borrarPrestamosCuenta } from '../../state/prestamos/prestamosSlice';
 import { Cuenta } from '../clases/cuentas/cuenta';
 import { Contacto } from '../clases/prestamos/contacto';
 import { PrestamoOtorgado } from '../clases/prestamos/prestamoOtorgado';

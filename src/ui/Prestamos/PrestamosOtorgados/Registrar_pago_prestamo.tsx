@@ -7,7 +7,7 @@ import { obtenerCuentas } from "../../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosOtorgados, registrarPagoPrestamo } from "../../../funcionesCliente/api/funcionesPrestamos";
 import { aumentarValoracion } from "../../../funcionesCliente/api/funcionesValoracion";
 import { PrestamoOtorgado } from "../../../funcionesCliente/clases/prestamos/prestamoOtorgado";
-import { useAppSelector } from "../../../store/api/hooks";
+import { useAppSelector } from "../../../state/api/hooks";
 import ApliModal from "../../helpers/ApliModal";
 import { Form } from "../../helpers/Form";
 import { validarOtorgados } from "../../helpers/validarOtorgados";
