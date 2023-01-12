@@ -49,7 +49,7 @@ export const GraficaSalCuen = ()=>{
                 <Bar dataKey="saldo" fill="#8884d8" barSize={30} />
             </BarChart>
             </div>
-            <h2>Saldo General={SaldoGeneral}</h2>
+            <h2>Saldo General = ${SaldoGeneral}</h2>
             <div className="botones">
                 <br />
                 <br />

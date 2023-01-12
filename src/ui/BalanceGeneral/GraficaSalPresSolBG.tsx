@@ -56,7 +56,7 @@ export const GraficaSalPresSol = ()=>{
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Bar dataKey="monto" fill="#8884d8" barSize={30} />
             </BarChart>
-            <h2>Monto Total de Prestamos Solicitados = {SaldoGeneral}</h2>
+            <h2>Monto Total de Prestamos Solicitados = ${SaldoGeneral}</h2>
             </div>
             <div className="botones">
                 <br />
