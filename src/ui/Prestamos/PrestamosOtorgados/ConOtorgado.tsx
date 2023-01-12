@@ -22,7 +22,7 @@ export default function ConPresOto() {
         <>
             <div className="bg">
                 <div className="mainMod">
-                    <h1>Consultar Prestamos Solicitados</h1>
+                    <h1>Consultar Prestamos Otorgados</h1>
                         <div id="mainP">
                             Elige un Prestamo a Consultar:
                             <br/>
@@ -41,7 +41,7 @@ export default function ConPresOto() {
                                 })}
                             </select>
                             <div id="card" className="card">
-                                <p>Nombre Acreedor: {pres?.deudor.nombre}</p>
+                                <p>Nombre Deudor: {pres?.deudor.nombre}</p>
                                 <p>Numero de cuenta: {pres?.cuenta.numCuenta}</p>
                                 <p>Monto: ${pres?.valor}</p>
                                 <p>Fecha: {pres?.fecha}</p>

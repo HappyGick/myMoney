@@ -51,7 +51,7 @@ export const GraficaComTrans = ()=>{
     return (
         <> {validarTransaccion(cuentas,transacciones)}
             <div className="GrafContainer">
-                <h2>Transacciones Mas Comunes: {aux.length}</h2>
+                <h2>Transacciones Mas Comunes:</h2>
             <BarChart width={850} height={500} data={aux}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />

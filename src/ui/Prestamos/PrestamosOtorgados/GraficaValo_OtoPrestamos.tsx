@@ -15,7 +15,7 @@ export const GraficaValoOtoPrestamo = ()=>{
     const valoraciones = obtenerValoracionesOtorgados();
     let data = [];
     for(let v of valoraciones) {
-        data.push({ name: v.nombre, uv: v.valoracion });
+        data.push({ name: v.nombre, valoracion: v.valoracion });
     }
 
     const goHome = ()=>{
@@ -33,7 +33,7 @@ export const GraficaValoOtoPrestamo = ()=>{
                 <YAxis />
                 <Tooltip />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <Bar dataKey="uv" fill="#8884d8" barSize={30} />
+                <Bar dataKey="valoracion" fill="#8884d8" barSize={30} />
             </BarChart>
             </div>
             <div className="botones">
