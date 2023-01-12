@@ -38,7 +38,7 @@ export const GraficaSalCuen = ()=>{
     let aux: object[] = []  
     for ( let u=0; u<cuentas.length; u++ ) {
         aux.push( { 
-          banco:cuentas[u].banco, 
+          banco:cuentas[u].banco.nombre, 
           id:cuentas[u].id, 
           numCuenta:cuentas[u].numCuenta,
           nombre:'C-'+(u+1), 
@@ -80,7 +80,7 @@ export const GraficaSalCuen = ()=>{
           return (
             <div className="custom-tooltip">
               <p className="label">{`${label} : ${payload?.[0].value}`}</p>
-              <p className="intro">Banco:</p>
+              <p className="intro">Banco:{getBancoOfPage(label,aux)}</p>
               <p className="intro">ID:{getIdOfPage(label,aux)}</p>
               <p className="intro">Cuenta:{getnumCuentaOfPage(label,aux)}</p>
               <p className="intro">Saldo:{getSaldoOfPage(label,aux)}</p>
