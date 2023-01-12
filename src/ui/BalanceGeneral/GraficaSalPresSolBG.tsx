@@ -32,7 +32,7 @@ export const GraficaSalPresSol = ()=>{
         for (let item of presSol){
             if (item.name == n){
                 item.monto += v;
-                SaldoGeneral += item.monto;
+                SaldoGeneral += v;
                 bool=false;
                 break
             }

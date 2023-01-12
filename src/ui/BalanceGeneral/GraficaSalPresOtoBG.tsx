@@ -30,7 +30,7 @@ export const GraficaSalPresOto = ()=>{
         for (let item of presOto){
             if (item.name == n){
                 item.saldo += v;
-                SaldoGeneral += item.saldo;
+                SaldoGeneral += v;
                 bool=false;
                 break
             }
