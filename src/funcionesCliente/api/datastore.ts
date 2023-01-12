@@ -31,7 +31,7 @@ export function guardar(state: any) {
         prestamos: state.prestamos,
         transacciones: state.transacciones,
         cuentas: state.cuentas,
-        valoraciones: state.valoraciones
+        valoraciones: state.valoracionContactos
     }
     localStorage.setItem("app-storage", JSON.stringify(datastore));
 }
