@@ -10,7 +10,7 @@ import { validarTransaccion } from "../helpers/validarTransaccion";
 export const GraficaComTrans = ()=>{
     const nav = useNavigate();
     const goHome = ()=>{ nav('/transacciones'); };
-    const trans = obtenerTransacciones(true);
+    const trans = obtenerTransacciones();
 
     let book = [];
     let values = [];

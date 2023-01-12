@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { obtenerPrestamosSolicitados } from "../../funcionesCliente/api/funcionesPrestamos";
 import { obtenerTransacciones } from "../../funcionesCliente/api/funcionesTransacciones";
+import { validarCuenta } from "../helpers/validarCuenta";
 
 export default function MenuMayorMov() {
     const nav = useNavigate();
@@ -52,6 +53,7 @@ export default function MenuMayorMov() {
 
     return (    
         <>
+        {validarCuenta(cuentas)}
         <div className="bg">
         <div className="mainMod">
             <h1>Cuenta con Mayor Movimiento</h1>

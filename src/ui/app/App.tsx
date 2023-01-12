@@ -39,6 +39,7 @@ import Register from '../HomePage/Register';
 import { useAppSelector } from '../../store/api/hooks';
 import { redirect } from 'react-router-dom';
 import MenuMayorMov from '../Cuentas/CuentaMayorMov';
+import { ErrorMensajeCuentasExeso } from '../MensajeErrores/ErrorMensajeCuentaExeso';
 
 const Err = () => <div> <h1>Error - Page not Found</h1> </div>;
 
@@ -90,6 +91,8 @@ function App() {
       <Route path='/ErrorMensajeTransacciones' element={ <ErrorMensajeTransacciones/> } />
       <Route path='/ErrorMensajeSolicitados' element={ <ErrorMensajeSol/> } />
       <Route path='/ErrorMensajeOtorgados' element={ <ErrorMensajeOtor/> } />
+      <Route path='/ErrorMensajeCuentasExeceso' element={ <ErrorMensajeCuentasExeso/> } />
+
       
     </Routes>
   </BrowserRouter>

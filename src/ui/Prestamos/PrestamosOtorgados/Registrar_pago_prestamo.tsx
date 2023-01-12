@@ -10,6 +10,7 @@ import { PrestamoOtorgado } from "../../../funcionesCliente/clases/prestamos/pre
 import { useAppSelector } from "../../../store/api/hooks";
 import ApliModal from "../../helpers/ApliModal";
 import { Form } from "../../helpers/Form";
+import { validarOtorgados } from "../../helpers/validarOtorgados";
 
 interface FormPrestOtorgar {
     monto: number;
@@ -100,8 +101,8 @@ export const FormRegisPagoPrestamo = () => {
     };
 
     return (
-        <>
-            <div>
+        <>{validarOtorgados(cuentas,prestamos)}
+          <div>
                 <h1>Registrar Pago de Prestamo</h1>
                 <div className="container">
                     <select id="registros" onChange={showOption} value={key}>

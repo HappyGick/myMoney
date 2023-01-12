@@ -8,6 +8,7 @@ import { Form } from "../helpers/Form";
 import { guardar } from "../../funcionesCliente/api/datastore";
 import { agregarCuenta, existeCuenta, obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
+import { validarCuentaOverlow } from "../helpers/validarCuentaOverflow";
 
 interface FormData {
     banco: string;
@@ -101,7 +102,7 @@ export default function MenuAddCuen() {
 
 
     return (
-        <>
+         <>{validarCuentaOverlow(cuentas)}
             <div className="bg">
             <div className="mainAdd">
                 <h1 style={{margin: 5}}>Añadir Cuenta</h1>           

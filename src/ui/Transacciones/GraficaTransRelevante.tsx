@@ -178,6 +178,7 @@ export const GraficaRelvTrans = ()=>{
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Bar dataKey="valor" fill="#8884d8" barSize={30} />             
             </BarChart>
+            <h3>Leyenda:T significa transaccion, 1.2.3...es el numero de la transaccion</h3>
             </div>
             <div className="botones">
                 <br /> <br />

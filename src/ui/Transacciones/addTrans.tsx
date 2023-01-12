@@ -10,6 +10,7 @@ import { Transaccion } from "../../funcionesCliente/clases/transacciones/transac
 import { useAppDispatch, useAppSelector } from "../../store/api/hooks";
 import ApliModal from "../helpers/ApliModal";
 import { Form } from "../helpers/Form";
+import { validarCuenta } from "../helpers/validarCuenta";
 
 type FormTransacciones = {
     fecha: string;
@@ -123,7 +124,7 @@ export default function MenuAddTrans() {
     }
 
     return ( 
-        <>
+        <>{validarCuenta(cuentas)}
             <div className="bg">
                 <div className="mainAdd">
                     <h1>Añadir Transacciones</h1>           

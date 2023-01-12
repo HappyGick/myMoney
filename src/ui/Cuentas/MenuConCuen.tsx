@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerCuentas } from "../../funcionesCliente/api/funcionesCuentas";
 import { Cuenta } from "../../funcionesCliente/clases/cuentas/cuenta";
+import { validarCuenta } from "../helpers/validarCuenta";
 
 export default function MenuConCuen() {
     const nav = useNavigate();
@@ -20,7 +21,7 @@ export default function MenuConCuen() {
     }
     
     return (    
-        <>
+        <>{validarCuenta(cuentas)}
             <div className="bg">
                 <div className="mainMod">
                     <h1>Consultar cuenta especifica</h1>

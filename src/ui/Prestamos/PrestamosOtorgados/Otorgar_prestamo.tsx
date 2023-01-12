@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/api/hooks";
 import { agregarContacto } from "../../../store/valoracionContactos/valoracionContactosSlice";
 import ApliModal from "../../helpers/ApliModal";
 import { Form } from "../../helpers/Form";
+import { validarCuenta } from "../../helpers/validarCuenta";
 
 interface FormPrestOtorgar {
     nombre: string;
@@ -123,7 +124,7 @@ export const FormOtorgarPrestamo = ()=>{
 
     return (
         <>
-            <div>
+            <div>{validarCuenta(cuentas)}
                 <h1>Otorgar Prestamo</h1>
 
                 <div className="container" style={{display: 'flex', flexDirection: 'column', rowGap: 10}}>
